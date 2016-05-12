@@ -1,0 +1,40 @@
+<div class="jumbotron">
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="row">
+                <div class="col-md-6">
+                    Amount Extra
+                </div>
+                <div class="col-md-6">
+                    ${{lifecycle.amountExtraPerMonth | number }}/month
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    Number of months
+                </div>
+                <div class="col-md-6">
+                    {{lifecycle.series.length}} | {{ ( ( lifecycle.series.length - 2 ) / 12 ) | number:2 }} years
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    Total Paid
+                </div>
+                <div class="col-md-6">
+                    ${{lifecycle.totalPaid | number:2 }} | ${{ lifecycle.totalPaid / (lifecyle.series.length - 2) | number:2 }} per month
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chart-container">
+        <svg id="chart"></svg>
+    </div>
+
+</div>
