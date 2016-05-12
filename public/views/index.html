@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="loanVisualizer">
+<head>
+    <meta charset="UTF-8">
+    <title>Lifecycle</title>
+
+    <script src="scripts/angular/angular.js"></script>
+    <script src="scripts/d3/d3.js"></script>
+    <script src="scripts/lodash/lodash.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/analysis/analysis_controller.js"></script>
+    <script src="js/analysis/lifecycle_directive.js"></script>
+    <script src="js/analysis/loan_panel_directive.js"></script>
+
+    <link rel="stylesheet" type="text/css"  href="libs/bootstrap/dist/css/bootstrap.css" >
+
+</head>
+<body ng-controller="AnalysisController">
+
+    <div class="container">
+
+        <div class="row">
+
+            <h3>Lifecycle</h3>
+            <div class="row">
+
+                <div class="col-md-4">
+                    <loan-panel></loan-panel>
+                </div>
+
+                <div class="col-md-8">
+
+                    <lifecycle></lifecycle>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>

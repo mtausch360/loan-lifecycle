@@ -1,0 +1,32 @@
+{
+  "name": "loans",
+  "version": "1.0.0",
+  "description": "view the different outcomes for the repayment of your loans",
+  "main": "index.js",
+  "scripts": {
+    "test": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "keywords": [
+    "loans",
+    "visualization"
+  ],
+  "author": "Mark Tausch",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.5.0",
+    "bluebird": "^3.3.0",
+    "body-parser": "^1.14.2",
+    "bookshelf": "^0.9.1",
+    "bootstrap": "^3.3.6",
+    "d3": "^3.5.14",
+    "express": "^4.13.4",
+    "knex": "^0.10.0-rc1",
+    "lodash": "^4.2.1",
+    "morgan": "^1.6.1",
+    "pg": "^4.4.4"
+  }
+}
