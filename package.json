@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "none"
+    "url": "https://github.com/tausch86/loan-lifecycle"
   },
   "keywords": [
     "loans",
@@ -18,15 +18,13 @@
   "license": "ISC",
   "dependencies": {
     "angular": "^1.5.0",
-    "bluebird": "^3.3.0",
-    "body-parser": "^1.14.2",
-    "bookshelf": "^0.9.1",
     "bootstrap": "^3.3.6",
     "d3": "^3.5.14",
     "express": "^4.13.4",
-    "knex": "^0.10.0-rc1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "karma": "^0.13.22",
     "lodash": "^4.2.1",
-    "morgan": "^1.6.1",
-    "pg": "^4.4.4"
+    "morgan": "^1.6.1"
   }
 }
