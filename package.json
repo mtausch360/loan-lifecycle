@@ -21,10 +21,20 @@
     "bootstrap": "^3.3.6",
     "d3": "^3.5.14",
     "express": "^4.13.4",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
+    "lodash": "^4.2.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.9.0",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.3.13",
+    "jasmine": "^2.4.1",
     "karma": "^0.13.22",
-    "lodash": "^4.2.1",
-    "morgan": "^1.6.1"
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-webpack": "^1.7.0",
+    "morgan": "^1.6.1",
+    "phantomjs-prebuilt": "^2.1.7",
+    "webpack": "^1.13.1"
   }
 }

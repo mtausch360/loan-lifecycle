@@ -24,4 +24,5 @@ function loanPanel(loanService) {
 
 }
 
-angular.module('loanVisualizer').directive('loanPanel', loanPanel);
+export default loanPanel;
+

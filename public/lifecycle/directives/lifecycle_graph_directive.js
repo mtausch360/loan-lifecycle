@@ -1,6 +1,6 @@
 class lifecycleGraph {
     constructor() {
-        this.templateUrl = 'lifecycle/lifecycle_graph.html';
+        this.templateUrl = 'lifecycle/directives/lifecycle_graph.html';
     }
 
     link(scope, element, attrs) {
@@ -13,4 +13,4 @@ class lifecycleGraph {
 
 }
 
-angular.module('loanVisualizer').directive('lifecycleGraph', lifecycleGraph);
+export default lifecycleGraph;

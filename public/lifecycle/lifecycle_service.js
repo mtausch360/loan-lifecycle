@@ -1,4 +1,5 @@
 function lifecycleService() {
+
     var lifecycle = {
         base: {
             date: null,
@@ -129,97 +130,43 @@ function lifecycleService() {
         return lifecycle;
     }
 
-}
 
-angular.module('loanVisualizer').service('lifecycleService', lifecycleService);
-
-function calculateMonth(loan, amountExtraNow) {
-    var totalAmountPaid = 0;
-    var amountExtraPaid = 0;
-    var amountInterestPaid = 0;
-
-    //add the interest
-    var monthlyInterestAccrued = loan.interestRate / 12 * loan.currentBalance;
-
-    loan.currentBalance += monthlyInterestAccrued;
-
-    if (loan.currentBalance !== 0) {
-
-        if (loan.currentBalance - loan.minimumPayment <= 0) { //if minimum payment is more than required
-
-            amountExtraPaid = 0;
-
-            amountPaid = loan.currentBalance;
-        }
-
-        //figure out how much to pay per month per loan
-        if (amountExtraNow !== 0) {
-
-            if (loan.currentBalance - (loan.minimumPayment + amountExtraNow) <= 0) { //some extra
-
-                amountExtraPaid = loan.currentBalance - loan.minimumPayment;
-                amountExtraNow -= amountExtraPaid;
-
-                amountPaid = loan.minimumPayment + amountExtraPaid;
-
-
-            } else { //all extra
-
-                amountExtraPaid = amountExtraNow;
-                amountExtraNow = 0;
-
-                amountPaid = loan.minimumPayment + amountExtraPaid;
-
+    function bubbleSort(array, key) {
+        var flag = false;
+        var prev = array[0];
+        for (var i = 1; i < array.length; i++) {
+            var curr = array[i];
+            if (prev[key] > curr[key]) {
+                array[i] = prev;
+                array[i - 1] = curr;
+                flag = true;
             }
-
-        } else {
-
-            amountExtraPaid = 0;
-
-            amountPaid = loan.minimumPayment;
-
+            prev = array[i];
         }
+        if (!flag)
+            return array;
+        else
+            return bubbleSort(array, key);
     }
 
-    return {
-        totalAmountPaid,
-        amountExtraPaid,
-        amountInterestPaid,
-        amountExtraNow
-    };
-}
 
-function bubbleSort(array, key) {
-    var flag = false;
-    var prev = array[0];
-    for (var i = 1; i < array.length; i++) {
-        var curr = array[i];
-        if (prev[key] > curr[key]) {
-            array[i] = prev;
-            array[i - 1] = curr;
-            flag = true;
+    function lifecycleIncomplete(loans) {
+
+        var isComplete = true;
+        var loan;
+
+        for (var i = 0; i < loans.length; i++) {
+            loan = loans[i];
+            if (loan.currentBalance > 0) {
+
+                isComplete = false;
+            }
         }
-        prev = array[i];
+
+        return !isComplete;
     }
-    if (!flag)
-        return array;
-    else
-        return bubbleSort(array, key);
 }
 
 
-function lifecycleIncomplete(loans) {
 
-    var isComplete = true;
-    var loan;
-
-    for (var i = 0; i < loans.length; i++) {
-        loan = loans[i];
-        if (loan.currentBalance > 0) {
-
-            isComplete = false;
-        }
-    }
-
-    return !isComplete;
-}
+export default lifecycleService;

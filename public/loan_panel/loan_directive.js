@@ -10,5 +10,5 @@ class loan {
 
 
 }
+export default loan;
 
-angular.module('loanVisualizer').directive('loan', loan);

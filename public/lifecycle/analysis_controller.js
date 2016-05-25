@@ -5,4 +5,4 @@ function AnalysisController($scope, lifecycleService, loanService){
 
 }
 
-angular.module('loanVisualizer').controller('AnalysisController', AnalysisController);
+export default AnalysisController;

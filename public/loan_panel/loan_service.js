@@ -24,53 +24,54 @@ function loanService(){
     localStorage.setItem('loans', JSON.stringify([
       {
         name: 'sm1',
-        currentBalance: 11350.12,
+        balance: 11350.12,
+        principal: 11350.12,
+        interest: 0,
         interestRate: 0.0825,
         minimumPayment: 229.88,
       },
       {
         name: 'sm2',
-        currentBalance: 7897.15,
+        balance: 7897.15,
+        principal: 7897.15,
+        interest: 0,
         interestRate: 0.0725,
         minimumPayment: 136.10,
       },
       {
         name: 'sm3',
-        currentBalance: 5738.86,
+        balance: 5738.86,
+        principal: 5738.86,
+        interest: 0,
         interestRate: 0.0725,
         minimumPayment: 98.29,
       },
       {
         name: 'AES1',
-        currentBalance: 8778.63,
+        balance: 8778.63,
+        principal: 8778.63,
+        interest: 0,
         interestRate: 0.0377,
         minimumPayment: 53.82,
       },
 
       {
         name: 'GLS1',
-        currentBalance: 11293.97,
+        balance: 11293.97,
+        principal: 11293.97,
+        interest: 0,
         interestRate: 0.034,
         minimumPayment: 53.82,
       },
       {
         name: 'AES2',
-        currentBalance: 7563.24,
+        balance: 7563.24,
+        principal: 7563.24,
+        interest: 0,
         interestRate: 0.0386,
         minimumPayment: 53.82,
       }
-      // {
-      //   name: 'AES1',
-      //   currentBalance: 8778.63,
-      //   interestRate: 0.0377,
-      //   minimumPayment: 53.82,
-      // },
-      // {
-      //   name: 'AES1',
-      //   currentBalance: 8778.63,
-      //   interestRate: 0.0377,
-      //   minimumPayment: 53.82,
-      // },
+
     ]) );
   }
 
@@ -83,7 +84,4 @@ function loanService(){
 
 }
 
-angular.module('loanVisualizer').service('loanService', loanService);
-
-
-
+export default loanService;
