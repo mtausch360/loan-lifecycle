@@ -17,7 +17,7 @@ class Loan {
 
   /**
    * Payments assume that any overpayment is applied to principal balance.
-   * Calling this function also ages the Loan one month and capitalizes and previous interest
+   * Calling this function also ages the Loan one month and capitalizes any previous interest
    *
    * @param  {[number]} amount [total money to paydown on this loan]
    * @return {[type]}     [description]
@@ -29,9 +29,10 @@ class Loan {
     var amountPaid = 0;
     var principalPaid = 0;
     var change;
+    var extra = amountTendered - this.minimumPayment;
 
     //first pay off any interest
-    if( this.interest - amount > 0){
+    if( this.interest - amount >= 0){
       interestPaid = amount;
       amount = 0;
       this.interest -= interestPaid;
@@ -42,7 +43,7 @@ class Loan {
     }
 
     //then pay off principal balance
-    if( this.principal - amount > 0){
+    if( this.principal - amount >= 0){
       principalPaid = amount;
       amount = 0;
       this.principal -= principalPaid;
@@ -52,12 +53,16 @@ class Loan {
       this.principal = 0;
     }
 
+
+
     this._calculateBalance();
 
     return {
         amountTendered,
         amountPaid: interestPaid + principalPaid,
+        extraPaid: this.minimumPayment,
         change: amount,
+        extraPaid: amountTendered - this.minimumPayment,
         principalPaid,
         interestPaid
     };
@@ -74,7 +79,8 @@ class Loan {
     this.principal += this.interest;
     this.interest = 0;
 
-    var monthlyInterestAccrued = this.interestRate / 12 * this.principal;
+    //need better way to deal with division, losing significance
+    var monthlyInterestAccrued = Number( (this.interestRate / 12 * this.principal).toFixed(2));
 
     this.interest += monthlyInterestAccrued;
     this.interestAccrued += monthlyInterestAccrued;

@@ -11,7 +11,7 @@ import loanService from "./loan_panel/loan_service";
 import loan from "./loan_panel/loan_directive";
 
 //modules
-import Loan from "./modules/Loan.js";
+import Loan from "./modules/Loan";
 
 //init angular app
 angular.module('loanVisualizer', []);

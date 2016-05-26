@@ -1,6 +1,6 @@
 function lifecycleService() {
 
-    var lifecycle = {
+    var lifecycleState = {
         base: {
             date: null,
             lifecycle: null
@@ -21,23 +21,27 @@ function lifecycleService() {
     function createLifecycles(loans, settings){
 
     	return;
-    	lifecycle.custom.lifecycle = create(loans, settings.method, settings.amountExtra );
-    	lifecycle.custom.date = Date.now();
+    	lifecycleState.custom.lifecycle = new Lifecycle(loans, settings.method, settings.amountExtra );
+    	lifecycleState.custom.date = Date.now();
 
-    	lifecycle.base.lifecycle = create(loans, settings.method, 0 );
-    	lifecycle.base.date = Date.now();
+    	lifecycleState.base.lifecycle = new Lifecycle(loans, settings.method);
+    	lifecycleState.base.date = Date.now();
 
     }
 
     function getLifecycle() {
-        return this.lifecycle;
+        return lifecycleState;
     }
 
-    function create(loans, method, amountExtraPerMonth) {
+    function create(loans, method, amountExtraPerMonth = 0) {
+ 
+        var Loans = [];
+        _.each(loans, function(loan){
+            Loans.push( new Loan(loan) );
+        });
 
-        loans = angular.copy(loans);
         amountExtraPerMonth = amountExtraPerMonth || 0;
-        lifecycle = {
+        var lifecycle = {
             method: method,
             amountExtraPerMonth: amountExtraPerMonth,
             series: [],
@@ -64,23 +68,23 @@ function lifecycleService() {
 
         };
 
-        _.each(loans, function(l) {
+        _.each(Loans, function(l) {
 
             init.minimumPayment += l.minimumPayment;
             init.currentBalance += l.currentBalance;
 
         });
 
-        while (lifecycleIncomplete(loans)) {
+        while (lifecycleIncomplete(Loans)) {
 
             amountExtraNow = amountExtraPerMonth;
 
             switch (method) {
                 case 'HI_INTEREST':
-                    bubbleSort(loans, 'interestRate');
+                    bubbleSort(Loans, 'interestRate');
                     break;
                 case 'LO_BALANCE':
-                    bubbleSort(loans, 'currentBalance');
+                    bubbleSort(Loans, 'currentBalance');
                     break;
             }
 
@@ -103,18 +107,19 @@ function lifecycleService() {
 
             cumulativeMonth = lifecycle.series[monthIndex];
 
-            _.each(loans, function(loan, i) {
-                var res = calculateMonth(loan, amountExtraNow);
+            _.each(Loans, function(L, i) {
+                L.age();
+                let { amountTendered,amountPaid, change, principalPaid, interestPaid } = L.makePayment( L.minimumPayment + amountExtraNow );
 
-                amountExtraNow = res.amountExtraNow;
-                cumulativeMonth.amountPaid += res.amountPaid;
-                cumulativeMonth.amountExtraPaid += res.amountExtraPaid;
-                cumulativeMonth.amountPrincipalPaid += res.amountPrincipalPaid;
-                cumulativeMonth.amountInterestPaid += res.amountInterestPaid;
-
+                amountExtraNow = L.minimumPayment - change -; //need to calculate how much extra cash has been spent
+                cumulativeMonth.amountPaid += amountPaid;
+                // cumulativeMonth.amountExtraPaid += amountExtraPaid;
+                cumulativeMonth.principalPaid += principalPaid;
+                cumulativeMonth.interestPaid += interestPaid;
                 cumulativeMonth.interest += res.interest;
 
-                cumulativeMonth.currentBalance += loan.currentBalance;
+                cumulativeMonth.balance += L.balance;
+
             });
 
 
