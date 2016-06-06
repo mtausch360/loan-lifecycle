@@ -9,13 +9,15 @@ module.exports = function(config) {
         files: [
             // './public/app.js',
             // './spec/*_spec.js',
+            './node_modules/lodash/lodash.js',
             './spec/**/*_spec.js'
             // each file acts as entry point for the webpack configuration
         ],
+        logLevel: config.LOG_DEBUG,
 
         preprocessors: {
             // add webpack as preprocessor
-            // './public/app.js': ['webpack'],
+            // './public/app.js': ['webpack', 'babel'],
             // './spec/*_spec.js': ['webpack', 'babel'],
             './spec/**/*_spec.js': ['webpack', 'babel']
         },
@@ -25,7 +27,7 @@ module.exports = function(config) {
         webpackMiddleware: {
             // webpack-dev-middleware configuration
             // i. e.
-            noInfo: true
+            noInfo: false
         }
     });
 };

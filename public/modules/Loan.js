@@ -1,8 +1,9 @@
 class Loan {
 
-  constructor({name, id = Math.floor(Math.random()*10000), interestRate, minimumPayment, principal, interest} ){
+  //find better way to id things
+  constructor( { name, interestRate, minimumPayment, principal, interest } ){
     this.name = name;
-    this.id = id;
+    this.id = Math.floor(Math.random()*10000);
     this.interestRate = interestRate;
     this.minimumPayment = minimumPayment;
     this.principal = principal;
@@ -59,10 +60,10 @@ class Loan {
 
     return {
         amountTendered,
-        amountPaid: interestPaid + principalPaid,
+        amountPaid: (interestPaid + principalPaid),
         extraPaid: this.minimumPayment,
         change: amount,
-        extraPaid: amountTendered - this.minimumPayment,
+        // extraPaid: (amountTendered - this.minimumPayment),
         principalPaid,
         interestPaid
     };
@@ -94,11 +95,10 @@ class Loan {
    * @return {[type]} [description]
    */
   _calculateBalance(){
-    if( this.principal || this.interest)
       this.balance = this.principal + this.interest;
-    else {
-      this.balance = 0;
-      this.alive = false;
+
+      if( this.balance )
+        this.alive = false;
     }
   }
 }

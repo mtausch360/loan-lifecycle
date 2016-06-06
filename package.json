@@ -4,7 +4,8 @@
   "description": "view the different outcomes for the repayment of your loans",
   "main": "index.js",
   "scripts": {
-    "test": "none"
+    "test": "karma start",
+    "lint": "jshint **.js"
   },
   "repository": {
     "type": "git",
@@ -28,12 +29,12 @@
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.3.13",
     "jasmine": "^2.4.1",
+    "jshint": "^2.9.2",
     "karma": "^0.13.22",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-webpack": "^1.7.0",
-    "morgan": "^1.6.1",
     "phantomjs-prebuilt": "^2.1.7",
     "webpack": "^1.13.1"
   }

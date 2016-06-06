@@ -11,7 +11,8 @@ import loanService from "./loan_panel/loan_service";
 import loan from "./loan_panel/loan_directive";
 
 //modules
-import Loan from "./modules/Loan";
+// import Loan from "./modules/Loan";
+import Lifecycle from "./modules/Lifecycle";
 
 //init angular app
 angular.module('loanVisualizer', []);
@@ -21,4 +22,4 @@ angular.module('loanVisualizer').service('lifecycleService', lifecycleService);
 
 angular.module('loanVisualizer').directive('loanPanel', loanPanel);
 angular.module('loanVisualizer').service('loanService', loanService);
-angular.module('loanVisualizer').directive('loan', loan);
+angular.module('loanVisualizer').directive('loan', new loan);

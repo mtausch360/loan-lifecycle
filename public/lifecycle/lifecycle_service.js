@@ -14,17 +14,16 @@ function lifecycleService() {
 
     return {
     	getLifecycle,
-    	create,
     	createLifecycles
     };
 
     function createLifecycles(loans, settings){
 
     	return;
-    	lifecycleState.custom.lifecycle = new Lifecycle(loans, settings.method, settings.amountExtra );
+    	lifecycleState.custom.lifecycle = new Lifecycle(loans, settings);
     	lifecycleState.custom.date = Date.now();
 
-    	lifecycleState.base.lifecycle = new Lifecycle(loans, settings.method);
+    	lifecycleState.base.lifecycle = new Lifecycle(loans, settings);
     	lifecycleState.base.date = Date.now();
 
     }

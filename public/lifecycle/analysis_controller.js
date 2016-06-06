@@ -1,7 +1,8 @@
 
 /*@ngInject*/
 function AnalysisController($scope, lifecycleService, loanService){
-  lifecycleService.createLifecycles( loanService.getLoans(), loanService.getSettings() )
+
+  lifecycleService.createLifecycles( loanService.getLoans(), loanService.getSettings() );
 
 }
 
