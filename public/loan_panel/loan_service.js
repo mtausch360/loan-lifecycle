@@ -4,8 +4,11 @@ function loanService(){
 
   if( !localStorage.getItem('loans') ) initLoans();
   loans = JSON.parse(localStorage.getItem('loans'));
+
   if( !localStorage.getItem('settings') ) initSettings();
   settings = JSON.parse( localStorage.getItem('settings') );
+
+  console.log("settings loaded", settings);
 
   return {
     getLoans,
@@ -78,7 +81,7 @@ function loanService(){
   function initSettings(){
     localStorage.setItem('settings', JSON.stringify({
       method: 'HI_INTEREST',
-      amountExtra: 10000
+      extra: 10000
     }));
   }
 

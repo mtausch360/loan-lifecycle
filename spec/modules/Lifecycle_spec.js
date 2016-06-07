@@ -34,8 +34,7 @@ describe('Lifecycle module', function(){
 
   it('should complete the lifecycle without errors', function(){
     var lifecycle = new Lifecycle(loans, {extra: 0, method: 'HI_BALANCE'});
-    console.log(lifecycle);
-    expect(lifecycle).toExist();
+    expect( lifecycle ).not.toBe(undefined);
   });
 
 });

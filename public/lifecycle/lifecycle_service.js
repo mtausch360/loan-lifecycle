@@ -1,4 +1,6 @@
-function lifecycleService() {
+import Lifecycle from '../modules/Lifecycle.js';
+
+function lifecycleService(loanService) {
 
     var lifecycleState = {
         base: {
@@ -9,26 +11,34 @@ function lifecycleService() {
         custom: {
             date: null,
             lifecycle: null
-        }
+        },
+        date: null
     };
 
     return {
-    	getLifecycle,
+    	getState,
     	createLifecycles
     };
 
-    function createLifecycles(loans, settings){
-
-    	return;
-    	lifecycleState.custom.lifecycle = new Lifecycle(loans, settings);
-    	lifecycleState.custom.date = Date.now();
-
-    	lifecycleState.base.lifecycle = new Lifecycle(loans, settings);
-    	lifecycleState.base.date = Date.now();
+    function createLifecycles(){
+        updateCustom();
+        updateBase();
+        lifecycleState.date = Date.now();
+        console.log(lifecycleState);
 
     }
 
-    function getLifecycle() {
+    function updateCustom(){
+        lifecycleState.custom.lifecycle = new Lifecycle(loanService.getLoans(), loanService.getSettings());
+        lifecycleState.custom.date = Date.now();
+    }
+
+    function updateBase(){
+        lifecycleState.base.lifecycle = new Lifecycle(loanService.getLoans(), loanService.getSettings(), /* base lifecycle */ true);
+        lifecycleState.base.date = Date.now();
+    }
+
+    function getState() {
         return lifecycleState;
     }
 

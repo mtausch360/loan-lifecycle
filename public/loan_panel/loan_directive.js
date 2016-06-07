@@ -1,14 +1,15 @@
-class loan {
+import tpl from './loan.html';
 
-  constructor(){
-    this.templateUrl = 'loan_panel/loan.html';
+function loan() {
+  return {
+    template: tpl,
+    link,
   }
-
-  link(scope, element, attrs){
-
-  }
-
-
 }
+
+function link(scope, element, attrs){
+  console.log('link directive');
+}
+
 export default loan;
 

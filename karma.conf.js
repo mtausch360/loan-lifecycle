@@ -13,7 +13,7 @@ module.exports = function(config) {
             './spec/**/*_spec.js'
             // each file acts as entry point for the webpack configuration
         ],
-        logLevel: config.LOG_DEBUG,
+        logLevel: config.LOG_INFO,
 
         preprocessors: {
             // add webpack as preprocessor

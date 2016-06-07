@@ -3,10 +3,10 @@
     <div class="minimumPayment">${{loan.minimumPayment}}/month</div>
     <div class="interestRate">${{loan.interestRate * 100 | number}}%</div>
     <div class="balance">
-        Current Balance ${{loan.currentBalance}}
-        <!-- <div style="margin-left: 5px;">
-            {{loan.principalBalance}}
-            {{loan.interest}}
-        </div> -->
+        Balance ${{loan.balance}}
+        <div style="margin-left: 5px;">
+            <div> Principal ${{loan.principal}}</div>
+            <div> Interest ${{loan.interest}}</div>
+        </div>
     </div>
 </div>

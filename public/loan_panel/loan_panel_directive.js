@@ -1,15 +1,18 @@
+import tpl from './loan_panel.html';
+
+
 function loanPanel(loanService) {
 
   return {
-    restrict: 'AE',
-    templateUrl: 'loan_panel/loan_panel.html',
+    restrict: 'E',
+    template: tpl,
     link: function(scope, element, attrs){
 
       if( !localStorage.getItem('settings') )
         init();
 
-      scope.settings = JSON.parse( localStorage.getItem('settings') );
-
+      scope.settings = loanService.getSettings();
+      console.log(scope.settings);
       scope.loans = loanService.getLoans();
 
       scope.$watch('settings', function(){
