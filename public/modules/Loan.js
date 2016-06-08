@@ -120,7 +120,7 @@ class Loan {
         this.principal += this.interest;
         this.interest = 0;
 
-        //need better way to deal with division, losing significance
+        //need better way to deal with specific dates, losing significance slightly over 1 year
         var monthlyInterestAccrued = Number((this.interestRate / 12 * this.principal).toFixed(2));
 
         this.interest += monthlyInterestAccrued;

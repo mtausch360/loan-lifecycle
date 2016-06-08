@@ -1,14 +1,13 @@
 import tpl from './loan.html';
 
-function loan() {
+function loan(loanService) {
   return {
     template: tpl,
-    link,
+    link: function(scope, element, attrs){
+      scope.removeLoan = loanService.removeLoan;
+      scope.$watch('loan', ()=> loanService.saveLoans(), true)
+    }
   }
-}
-
-function link(scope, element, attrs){
-  console.log('link directive');
 }
 
 export default loan;

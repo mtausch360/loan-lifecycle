@@ -36,6 +36,8 @@
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-webpack": "^1.7.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
     "phantomjs-prebuilt": "^2.1.7",
     "raw-loader": "^0.5.1",
     "webpack": "^1.13.1"

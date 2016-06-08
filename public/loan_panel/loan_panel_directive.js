@@ -8,20 +8,26 @@ function loanPanel(loanService) {
     template: tpl,
     link: function(scope, element, attrs){
 
-      if( !localStorage.getItem('settings') )
-        init();
 
       scope.settings = loanService.getSettings();
-      console.log(scope.settings);
       scope.loans = loanService.getLoans();
 
+      scope.saveSettings = ()=>{
+        scope.$emit('edit', { type: 'settings'});
+      };
+
+
       scope.$watch('settings', function(){
-        save();
+        loanService.saveSettings();
       }, true);
 
-      function save(){
-        localStorage.setItem('settings', JSON.stringify(scope.settings));
+      scope.addLoan = loanService.addLoan;
+
+
+      scope.saveLoans = ()=>{
+        scope.$emit('edit', { type: 'loans' });
       }
+
     }
   }
 

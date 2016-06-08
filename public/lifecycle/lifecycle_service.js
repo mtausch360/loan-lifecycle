@@ -17,7 +17,8 @@ function lifecycleService(loanService) {
 
     return {
     	getState,
-    	createLifecycles
+    	createLifecycles,
+        updateCustom,
     };
 
     function createLifecycles(){
@@ -29,12 +30,22 @@ function lifecycleService(loanService) {
     }
 
     function updateCustom(){
-        lifecycleState.custom.lifecycle = new Lifecycle(loanService.getLoans(), loanService.getSettings());
+        let custom = new Lifecycle(loanService.getLoans(), loanService.getSettings());
+        if( !lifecycleState.custom.lifecycle)
+            lifecycleState.custom.lifecycle = custom;
+        else
+            _.extend(lifecycleState.custom.lifecycle, custom);
+
         lifecycleState.custom.date = Date.now();
     }
 
     function updateBase(){
-        lifecycleState.base.lifecycle = new Lifecycle(loanService.getLoans(), loanService.getSettings(), /* base lifecycle */ true);
+        let base = new Lifecycle(loanService.getLoans(), loanService.getSettings(), /* base lifecycle */ true);
+        if( !lifecycleState.base.lifecycle)
+            lifecycleState.base.lifecycle = base;
+        else
+            _.extend(lifecycleState.base.lifecycle, base);
+
         lifecycleState.base.date = Date.now();
     }
 

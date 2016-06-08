@@ -2,18 +2,29 @@ import tpl from './repayment_breakdown.html';
 
 function repaymentBreakdown() {
   return {
+    restrict: 'E',
     template: tpl,
     link: (scope, element, attrs)=>{
-      let base;
-      let custom;
-      scope.$watch('lifecycles.date', function(s, newValue, oldValue) {
-          if (newValue){
-            custom = scope.lifecycles.custom.lifecycle;
-            base = scope.lifecycles.base.lifecycle;
-            create();
-          }
+
+      let custom = scope.lifecycles.custom.lifecycle;
+      let base = scope.lifecycles.base.lifecycle;
+      var updateCustom;
+      var updateBase;
+      var updateAxes;
+
+      create();
+
+      scope.$on('redrawCustom', function(){
+        console.log('redraw custom recieved');
+        updateCustom()
       });
 
+      scope.$on('redrawAll', function(){
+        console.log('redrawAll called');
+        updateAxes();
+        updateCustom();
+        updateBase();
+      })
 
       function create(){
         var width = 600;
@@ -35,11 +46,14 @@ function repaymentBreakdown() {
           height: height - margin.top - margin.bottom
         };
 
+        var Custom = {};
+        var Base = {};
 
-        var chart = d3.select('.repayment-breakdown-container')
+
+        var svg = d3.select('.repayment-breakdown-container')
           .append('svg')
-          .attr('width', width)
-          .attr('height', height);
+            .attr('width', width)
+            .attr('height', height);
 
         var domain = {
           base: 0,
@@ -57,17 +71,17 @@ function repaymentBreakdown() {
         var xAxis = d3.svg.axis().scale(xScale).orient('bottom');
         var yAxis = d3.svg.axis().scale(yScale).orient('left');
 
-        var xAxisEl = chart.append('g')
+        var xAxisEl = svg.append('g')
           .classed('x-axis', true)
           .attr('transform', 'translate(' + margin.left + ',' + (margin.top + plotArea.height) + ')' )
           .call(xAxis);
 
-        var yAxisEl = chart.append('g')
+        var yAxisEl = svg.append('g')
           .classed('y-axis', true)
           .attr('transform', 'translate(' + margin.left + ',' + ( margin.top) + ')' )
           .call(yAxis);
 
-        var plotArea = chart.append('g').classed('plot-area', true)
+        var plotArea = svg.append('g').classed('plot-area', true)
           .attr('width', plotArea.width )
           .attr('height', plotArea.height )
           .attr('transform', 'translate(' + (margin.left) + ', ' + ( margin.top ) + ')');
@@ -76,65 +90,90 @@ function repaymentBreakdown() {
         var baseBreakdown = plotArea.append('g').classed('base breakdown', true);
 
 
-        baseBreakdown.append('rect')
+        Base.totalPrincipal = baseBreakdown
+          .append('rect')
+            .attr('transform', 'translate(' + 0 + ',' + (20) + ')' )
+            .attr('height', () => bar.height)
+            .attr('fill', 'blue' );
+
+        Base.totalInterest = baseBreakdown
+          .append('rect')
           .attr('transform', 'translate(' + 0 + ',' + (20) + ')' )
           .attr('height', () => bar.height)
-          .attr('width', function() {
-            return xScale( base.totalPrincipalPaid);
-          })
-          .attr('fill', 'blue' );
-
-        baseBreakdown.append('rect')
-          .attr('width', function(){
-            return xScale(base.totalInterestPaid);
-          })
-          .attr('height', () => bar.height)
-          .attr('transform', 'translate(' + xScale( base.totalPrincipalPaid) + ',' + ( 20) + ')' )
           .attr('fill', 'red' );
 
-
-        customBreakdown.append('rect')
+        Custom.totalPrincipal = customBreakdown
+          .append('rect')
           .attr('transform', 'translate(' + 0 + ',' + (70 +20) + ')' )
           .attr('height', () => bar.height)
-          .attr('width', function() {
-            return xScale( custom.totalPrincipalPaid);
-          })
           .attr('fill', 'blue' );
 
-        customBreakdown.append('rect')
-          .attr('transform', 'translate(' + xScale( custom.totalPrincipalPaid ) + ',' + ( 70+ 20) + ')' )
+        Custom.totalPrincipalPaidByExtra = customBreakdown
+          .append('rect')
+          .attr('transform', 'translate(' + 0 + ',' + (70 +20) + ')' )
           .attr('height', () => bar.height)
-          .attr('width', function() {
-            return xScale( custom.totalPrincipalPaidByExtra);
-          })
           .attr('fill', 'pink' );
 
-
-        customBreakdown.append('rect')
-          .attr('width', function(){
-            return xScale(custom.totalInterestPaid);
-          })
+        Custom.totalInterest = customBreakdown
+          .append('rect')
+          .attr('transform', 'translate(' + 0 + ',' + (70 +20) + ')' )
           .attr('height', () => bar.height)
-          .attr('transform', 'translate(' + xScale( base.totalPrincipalPaid + base.totalPrincipalPaidByExtra ) + ',' + (70 + 20) + ')' )
           .attr('fill', 'red' );
 
-        // customBreakdown.append('rect')
-        //   .attr('width', ()=> xScale( custom.totalPrincipalPaid - custom.amountExtraPaid ))
-        //   .attr('height', bar.height)
-        //   .attr('transform', 'translate(' + 0 + ',' + yAxis(1) + ')' )
-        //   .attr('color', ()=> o( custom.totalPrincipalPaid ) );
 
-        // customBreakdown.append('rect')
-        //   .attr('width', ()=> xScale( custom.totalExtraPaid ))
-        //   .attr('height', bar.height)
-        //   .attr('transform', 'translate(' + xScale( custom.totalPrincipalPaid - custom.amountExtraPaid ) + ',' + yAxis(1) + ')' )
-        //   .attr('color', ()=> o( custom.totalExtraPaid ) );
+        updateBase = ()=>{
+          Base.totalPrincipal
+            .transition().delay(400)
+            .attr('transform', 'translate(' + 0 + ',' + (20) + ')' )
+            .attr('width', function() {
+              return xScale( base.totalPrincipalPaid);
+            })
 
-        // custom.append('rect')
-        //   .attr('width', ()=> xScale( custom.totalInterestPaid  ))
-        //   .attr('height', bar.height)
-        //   .attr('transform', 'translate(' + xScale( custom.totalPrincipalPaid ) + ',' + yAxis(1) + ')' )
-        //   .attr('color', ()=> o( custom.totalInterestPaid ) );
+          Base.totalInterest
+            .transition().delay(400)
+            .attr('transform', 'translate(' + xScale( base.totalPrincipalPaid) + ',' + ( 20) + ')' )
+            .attr('width', function(){
+              return xScale(base.totalInterestPaid);
+            })
+            .attr('height', () => bar.height)
+        }
+
+
+        updateCustom = ()=>{
+          Custom.totalPrincipal
+            .transition().delay(400)
+            .attr('transform', 'translate(' + 0 + ',' + (70 +20) + ')' )
+            .attr('height', () => bar.height)
+            .attr('width', function() {
+              return xScale( custom.totalPrincipalPaid);
+            })
+
+          Custom.totalPrincipalPaidByExtra
+            .transition().delay(400)
+            .attr('transform', 'translate(' + xScale( custom.totalPrincipalPaid ) + ',' + ( 70+ 20) + ')' )
+            .attr('height', () => bar.height)
+            .attr('width', function() {
+              return xScale( custom.totalPrincipalPaidByExtra);
+            })
+
+          Custom.totalInterest
+            .transition().delay(400)
+            .attr('transform', 'translate(' + xScale( base.totalPrincipalPaid + base.totalPrincipalPaidByExtra ) + ',' + (70 + 20) + ')' )
+            .attr('width', function(){
+              return xScale(custom.totalInterestPaid);
+            })
+            .attr('height', () => bar.height)
+
+        }
+
+        updateBase();
+        updateCustom();
+
+        updateAxes = ()=>{
+          xScale.domain([0, Math.max(base.totalPaid, custom.totalPaid)]);
+          xAxisEl.call(xAxis);
+        }
+
       }
     }
   }

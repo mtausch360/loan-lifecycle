@@ -10,21 +10,42 @@ function lifecycleGraph() {
     restrict: 'E',
     template: tpl,
     link: (scope, element, attrs)=>{
-      let base;
-      let custom;
-      scope.$watch('lifecycles.date', function(s, newValue, oldValue) {
-          if (newValue){
-            custom = scope.lifecycles.custom.lifecycle;
-            base = scope.lifecycles.base.lifecycle;
-            create();
-          }
+      let base = scope.lifecycles.base.lifecycle;
+      let custom = scope.lifecycles.custom.lifecycle;
+      var updateCustom;
+      var updateBase;
+      var updateAxes;
+
+      create();
+
+
+
+      scope.$on('redrawCustom', function(){
+        console.log('redraw custom recieved');
+          updateCustom()
       });
+
+      scope.$on('redrawAll', function(){
+        console.log('redrawAll called');
+        updateAxes();
+        updateCustom();
+        updateBase();
+      });
+
+      function timeHelper(num){
+        var d = new Date();
+        var currMonth = d.getMonth();
+        var currYear = d.getFullYear();
+
+        var date = new Date( Math.floor( (currMonth + num)/12) +  currYear, (currMonth + num) % 12, 1);
+        return date;
+      }
 
       function create(){
         var width = 600;
-        var height = 300;
+        var height = 400;
         var margin = {
-          top: 0,
+          top: 15,
           left: 75,
           bottom: 50,
           right: 10
@@ -41,10 +62,13 @@ function lifecycleGraph() {
           .attr('height', height);
 
         //create scales
-        var xScale = d3.scale.linear().domain([0, base.series.length]).range([0, plotArea.width]);
+        var xScale = d3.time.scale().domain([timeHelper( 0), timeHelper(base.series.length)]).range([0, plotArea.width]);
         var yScale = d3.scale.linear().domain([0, base.series[0].balance]).range([plotArea.height, 0]);
 
-        var xAxis = d3.svg.axis().scale(xScale).orient('bottom');
+        var xAxis = d3.svg.axis().scale(xScale).orient('bottom')
+          .ticks(6)
+          // .tickSize(16, 0)
+          // .tickFormat(d3.time.format("%B"));
         var yAxis = d3.svg.axis().scale(yScale).orient('left');
 
         var xAxisEl = chart.append('g')
@@ -57,39 +81,66 @@ function lifecycleGraph() {
           .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')' )
           .call(yAxis);
 
-        var plotArea = chart.append('g').classed('plot-area', true)
+        plotArea.element = chart.append('g').classed('plot-area', true)
           .attr('width', width - margin.left - margin.right )
           .attr('height', height - margin.top - margin.bottom )
           .attr('transform', 'translate(' + (margin.left) + ', ' + ( margin.top ) + ')');
 
-        var customSeries = plotArea.append('g').classed('custom series', true);
-        var baseSeries = plotArea.append('g').classed('base series', true);
+        var customSeries = plotArea.element.append('g').classed('custom series', true);
+        var baseSeries = plotArea.element.append('g').classed('base series', true);
 
         var line = d3.svg.line()
-            .x(function(d,i) { return xScale(d.monthIndex); })
+            .interpolate("cardinal")
+            .x(function(d,i) { return xScale( timeHelper(d.monthIndex) ) ; })
             .y(function(d) {
               return yScale(d.balance);
-            })
-            .interpolate("basis");
-
-
-        baseSeries
-            .append('path')
-            .datum(base.series)
-            .attr('class', 'line')
-            .attr('d', function(d){
-              return line(d)
             });
+        var basePath;
+        var customPath;
 
-        customSeries
+        drawBase();
+        drawCustom();
+
+        updateCustom = () => {
+          customPath.remove();
+          drawCustom();
+        }
+
+        updateBase = () => {
+          basePath.remove();
+          drawBase()
+        }
+
+        function drawBase(){
+          basePath = baseSeries.datum(base.series)
             .append('path')
-            .datum(custom.series)
-            .attr('class', 'line')
-            .attr('d', function(d){
-              return line(d)
-            })
-            .attr('stroke-color', 'red');
+                .attr('class', 'line base')
+                .attr('d', (d) => {
+                  return line(d)
+                })
+                .attr('stroke', 'blue');
+        }
+
+        function drawCustom(){
+          customPath = customSeries.datum(custom.series)
+                    .append('path')
+                        .attr('class', 'line custom')
+                        .attr('d', (d) => {
+                          console.log(d, line(d) );
+                          return line(d)
+                        })
+                        .attr('stroke', 'red')
+        }
+
+        updateAxes = () => {
+          xScale.domain([timeHelper(0), timeHelper(base.series.length)]);
+          yScale.domain([0, base.series[0].balance]);
+          xAxisEl.call(xAxis);
+          yAxisEl.call(yAxis);
+        }
       }
+
+
     }
   }
 }

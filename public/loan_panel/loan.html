@@ -1,12 +1,12 @@
 <div class="loan-container">
-    <div class="name"><h3>{{loan.name}}</h3></div>
-    <div class="minimumPayment">${{loan.minimumPayment}}/month</div>
-    <div class="interestRate">${{loan.interestRate * 100 | number}}%</div>
+    <div class="name"><h3>  {{loan.name}}</h3><span style="float: right;" ng-click="removeLoan(loan)">delete</span></div>
+    <div class="minimumPayment">MinimumPayment $<input ng-model="loan.minimumPayment" type="number">/month</div>
+    <div class="interestRate">Interest Rate <input ng-model="loan.interestRate" type="number">%</div>
     <div class="balance">
-        Balance ${{loan.balance}}
+        Balance ${{loan.principal + loan.interest}}
         <div style="margin-left: 5px;">
-            <div> Principal ${{loan.principal}}</div>
-            <div> Interest ${{loan.interest}}</div>
+            <div> Principal $<input ng-model="loan.principal" type="number"></div>
+            <div> Interest $<input ng-model="loan.interest" type="number"></div>
         </div>
     </div>
 </div>
