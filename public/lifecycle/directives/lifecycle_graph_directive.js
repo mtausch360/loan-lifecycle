@@ -66,7 +66,7 @@ function lifecycleGraph() {
         var yScale = d3.scale.linear().domain([0, base.series[0].balance]).range([plotArea.height, 0]);
 
         var xAxis = d3.svg.axis().scale(xScale).orient('bottom')
-          .ticks(6)
+          .ticks(4)
           // .tickSize(16, 0)
           // .tickFormat(d3.time.format("%B"));
         var yAxis = d3.svg.axis().scale(yScale).orient('left');
@@ -133,7 +133,7 @@ function lifecycleGraph() {
         }
 
         updateAxes = () => {
-          xScale.domain([timeHelper(0), timeHelper(base.series.length)]);
+          xScale.domain([timeHelper(0), timeHelper( Math.max( base.series.length, custom.series.length) )  ]);
           yScale.domain([0, base.series[0].balance]);
           xAxisEl.call(xAxis);
           yAxisEl.call(yAxis);

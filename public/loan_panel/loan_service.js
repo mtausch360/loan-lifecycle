@@ -9,8 +9,7 @@ function loanService(){
   }
 
   state = JSON.parse(localStorage.getItem('loanVisState'));
-
-  if( !localStorage.getItem('loans') ) initLoans();
+initLoans();
 
   loans = JSON.parse(localStorage.getItem('loans'));
 
