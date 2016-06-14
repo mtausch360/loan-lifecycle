@@ -1,4 +1,4 @@
-import Lifecycle from '../modules/Lifecycle.js';
+import Lifecycle from '../../modules/Lifecycle.js';
 
 function lifecycleService(loanService) {
 

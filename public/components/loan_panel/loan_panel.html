@@ -1,0 +1,20 @@
+<div>
+    <div class="nav">
+        <div class="nav-el" ng-click="toggleShowSettings(false)">
+            Loans
+        </div>
+        <div class="nav-el" ng-click="toggleShowSettings(true)">
+            Settings
+        </div>
+    </div>
+    <div class="settings" ng-if="showSettings">
+        Amount Extra: $<input type="number" ng-model="settings.extra">
+        <button ng-click="saveSettings()">Go!</button>
+    </div>
+    <div class="loans" ng-if="!showSettings">
+        <span ng-click="addLoan()">Add Loan</span> <button ng-click="saveLoans()">Update!</button>
+        <div class="loan" ng-repeat="loan in loans track by loan.id">
+            <loan></loan>
+        </div>
+    </div>
+</div>

@@ -19,24 +19,31 @@
                 padding: 10px;
             }
 
-            .domain{
-                display: none;
+
+            .axis {
+              shape-rendering: crispEdges;
             }
-            .line {
+
+            path{
+                fill: none;
+            }
+
+            .y-axis line, .y-axis path,
+            .x-axis line, .x-axis path {
               fill: none;
-              stroke-width: 1.5px;
+              stroke: #000;
             }
         </style>
 
+
     </head>
 
-    <body ng-controller="AnalysisController">
+    <body ng-controller="AppController">
 
         <div class="container">
 
             <div class="row">
 
-                <h3>Lifecycle</h3>
                 <div class="row">
 
                     <div class="col-md-4">
@@ -45,7 +52,7 @@
 
                     <div class="col-md-8">
 
-                        <div ng-include="'lifecycle/lifecycle.html'"></div>
+                        <div ng-include="'./components/lifecycle/lifecycle.html'"></div>
                     </div>
                 </div>
 

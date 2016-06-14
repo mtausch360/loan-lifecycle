@@ -6,6 +6,7 @@ function loan(loanService) {
     link: function(scope, element, attrs){
       scope.removeLoan = loanService.removeLoan;
       scope.$watch('loan', ()=> loanService.saveLoans(), true)
+
     }
   }
 }

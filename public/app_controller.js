@@ -1,6 +1,5 @@
 
-/*@ngInject*/
-function AnalysisController($scope, lifecycleService){
+function AppController($scope, lifecycleService){
 
   $scope.lifecycles = lifecycleService.getState();
   lifecycleService.createLifecycles();
@@ -45,4 +44,4 @@ function AnalysisController($scope, lifecycleService){
 
 }
 
-export default AnalysisController;
+export default AppController;
