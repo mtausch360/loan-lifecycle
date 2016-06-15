@@ -1,5 +1,5 @@
 
-function AppController($scope, lifecycleService){
+function AppController($scope, lifecycleService, $timeout){
 
   $scope.lifecycles = lifecycleService.getState();
   lifecycleService.createLifecycles();
@@ -7,18 +7,22 @@ function AppController($scope, lifecycleService){
   let lastCustomDate = $scope.lifecycles.custom.date;
   let lastBaseDate = $scope.lifecycles.base.date;
 
-  // $scope.$watch('lifecycles.date', function(newVal, oldVal, scope){
-  //   if( lastCustomDate !== $scope.lifecycles.custom.date && lastBaseDate !== $scope.lifecycles.base.date && newVal !== oldVal ){
-  //     $scope.broadcast('redrawAll');
+  $scope.showNav = true;
 
-  //   } else if( lastCustomDate !== $scope.lifecycles.custom.date ) {
-  //     $scope.broadcast('redrawCustom');
-  //   }
-  //   // else if( lastBaseDate !== $scope.lifecycles.base.date ) {
-  //   //   lifecycleService.
-  //   // }
-  // });
-
+  $scope.toggleNav = ()=>{
+    $scope.showNav = !$scope.showNav;
+    render()
+    let count = 0;
+    function render(){
+      $timeout(()=>{
+        $scope.$broadcast('render')
+        count++
+        if( count < 100)
+          render()
+      }
+        , 10);
+    }
+  };
 
   $scope.$on('edit', function(event, data){
     console.log('edit event received', data);
@@ -41,6 +45,8 @@ function AppController($scope, lifecycleService){
     lifecycleService.updateCustom();
     $scope.$broadcast('redrawCustom');
   }
+
+
 
 }
 

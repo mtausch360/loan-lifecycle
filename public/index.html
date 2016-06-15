@@ -12,54 +12,25 @@
         <script src="dist/bundle.js"></script>
 
         <link rel="stylesheet" type="text/css"  href="libs/bootstrap/dist/css/bootstrap.css" >
-        <style>
-            .loan-container{
-                border: 1px solid black;
-                margin-bottom: 10px;
-                padding: 10px;
-            }
-
-
-            .axis {
-              shape-rendering: crispEdges;
-            }
-
-            path{
-                fill: none;
-            }
-
-            .y-axis line, .y-axis path,
-            .x-axis line, .x-axis path {
-              fill: none;
-              stroke: #000;
-            }
-        </style>
-
 
     </head>
 
     <body ng-controller="AppController">
 
-        <div class="container">
+        <lifecycle-nav></lifecycle-nav>
 
-            <div class="row">
+        <div class="content-container">
 
-                <div class="row">
 
-                    <div class="col-md-4">
-                        <loan-panel></loan-panel>
-                    </div>
+            <div id="loan-panel" ng-class="{'full': !showNav }" class="loan-panel-container">
+                <loan-panel></loan-panel>
+            </div>
 
-                    <div class="col-md-8">
-
-                        <div ng-include="'./components/lifecycle/lifecycle.html'"></div>
-                    </div>
-                </div>
-
+            <div id="lifecycle-panel" class="lifecycle-panel-container" ng-class="{'full': !showNav}">
+                <div ng-include="'./components/lifecycle/lifecycle.html'"></div>
             </div>
 
         </div>
-
 
     </body>
 

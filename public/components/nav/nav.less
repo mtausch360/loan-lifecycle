@@ -1,0 +1,37 @@
+.nav-bar {
+  position: fixed;
+  width: 100%;
+  background-color: white;
+  height: @navHeight;
+  overflow-y: hidden;
+  border-bottom: 1px solid;
+
+  .loan-panel-nav{
+    width: @loanPanelWidth;
+    .nav-el {
+      width : 49%;
+      &:first-child{
+        border-right: 1px solid @borderColor;
+      }
+
+    }
+  }
+
+  .lifecycle-panel-nav{
+    width: @lifecyclePanelWidth;
+  }
+}
+
+.l-nav{
+  display: inline-block;
+  .l-nav-el{
+    padding: 5px;
+    text-align: center;
+    display:inline-block;
+
+    &:hover {
+      cursor: pointer;
+      background-color: blue;
+    }
+  }
+}

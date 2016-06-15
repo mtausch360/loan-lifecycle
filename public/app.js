@@ -1,19 +1,12 @@
-//dependencies
-
-//modules
-// import Loan from "./modules/Loan";
-// import Lifecycle from "./modules/Lifecycle";
-
 import AppController from "./app_controller";
+import lifecycleNav from "./components/nav/nav_directive";
 
-//lifecycle
 import lifecycleGraph from "./components/lifecycle_graph/lifecycle_graph_directive";
-
 import repaymentBreakdown from "./components/repayment_breakdown/repayment_breakdown_directive";
+import loanPanel from "./components/loan_panel/loan_panel_directive";
 
 import lifecycleService from "./components/lifecycle/lifecycle_service";
 
-import loanPanel from "./components/loan_panel/loan_panel_directive";
 import loanService from "./components/loan_panel/loan_panel_service";
 import loan from "./components/loan/loan_directive";
 
@@ -28,3 +21,4 @@ angular.module('loanVisualizer').service('lifecycleService', lifecycleService);
 angular.module('loanVisualizer').directive('loanPanel', loanPanel);
 angular.module('loanVisualizer').service('loanService', loanService);
 angular.module('loanVisualizer').directive('loan', loan);
+angular.module('loanVisualizer').directive('lifecycleNav', lifecycleNav);

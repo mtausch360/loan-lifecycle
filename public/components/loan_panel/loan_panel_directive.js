@@ -12,12 +12,6 @@ function loanPanel(loanService) {
       scope.settings = loanService.getSettings();
       scope.loans = loanService.getLoans();
 
-      scope.showSettings = true;
-
-      scope.toggleShowSettings = (show) =>{
-        scope.showSettings = show;
-      }
-
       scope.saveSettings = ()=>{
         scope.$emit('edit', { type: 'settings'});
       };

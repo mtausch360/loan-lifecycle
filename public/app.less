@@ -1,6 +1,50 @@
-@border-color = #ccc;
+@borderColor: #ccc;
+@navHeight: 30px;
+@loanPanelWidth: 33.333%;
+@lifecyclePanelWidth: 66.666%;
+@panelHeight: 800px;
+
+.content-container{
+  padding-top: 30px;
+}
+.panel{
+  height: @panelHeight;
+  display: inline-block;
+  position: relative;
+
+}
+
+.swingTransition(@prop) {
+  transition: @prop 1s ease;
+}
+
+.lifecycle-panel-container{
+  &.full{
+    width: 100% !important;
+  }
+  width: @lifecyclePanelWidth;
+  float: right;
+  .panel;
+  .swingTransition(width);
+}
+
+.loan-panel-container {
+
+}
+
+.loan-panel-container{
+  width: @loanPanelWidth;
+  border-right: 1px solid @borderColor;
+  &.full {
+    left: -100%;
+  }
+  .panel;
+  .swingTransition(left);
+}
 
 @import "./components/loan/loan";
+@import "./components/nav/nav";
 @import "./components/loan_panel/loan_panel";
+@import "./components/lifecycle/lifecycle";
 
 
