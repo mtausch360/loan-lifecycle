@@ -1,0 +1,47 @@
+.editable-input{
+  @height: 40px;
+  @width: 180px;
+  @inputWidth: 120px;
+  @inputHeight: @height/2;
+  @backgroundColor: lightBlue;
+  padding: 5px;
+  display: inline-block;
+  position: relative;
+  transition: background-color 500ms ease;
+  height: @height;
+  &.big{
+    font-size: 18px;
+    font-weight: 600;
+  }
+  &:hover {
+    background-color: @backgroundColor;
+  }
+  input {
+    width: @inputWidth;
+    height: @inputHeight;
+    display: inline;
+  }
+
+  .view {
+    width: @width;
+    transition: display 250ms ease;
+    .edit-button {
+      display: inline;
+      transition: color 250ms ease;
+      &:hover {
+        color: blue;
+      }
+    }
+  }
+  .edit {
+    width: @width;
+  }
+
+  .action-box{
+    display: inline-block;
+    position: absolute;
+    // background-color: blue;
+    transition: background-color 500ms ease;
+    .element{}
+  }
+}

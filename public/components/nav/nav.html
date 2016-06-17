@@ -1,19 +1,21 @@
 <div class="nav-bar">
 
-    <div ng-if="showNav" class="loan-panel-nav l-nav">
-        <div class="nav-el l-nav-el" ng-click="toggleShowSettings(false)">
+    <div ng-class="{full: !showNav}" class="loan-panel-nav l-nav">
+        <div class="nav-el l-nav-el" ng-class="{'active': !showSettings}" ng-click="toggleShowSettings(false)">
             Loans
         </div>
-        <div class="nav-el l-nav-el" ng-click="toggleShowSettings(true)">
+        <div class="nav-el l-nav-el" ng-class="{'active': showSettings}" ng-click="toggleShowSettings(true)">
             Settings
         </div>
     </div>
 
-    <div class="lifecycle-nav l-nav">
-        <div class="nav-el l-nav-el">
-            <button ng-click="toggleNav()">Show Settings</button>
-            Lifecycle
+    <div ng-class="{full: !showNav}" class="lifecycle-panel-nav l-nav">
+        <div class="nav-el l-nav-el" ng-click="toggleNav()">
+            <div class="glyphicon"
+                ng-class="{'glyphicon-menu-left': showNav, 'glyphicon-menu-right': !showNav}">
+            </div>
         </div>
+        <div class="nav-el l-nav-el">Lifecycle</div>
     </div>
 
 </div>

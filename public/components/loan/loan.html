@@ -1,12 +1,16 @@
 <div class="loan-container">
-    <div class="name"><h3>  {{loan.name}}</h3><span style="float: right;" ng-click="removeLoan(loan)">delete</span></div>
-    <div class="minimumPayment">MinimumPayment $<input ng-model="loan.minimumPayment" type="number">/month</div>
-    <div class="interestRate">Interest Rate <input ng-model="loan.interestRate" type="number">%</div>
+    <span style="float: right;" class="glyphicon glyphicon-trash" ng-click="removeLoan(loan)"></span>
+    <editable-input class="big" model="loan.name" type="text" on-save="saveLoans()"></editable-input>
     <div class="balance">
-        Balance ${{loan.principal + loan.interest}}
-        <div style="margin-left: 5px;">
-            <div> Principal $<input ng-model="loan.principal" type="number"></div>
-            <div> Interest $<input ng-model="loan.interest" type="number"></div>
-        </div>
+        <div class="prop">Balance</div>
+        <editable-input prefix="$" model="loan.balance" type="number" on-save="saveLoans()"></editable-input>
+    </div>
+    <div class="minimum-payment">
+        <div class="prop">Minimum Payment</div>
+        <editable-input model="loan.minimumPayment" type="number" prefix="$" on-save="saveLoans()"></editable-input>
+    </div>
+    <div class="interest-rate">
+        <div class="prop">Interest Rate</div>
+        <editable-input model="loan.interestRate" type="number" suffix="%" on-save="saveLoans()"></editable-input>
     </div>
 </div>

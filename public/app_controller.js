@@ -10,14 +10,18 @@ function AppController($scope, lifecycleService, $timeout){
   $scope.showNav = true;
 
   $scope.toggleNav = ()=>{
+
     $scope.showNav = !$scope.showNav;
-    render()
+
+    render();
+
     let count = 0;
+
     function render(){
       $timeout(()=>{
-        $scope.$broadcast('render')
-        count++
-        if( count < 100)
+        $scope.$broadcast('render');
+        count++;
+        if( count < 50)
           render()
       }
         , 10);

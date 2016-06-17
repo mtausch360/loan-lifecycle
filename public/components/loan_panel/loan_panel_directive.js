@@ -8,7 +8,6 @@ function loanPanel(loanService) {
     template: tpl,
     link: function(scope, element, attrs){
 
-
       scope.settings = loanService.getSettings();
       scope.loans = loanService.getLoans();
 

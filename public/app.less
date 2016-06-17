@@ -1,50 +1,69 @@
+//variables
 @borderColor: #ccc;
 @navHeight: 30px;
-@loanPanelWidth: 33.333%;
-@lifecyclePanelWidth: 66.666%;
+@loanPanelWidth: 1 / 3 * 100%;
+@lifecyclePanelWidth: 2 / 3 * 100% ;
 @panelHeight: 800px;
 
-.content-container{
-  padding-top: 30px;
-}
+//mixins
 .panel{
   height: @panelHeight;
   display: inline-block;
-  position: relative;
+}
 
+.shadow {
+  box-shadow: lightgrey 1px 1px 1px;
 }
 
 .swingTransition(@prop) {
   transition: @prop 1s ease;
 }
 
-.lifecycle-panel-container{
-  &.full{
-    width: 100% !important;
+//app level styles
+.content-container{
+  padding-top: 30px;
+  position: relative;
+
+  .loan-panel-container{
+    width: @loanPanelWidth;
+    border-right: 1px solid @borderColor;
+    position: relative;
+    display: inline-block;
+    &.full {
+      margin-left: -@loanPanelWidth;
+    }
+    .panel;
+    .swingTransition(margin-left);
+    @import "./components/loan_panel/loan_panel";
+    @import "./components/loan/loan";
   }
-  width: @lifecyclePanelWidth;
-  float: right;
-  .panel;
-  .swingTransition(width);
-}
 
-.loan-panel-container {
-
-}
-
-.loan-panel-container{
-  width: @loanPanelWidth;
-  border-right: 1px solid @borderColor;
-  &.full {
-    left: -100%;
+  .lifecycle-panel-container{
+    width: @lifecyclePanelWidth;
+    position: absolute;
+    height: @panelHeight;
+    &.full{
+      width: 100% !important;
+      height: 100%;
+    }
+    .panel;
+    .swingTransition(width);
+    @import "./components/lifecycle/lifecycle";
   }
-  .panel;
-  .swingTransition(left);
+
 }
 
-@import "./components/loan/loan";
+.glyphicon{
+  transition: color 250ms ease;
+  &:hover{
+    color: darkblue;
+    cursor: pointer;
+  }
+}
+
+
+
+@import "./components/editable_input/editable_input";
 @import "./components/nav/nav";
-@import "./components/loan_panel/loan_panel";
-@import "./components/lifecycle/lifecycle";
 
 

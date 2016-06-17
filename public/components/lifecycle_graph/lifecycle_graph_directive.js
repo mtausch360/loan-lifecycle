@@ -62,7 +62,6 @@ function lifecycleGraph() {
       }
 
       function render(){
-        console.log('render');
         width = document.getElementById('lifecycle-panel').offsetWidth || 800;
         height = width * .5;
         margin = {

@@ -4,21 +4,39 @@
   background-color: white;
   height: @navHeight;
   overflow-y: hidden;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid @borderColor;
+  z-index: 10;
+  .shadow;
 
   .loan-panel-nav{
     width: @loanPanelWidth;
+    border-right: 1px solid @borderColor;
+    .swingTransition(margin-left);
+    &.full{
+      margin-left: -@loanPanelWidth;
+    }
     .nav-el {
-      width : 49%;
+      &.active {
+        background-color: darken(lightblue, 5%);
+      }
+      width : 50%;
       &:first-child{
         border-right: 1px solid @borderColor;
       }
-
+      &:last-child {
+        float: right;
+      }
     }
   }
 
   .lifecycle-panel-nav{
     width: @lifecyclePanelWidth;
+    float: right;
+    .swingTransition(width);
+
+    &.full{
+      width: 100% !important;
+    }
   }
 }
 
@@ -28,10 +46,10 @@
     padding: 5px;
     text-align: center;
     display:inline-block;
-
+    transition: background-color 250ms ease;
     &:hover {
       cursor: pointer;
-      background-color: blue;
+      background-color: lightblue;
     }
   }
 }

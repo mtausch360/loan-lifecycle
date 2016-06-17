@@ -6,7 +6,7 @@ function lifecycleNav() {
     link: function(scope, element, attrs){
 
 
-      scope.showSettings = true;
+      scope.showSettings = false;
 
       scope.toggleShowSettings = (show) =>{
         scope.showSettings = show;
