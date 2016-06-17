@@ -4,7 +4,8 @@
   "description": "view the different outcomes for the repayment of your loans",
   "main": "index.js",
   "engines": {
-    "node": "6.2.1"
+    "node": "6.2.1",
+    "npm": "3.4.1"
   },
   "scripts": {
     "start": "webpack; node index.js",
