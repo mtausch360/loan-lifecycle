@@ -1,4 +1,3 @@
-var bodyParser = require('body-parser');
 var path = require('path');
 
 module.exports = function(app, express) {
@@ -10,8 +9,6 @@ module.exports = function(app, express) {
   app.use('/scripts', express.static( __dirname + '/../node_modules'));
 
   app.use('/libs', express.static( __dirname + '/../node_modules'));
-
-  app.use(bodyParser.json());
 
   app.use('/api/v0', router);
 };
