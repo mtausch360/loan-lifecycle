@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "view the different outcomes for the repayment of your loans",
   "main": "index.js",
+  "engines": {
+    "node": "6.2.1"
+  },
   "scripts": {
-    "start": "webpack;",
+    "start": "node index.js",
+    "postinstall": "webpack",
     "test": "karma start",
     "lint": "jshint ./public/**/*.js "
   },
@@ -24,26 +28,26 @@
     "bootstrap": "^3.3.6",
     "d3": "^3.5.14",
     "express": "^4.13.4",
-    "lodash": "^4.2.1"
-  },
-  "devDependencies": {
+    "lodash": "^4.2.1",
+    "webpack": "^1.13.1",
+    "raw-loader": "^0.5.1",
     "babel-core": "^6.9.0",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.3.13",
-    "css-loader": "^0.23.1",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "css-loader": "^0.23.1"
+  },
+  "devDependencies": {
     "jasmine": "^2.4.1",
     "jshint": "^2.9.2",
     "jshint-loader": "^0.8.3",
+    "phantomjs-prebuilt": "^2.1.7",
     "karma": "^0.13.22",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.0",
-    "karma-webpack": "^1.7.0",
-    "less": "^2.7.1",
-    "less-loader": "^2.2.3",
-    "phantomjs-prebuilt": "^2.1.7",
-    "raw-loader": "^0.5.1",
-    "style-loader": "^0.13.1",
-    "webpack": "^1.13.1"
+    "karma-webpack": "^1.7.0"
   }
 }
