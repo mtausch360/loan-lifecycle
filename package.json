@@ -4,7 +4,7 @@
   "description": "view the different outcomes for the repayment of your loans",
   "main": "index.js",
   "scripts": {
-    "start": "npm i; webpack",
+    "start": "npm i; webpack; node index.js",
     "test": "karma start",
     "lint": "jshint ./public/**/*.js "
   },
