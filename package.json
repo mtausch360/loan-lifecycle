@@ -8,9 +8,10 @@
     "npm": "3.4.1"
   },
   "scripts": {
-    "start": "webpack; node index.js",
+    "start": "node index.js",
+    "postinstall": "webpack;",
     "test": "karma start",
-    "lint": "jshint ./public/**/*.js "
+    "lint": "jshint ./public/**/*.js"
   },
   "repository": {
     "type": "git",
