@@ -7,8 +7,8 @@
     "node": "6.2.1"
   },
   "scripts": {
-    "start": "node index.js",
-    "postinstall": "webpack",
+    "start": "webpack; node index.js",
+    // "postinstall": "webpack",
     "test": "karma start",
     "lint": "jshint ./public/**/*.js "
   },
