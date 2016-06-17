@@ -8,7 +8,6 @@
   },
   "scripts": {
     "start": "webpack; node index.js",
-    // "postinstall": "webpack",
     "test": "karma start",
     "lint": "jshint ./public/**/*.js "
   },
