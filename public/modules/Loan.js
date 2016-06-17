@@ -1,17 +1,21 @@
 class Loan {
 
-    constructor({ name, interestRate, minimumPayment, principal, interest }) {
+    constructor({ name, interestRate, id, minimumPayment, principal, interest }) {
         this.name = name;
-        //find better way to id things
-        this.id = Math.floor(Math.random() * 10000);
+        this.id = id;
         this.interestRate = interestRate;
         this.minimumPayment = minimumPayment;
         this.principal = principal;
         this.interest = interest;
         this.interestAccrued = 0;
         this.alive = true;
-
         this._calculateBalance();
+
+        try{
+            this._validate();
+        } catch(e){
+            console.error(e);
+        }
     }
 
     /**
@@ -139,6 +143,13 @@ class Loan {
 
         if (this.balance <= 0)
             this.alive = false;
+    }
+    /**
+     * throws if not a valid loan
+     * 
+     */
+    _validate(){
+
     }
 }
 

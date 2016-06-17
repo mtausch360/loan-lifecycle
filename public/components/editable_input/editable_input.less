@@ -24,10 +24,16 @@
 
   .view {
     width: @width;
-    transition: display 250ms ease;
+    transition: all 250ms ease;
+    &.ng-hide{
+      transition: none;
+    }
     .edit-button {
       display: inline;
-      transition: color 250ms ease;
+      transition: all 250ms ease;
+      &.ng-hide{
+        transition: none;
+      }
       &:hover {
         color: blue;
       }
