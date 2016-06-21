@@ -2,7 +2,6 @@
   position: fixed;
   width: 100%;
   background-color: white;
-  height: @navHeight;
   overflow-y: hidden;
   border-bottom: 1px solid @borderColor;
   z-index: 10;
@@ -43,10 +42,11 @@
 .l-nav{
   display: inline-block;
   .l-nav-el{
-    padding: 5px;
+    padding: 10px;
     text-align: center;
-    display:inline-block;
+    display: inline-block;
     transition: background-color 250ms ease;
+    font-size: 16px;
     &:hover {
       cursor: pointer;
       background-color: lightblue;

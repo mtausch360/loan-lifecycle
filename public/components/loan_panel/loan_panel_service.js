@@ -53,12 +53,16 @@ initLoans();
         name: 'sm1',
         balance: 11350.12,
         principal: 11350.12,
+        dueDate: 3,
+        compoundingRate: "MONTHLY",
         interest: 0,
         interestRate: 0.0825,
         minimumPayment: 229.88,
       },
       {
         name: 'sm2',
+        dueDate: 3,
+        compoundingRate: "MONTHLY",
         balance: 7897.15,
         principal: 7897.15,
         interest: 0,
@@ -67,6 +71,8 @@ initLoans();
       },
       {
         name: 'sm3',
+        dueDate: 3,
+        compoundingRate: "MONTHLY",
         balance: 5738.86,
         principal: 5738.86,
         interest: 0,
@@ -75,6 +81,8 @@ initLoans();
       },
       {
         name: 'AES1',
+        dueDate: 15,
+        compoundingRate: "MONTHLY",
         balance: 8778.63,
         principal: 8778.63,
         interest: 0,
@@ -84,6 +92,8 @@ initLoans();
 
       {
         name: 'GLS1',
+        dueDate: 22,
+        compoundingRate: "MONTHLY",
         balance: 11293.97,
         principal: 11293.97,
         interest: 0,
@@ -91,7 +101,9 @@ initLoans();
         minimumPayment: 53.82,
       },
       {
-        name: 'AES2',
+        name: 'GLS2',
+        dueDate: 22,
+        compoundingRate: "MONTHLY",
         balance: 7563.24,
         principal: 7563.24,
         interest: 0,
@@ -111,7 +123,7 @@ initLoans();
     localStorage.setItem('loans', JSON.stringify(loans));
   }
 
-  function initLoan({ name = "", id = state.id++, balance = 0, principal = 0, interest = 0, interestRate = 0, minimumPayment = 0} = {}){
+  function initLoan({ name = "New Loan", id = state.id++, balance = 0, principal = 0, interest = 0, interestRate = 0, minimumPayment = 0} = {}){
 
     return {
       name,
