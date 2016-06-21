@@ -1,6 +1,6 @@
 import tpl from './repayment_breakdown.html';
 
-function repaymentBreakdown() {
+function repaymentBreakdown(lifecycleService) {
   return {
     restrict: 'E',
     template: tpl,
@@ -179,7 +179,7 @@ function repaymentBreakdown() {
       }
 
 
-      function update() {
+      function updateCustom() {
         Custom.totalPrincipal
           .attr('transform', 'translate(' + 0 + ',' + (70 + 20) + ')')
           .attr('height', () => bar.height)

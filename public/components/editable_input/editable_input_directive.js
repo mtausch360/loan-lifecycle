@@ -31,6 +31,7 @@ function editableInputDirective() {
       scope.save = ()=>{
         scope.view = true;
         scope.model = scope.obj.copy;
+        // scope.$digest();
 
         if( scope.onSave )
           scope.onSave();
