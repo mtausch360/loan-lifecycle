@@ -1,4 +1,4 @@
-import Loan from "../../public/modules/Loan.js";
+import Loan from "./Loan.js";
 
 describe("Loan module", function(){
   var loan;

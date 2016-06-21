@@ -1,5 +1,5 @@
 // import Loan from "../../public/modules/Loan.js";
-import Lifecycle from "../../public/modules/Lifecycle.js";
+import Lifecycle from "./Lifecycle.js";
 
 describe('Lifecycle module', function(){
   var loans;

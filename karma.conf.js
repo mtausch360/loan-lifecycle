@@ -6,21 +6,10 @@ module.exports = function(config) {
         // ... normal karma configuration
         frameworks: ['jasmine'],
         browsers: ['PhantomJS'],
-        files: [
-            // './public/app.js',
-            // './spec/*_spec.js',
-            './node_modules/lodash/lodash.js',
-            './spec/**/*_spec.js'
-            // each file acts as entry point for the webpack configuration
-        ],
+        files: [{ pattern: 'spec.bundle.js', watched: false }],
         logLevel: config.LOG_INFO,
 
-        preprocessors: {
-            // add webpack as preprocessor
-            // './public/app.js': ['webpack', 'babel'],
-            // './spec/*_spec.js': ['webpack', 'babel'],
-            './spec/**/*_spec.js': ['webpack', 'babel']
-        },
+        preprocessors: { 'spec.bundle.js': ['webpack', 'babel'] },
 
         webpack: webpackConfig,
 
@@ -28,6 +17,8 @@ module.exports = function(config) {
             // webpack-dev-middleware configuration
             // i. e.
             noInfo: false
-        }
+        },
+
+        singleRun: true
     });
 };
