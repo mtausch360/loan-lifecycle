@@ -59,7 +59,7 @@ function loanService() {
    * @return {[type]} [description]
    */
   function initLoans() {
-    loans = JSON.parse(localStorage.getItem('loans')) || [];
+    // loans = JSON.parse(localStorage.getItem('loans')) || [];
 
     _.each([{
         name: 'sm1',
@@ -137,7 +137,6 @@ function loanService() {
    * @return {[type]}     [description]
    */
   function removeLoan(obj) {
-    _.extend(obj, {id: appState.id++ });
     loans.splice(loans.indexOf(obj), 1);
     saveLoans();
   }
@@ -145,9 +144,12 @@ function loanService() {
    * [addLoan description]
    * @param {[type]} loan [description]
    */
-  function addLoan(loan) {
-    loans.unshift(new Loan(loan));
+  function addLoan(obj) {
+    _.extend(obj, {id: appState.id++ });
+    console.log('obj', obj);
+    loans.unshift(new Loan(obj));
     saveAppState();
+
   }
 
   /**
