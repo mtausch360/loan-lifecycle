@@ -1,7 +1,18 @@
 class Loan {
 
-
-  constructor({ name, interestRate, compoundingRate = "MONTHLY", id, dueDate = 1, minimumPayment, principal, interest }) {
+  /**
+   * [constructor description]
+   * @param  {String} options.name            [description]
+   * @param  {[type]} options.id              [description]
+   * @param  {Number} options.interestRate    [description]
+   * @param  {String} options.compoundingRate [description]
+   * @param  {Number} options.dueDate         [description]
+   * @param  {Number} options.minimumPayment  [description]
+   * @param  {Number} options.principal       [description]
+   * @param  {Number} options.interest        [description]
+   * @return {[type]}                         [description]
+   */
+  constructor({ name="", id, interestRate=0, compoundingRate="MONTHLY", dueDate=1, minimumPayment=0, principal=0, interest=0 }) {
     this.name = name;
     this.id = id;
     this.dueDate = dueDate; //not used yet

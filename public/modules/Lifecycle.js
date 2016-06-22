@@ -135,12 +135,11 @@ class Lifecycle {
     let cumulativeMonth = this.lifecycle.series[this.monthIndex];
     let self = this;
     _.each(this.Loans, function (L, i) {
-      //age the loan
       L.age();
+
       if (L.alive) {
 
         let {
-          // amountTendered,
           amountPaid,
           extraLeft,
           minimumPaymentLeft,
@@ -156,15 +155,11 @@ class Lifecycle {
         self.amountExtraNow -= extraPaid;
 
         cumulativeMonth.amountPaid += amountPaid;
-
         cumulativeMonth.extraPaid += extraPaid;
-
         cumulativeMonth.principalPaid += principalPaid;
         cumulativeMonth.principalPaidByExtra += principalPaidByExtra;
-
         cumulativeMonth.interestPaid += interestPaid;
         cumulativeMonth.interestPaidByExtra += interestPaidByExtra;
-
         cumulativeMonth.interest += L.interest;
         cumulativeMonth.principal += L.principal;
         cumulativeMonth.balance += L.balance;
@@ -173,12 +168,9 @@ class Lifecycle {
     });
 
     this.lifecycle.totalPaid += cumulativeMonth.amountPaid;
-
     this.lifecycle.totalExtraPaid += cumulativeMonth.extraPaid;
-
     this.lifecycle.totalPrincipalPaid += cumulativeMonth.principalPaid;
     this.lifecycle.totalPrincipalPaidByExtra += cumulativeMonth.principalPaidByExtra;
-
     this.lifecycle.totalInterestPaid += cumulativeMonth.interestPaid;
     this.lifecycle.totalInterestPaidByExtra += cumulativeMonth.interestPaidByExtra;
 
@@ -190,31 +182,19 @@ class Lifecycle {
    * @return {[type]} [description]
    */
   _initMonth() {
-
     return {
-
       monthIndex: this.monthIndex,
-
       minimumPayment: 0,
-
       amountExtraPaid: 0,
-
       amountPaid: 0,
-
       balance: 0,
-
       principal: 0,
-
       interest: 0,
-
       interestPaid: 0,
       interestPaidByExtra: 0,
-
       principalPaid: 0,
       principalPaidByExtra: 0,
-
       extraPaid: 0
-
     };
   }
 

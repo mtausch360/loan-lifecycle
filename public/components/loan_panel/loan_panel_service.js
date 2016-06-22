@@ -1,55 +1,67 @@
-function loanService(){
+import Loan from '../../modules/Loan';
+
+function loanService() {
+  var appName = 'loanLifecycleState'
   var loans = [];
   var settings;
-  var state;
+  var appState;
 
-  if( !localStorage.getItem('loanVisState') ) {
-    state = { id: 0 };
-    saveState()
-  }
-
-  state = JSON.parse(localStorage.getItem('loanVisState'));
-initLoans();
-
-  loans = JSON.parse(localStorage.getItem('loans'));
-
-  if( !localStorage.getItem('settings') ) initSettings();
-  settings = JSON.parse( localStorage.getItem('settings') );
-
+  //currently overwriting previous appState now
+  initAppState();
+  initLoans();
+  initSettings();
 
   return {
     getLoans,
     addLoan,
     saveLoans,
     removeLoan,
-
     getSettings,
     saveSettings,
-
   };
 
-  function getLoans(){
-    return loans;
+  /**
+   * [initAppState description]
+   * @return {[type]} [description]
+   */
+  function initAppState() {
+    if (!localStorage.getItem(appName)) {
+      appState = { id: 0 };
+      saveAppState();
+    }
+    appState = JSON.parse(localStorage.getItem(appName));
   }
 
-  function removeLoan(loan){
-    loans.splice(loans.indexOf(loan), 1);
-    saveLoans()
+  /**
+   * [saveAppState description]
+   * @return {[type]} [description]
+   */
+  function saveAppState() {
+    localStorage.setItem(appName, JSON.stringify(appState));
   }
 
-  function getSettings(){
-    return settings;
+  /**
+   * [initSettings description]
+   * @return {[type]} [description]
+   */
+  function initSettings() {
+    if (!localStorage.getItem('settings'))
+      localStorage.setItem('settings', JSON.stringify({
+        method: 'HI_INTEREST',
+        extra: 10000
+      }));
+
+    settings = JSON.parse(localStorage.getItem('settings'));
   }
 
-  function addLoan(loan){
-    loans.unshift( initLoan(loan) );
-    saveState();
-  };
+  /**
+   * [initLoans description]
+   * @return {[type]} [description]
+   */
+  function initLoans() {
+    loans = JSON.parse(localStorage.getItem('loans')) || [];
 
-  function initLoans(){
-
-    _.each([
-      {
+    _.each([{
         name: 'sm1',
         balance: 11350.12,
         principal: 11350.12,
@@ -58,8 +70,7 @@ initLoans();
         interest: 0,
         interestRate: 0.0825,
         minimumPayment: 229.88,
-      },
-      {
+      }, {
         name: 'sm2',
         dueDate: 3,
         compoundingRate: "MONTHLY",
@@ -68,8 +79,7 @@ initLoans();
         interest: 0,
         interestRate: 0.0725,
         minimumPayment: 136.10,
-      },
-      {
+      }, {
         name: 'sm3',
         dueDate: 3,
         compoundingRate: "MONTHLY",
@@ -78,8 +88,7 @@ initLoans();
         interest: 0,
         interestRate: 0.0725,
         minimumPayment: 98.29,
-      },
-      {
+      }, {
         name: 'AES1',
         dueDate: 15,
         compoundingRate: "MONTHLY",
@@ -99,8 +108,7 @@ initLoans();
         interest: 0,
         interestRate: 0.034,
         minimumPayment: 53.82,
-      },
-      {
+      }, {
         name: 'GLS2',
         dueDate: 22,
         compoundingRate: "MONTHLY",
@@ -111,45 +119,61 @@ initLoans();
         minimumPayment: 53.82,
       }
 
-    ], function(l){
+    ], function (l) {
       addLoan(l);
     });
-
     saveLoans();
-
+  }
+  /**
+   * [getLoans description]
+   * @return {[type]} [description]
+   */
+  function getLoans() {
+    return loans;
+  }
+  /**
+   * [removeLoan description]
+   * @param  {[type]} obj [description]
+   * @return {[type]}     [description]
+   */
+  function removeLoan(obj) {
+    _.extend(obj, {id: appState.id++ });
+    loans.splice(loans.indexOf(obj), 1);
+    saveLoans();
+  }
+  /**
+   * [addLoan description]
+   * @param {[type]} loan [description]
+   */
+  function addLoan(loan) {
+    loans.unshift(new Loan(loan));
+    saveAppState();
   }
 
-  function saveLoans(){
+  /**
+   * [saveLoans description]
+   * @return {[type]} [description]
+   */
+  function saveLoans() {
     localStorage.setItem('loans', JSON.stringify(loans));
   }
 
-  function initLoan({ name = "New Loan", id = state.id++, balance = 0, principal = 0, interest = 0, interestRate = 0, minimumPayment = 0} = {}){
-
-    return {
-      name,
-      id,
-      balance,
-      principal,
-      interest,
-      interestRate,
-      minimumPayment
-    };
+  /**
+   * [getSettings description]
+   * @return {[type]} [description]
+   */
+  function getSettings() {
+    return settings;
   }
 
-  function initSettings(){
-    localStorage.setItem('settings', JSON.stringify({
-      method: 'HI_INTEREST',
-      extra: 10000
-    }));
-  }
-
-  function saveSettings(){
+  /**
+   * [saveSettings description]
+   * @return {[type]} [description]
+   */
+  function saveSettings() {
     localStorage.setItem('settings', JSON.stringify(settings));
   }
 
-  function saveState(){
-    localStorage.setItem('loanVisState', JSON.stringify(state));
-  }
 
 }
 

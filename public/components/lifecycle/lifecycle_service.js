@@ -6,7 +6,6 @@ function lifecycleService(loanService) {
     base: {
       date: null,
       lifecycle: null
-
     },
     custom: {
       date: null,
@@ -25,8 +24,6 @@ function lifecycleService(loanService) {
     updateCustom();
     updateBase();
     lifecycleState.date = Date.now();
-    console.log(lifecycleState);
-
   }
 
   function updateCustom() {

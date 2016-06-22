@@ -38,7 +38,6 @@ function lifecycleGraph(lifecycleService) {
       var customPath;
       var zoom;
 
-      create();
 
       window.addEventListener('resize', render);
       scope.$on('render', render);
@@ -64,6 +63,83 @@ function lifecycleGraph(lifecycleService) {
         return date;
       }
 
+      create();
+
+      /**
+       * [create description]
+       * @return {[type]} [description]
+       */
+      function create() {
+
+        //create chart
+        chart = d3.select('.lifecycle-graph-container').append('svg');
+
+        //create scales
+        xScale = d3.time.scale().domain([timeHelper(0), timeHelper(base.series.length)]);
+
+        //need to search for highest balance
+        yScale = d3.scale.linear().domain([0, base.series[0].balance]);
+
+        xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
+
+        yAxis = d3.svg.axis().scale(yScale).orient('left');
+
+        xAxisEl = chart.append('g').classed('x-axis', true);
+
+        yAxisEl = chart.append('g').classed('y-axis', true);
+
+        clipPath = chart
+          .append('clipPath')
+          .attr('id', 'clip')
+          .append('rect');
+
+        plotAreaEl = chart.append('g').classed('plot-area', true).attr('clip-path', 'url(#clip)');
+
+        customSeries = plotAreaEl.append('g').classed('custom series', true);
+        baseSeries = plotAreaEl.append('g').classed('base series', true);
+
+        line = d3.svg.line()
+          .interpolate("cardinal")
+          .x(function (d, i) {
+            return xScale(timeHelper(d.monthIndex));
+          })
+          .y(function (d) {
+            return yScale(d.balance);
+          });
+
+        //should be moved
+        updateCustom = () => {
+          customPath.remove();
+          drawCustom();
+        };
+
+        updateBase = () => {
+          basePath.remove();
+          drawBase()
+        };
+
+        updateAxes = () => {
+          xScale.domain([timeHelper(0), timeHelper(Math.max(base.series.length, custom.series.length))]);
+          yScale.domain([0, base.series[0].balance]);
+          xAxisEl.call(xAxis);
+          yAxisEl.call(yAxis);
+        };
+
+        render();
+
+        zoom = d3.behavior.zoom()
+          .x(xScale)
+          .on('zoom', zoomed);
+
+        chart.call(zoom);
+
+
+      }
+
+      /**
+       * [render description]
+       * @return {[type]} [description]
+       */
       function render() {
         width = document.getElementById('lifecycle-panel').offsetWidth || 800;
         height = width * .5;
@@ -115,97 +191,41 @@ function lifecycleGraph(lifecycleService) {
         drawCustom();
       }
 
-      function create() {
-
-        //create chart
-        chart = d3.select('.lifecycle-graph-container').append('svg');
-
-        //create scales
-        xScale = d3.time.scale().domain([timeHelper(0), timeHelper(base.series.length)]);
-
-        //need to search for highest balance
-        yScale = d3.scale.linear().domain([0, base.series[0].balance]);
-
-        xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
-
-        yAxis = d3.svg.axis().scale(yScale).orient('left');
-
-        xAxisEl = chart.append('g').classed('x-axis', true);
-
-        yAxisEl = chart.append('g').classed('y-axis', true);
-
-        clipPath = chart
-          .append('clipPath')
-            .attr('id', 'clip')
-            .append('rect');
-
-        plotAreaEl = chart.append('g').classed('plot-area', true).attr('clip-path', 'url(#clip)');
-
-        customSeries = plotAreaEl.append('g').classed('custom series', true);
-        baseSeries = plotAreaEl.append('g').classed('base series', true);
-
-        line = d3.svg.line()
-          .interpolate("cardinal")
-          .x(function (d, i) {
-            return xScale(timeHelper(d.monthIndex)); })
-          .y(function (d) {
-            return yScale(d.balance);
-          });
-
-        //should be moved
-        updateCustom = () => {
-          customPath.remove();
-          drawCustom();
-        };
-
-        updateBase = () => {
-          basePath.remove();
-          drawBase()
-        };
-
-        updateAxes = () => {
-          xScale.domain([timeHelper(0), timeHelper(Math.max(base.series.length, custom.series.length))]);
-          yScale.domain([0, base.series[0].balance]);
-          xAxisEl.call(xAxis);
-          yAxisEl.call(yAxis);
-        };
-
-        render();
-
-        zoom = d3.behavior.zoom()
-          .x(xScale)
-          // .scaleExtent(xScale.range())
-          // .translate([plotArea.width / 2, plotArea.height / 2])
-          .on('zoom', zoomed);
-
-        chart.call(zoom);
-
-
-      }
-
+      /**
+       * [drawBase description]
+       * @return {[type]} [description]
+       */
       function drawBase() {
         if (basePath) basePath.remove()
         basePath = baseSeries.datum(base.series)
           .append('path')
-            .attr('class', 'line base')
-            .attr('d', (d) => {
-              return line(d)
-            })
-            .attr('stroke', 'blue');
+          .attr('class', 'line base')
+          .attr('d', (d) => {
+            return line(d)
+          })
+          .attr('stroke', 'blue');
       }
 
+      /**
+       * [drawCustom description]
+       * @return {[type]} [description]
+       */
       function drawCustom() {
         if (customPath) customPath.remove()
         customPath = customSeries.datum(custom.series)
           .append('path')
-            .attr('class', 'line custom')
-            .attr('d', (d) => {
-              return line(d)
-            })
-            .attr('stroke', 'red')
+          .attr('class', 'line custom')
+          .attr('d', (d) => {
+            return line(d)
+          })
+          .attr('stroke', 'red')
       }
 
-      function zoomed(){
+      /**
+       * [zoomed description]
+       * @return {[type]} [description]
+       */
+      function zoomed() {
         render();
 
         let minDate = xScale.domain()[0]
@@ -213,17 +233,16 @@ function lifecycleGraph(lifecycleService) {
         let max = 500; //min scale
 
         //update y scale max based on what's in selection
-        _.each(base.series, function(el, i){
-          let elDate = timeHelper( el.monthIndex );
-          if(  elDate >= minDate && elDate <= maxDate ){
-            if( el.balance > max)
+        _.each(base.series, function (el, i) {
+          let elDate = timeHelper(el.monthIndex);
+          if (elDate >= minDate && elDate <= maxDate) {
+            if (el.balance > max)
               max = el.balance;
           }
         });
 
         yScale.domain([0, max]);
       }
-
 
     }
   }

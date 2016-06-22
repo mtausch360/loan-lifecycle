@@ -1,55 +1,52 @@
 .nav-bar {
-  position: fixed;
-  width: 100%;
-  background-color: white;
-  overflow-y: hidden;
-  border-bottom: 1px solid @borderColor;
-  z-index: 10;
-  .shadow;
-
-  .loan-panel-nav{
-    width: @loanPanelWidth;
-    border-right: 1px solid @borderColor;
-    .swingTransition(margin-left);
-    &.full{
-      margin-left: -@loanPanelWidth;
-    }
-    .nav-el {
-      &.active {
-        background-color: darken(lightblue, 5%);
-      }
-      width : 50%;
-      &:first-child{
+    position: fixed;
+    width: 100%;
+    background-color: white;
+    overflow-y: hidden;
+    border-bottom: 1px solid @borderColor;
+    z-index: 10;
+    .shadow;
+    .loan-panel-nav {
+        width: @loanPanelWidth;
         border-right: 1px solid @borderColor;
-      }
-      &:last-child {
+        .swingTransition(margin-left);
+        &.full {
+            margin-left: -@loanPanelWidth;
+        }
+        .nav-el {
+            &.active {
+                background-color: darken(lightblue, 5%);
+            }
+            width: 50%;
+            &:first-child {
+                border-right: 1px solid @borderColor;
+            }
+            &:last-child {
+                float: right;
+            }
+        }
+    }
+    .lifecycle-panel-nav {
+        width: @lifecyclePanelWidth;
         float: right;
-      }
+        .swingTransition(width);
+        &.full {
+            width: 100% !important;
+        }
     }
-  }
-
-  .lifecycle-panel-nav{
-    width: @lifecyclePanelWidth;
-    float: right;
-    .swingTransition(width);
-
-    &.full{
-      width: 100% !important;
-    }
-  }
 }
 
-.l-nav{
-  display: inline-block;
-  .l-nav-el{
-    padding: 10px;
-    text-align: center;
+.l-nav {
     display: inline-block;
-    transition: background-color 250ms ease;
-    font-size: 16px;
-    &:hover {
-      cursor: pointer;
-      background-color: lightblue;
+    .l-nav-el {
+        padding: 10px;
+        text-align: center;
+        display: inline-block;
+        transition: background-color 250ms ease;
+        font-size: 16px;
+        &:hover {
+            cursor: pointer;
+            background-color: lightblue;
+        }
     }
-  }
 }

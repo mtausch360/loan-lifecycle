@@ -2,68 +2,60 @@
 @borderColor: #ccc;
 @navHeight: 43px;
 @loanPanelWidth: 1 / 3 * 100%;
-@lifecyclePanelWidth: 2 / 3 * 100% ;
+@lifecyclePanelWidth: 2 / 3 * 100%;
 @panelHeight: 800px;
-
 //mixins
-.panel{
-  height: @panelHeight;
-  display: inline-block;
+.panel {
+    height: @panelHeight;
+    display: inline-block;
 }
 
 .shadow {
-  box-shadow: lightgrey 1px 1px 1px;
+    box-shadow: lightgrey 1px 1px 1px;
 }
 
 .swingTransition(@prop) {
-  transition: @prop 1s ease;
+    transition: @prop 1s ease;
 }
 
 //app level styles
-.content-container{
-  padding-top: @navHeight;
-  position: relative;
-
-  .loan-panel-container{
-    width: @loanPanelWidth;
-    border-right: 1px solid @borderColor;
+.content-container {
+    padding-top: @navHeight;
     position: relative;
-    display: inline-block;
-    &.full {
-      margin-left: -@loanPanelWidth;
+    .loan-panel-container {
+        width: @loanPanelWidth;
+        border-right: 1px solid @borderColor;
+        position: relative;
+        display: inline-block;
+        &.full {
+            margin-left: -@loanPanelWidth;
+        }
+        .panel;
+        .swingTransition(margin-left);
+        @import "./components/loan_panel/loan_panel";
+        @import "./components/loan/loan";
     }
-    .panel;
-    .swingTransition(margin-left);
-    @import "./components/loan_panel/loan_panel";
-    @import "./components/loan/loan";
-  }
-
-  .lifecycle-panel-container{
-    width: @lifecyclePanelWidth;
-    position: absolute;
-    height: @panelHeight;
-    &.full{
-      width: 100% !important;
-      height: 100%;
+    .lifecycle-panel-container {
+        width: @lifecyclePanelWidth;
+        position: absolute;
+        height: @panelHeight;
+        &.full {
+            width: 100% !important;
+            height: 100%;
+        }
+        .panel;
+        .swingTransition(width);
+        @import "./components/lifecycle/lifecycle";
     }
-    .panel;
-    .swingTransition(width);
-    @import "./components/lifecycle/lifecycle";
-  }
-
 }
 
-.glyphicon{
-  transition: color 250ms ease;
-  &:hover{
-    color: darkblue;
-    cursor: pointer;
-  }
+.glyphicon {
+    transition: color 250ms ease;
+    &:hover {
+        color: darkblue;
+        cursor: pointer;
+    }
 }
-
-
 
 @import "./components/editable_input/editable_input";
 @import "./components/nav/nav";
-
-

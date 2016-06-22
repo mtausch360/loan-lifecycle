@@ -1,5 +1,4 @@
-
-function AppController($scope, lifecycleService, $timeout){
+function AppController($scope, lifecycleService, $timeout) {
 
   $scope.lifecycles = lifecycleService.getState();
   lifecycleService.createLifecycles();
@@ -9,7 +8,7 @@ function AppController($scope, lifecycleService, $timeout){
 
   $scope.showNav = true;
 
-  $scope.toggleNav = ()=>{
+  $scope.toggleNav = () => {
 
     $scope.showNav = !$scope.showNav;
 
@@ -17,40 +16,37 @@ function AppController($scope, lifecycleService, $timeout){
 
     let count = 0;
 
-    function render(){
-      $timeout(()=>{
+    function render() {
+      $timeout(() => {
         $scope.$broadcast('render');
         count++;
-        if( count < 50)
+        if (count < 50)
           render()
-      }
-        , 10);
+      }, 10);
     }
   };
 
-  $scope.$on('edit', function(event, data){
+  $scope.$on('edit', function (event, data) {
     console.log('edit event received', data);
-    switch(data.type){
-      case 'settings':
-        redrawCustom();
-        break;
-      case 'loans':
-        redrawAll();
-        break;
+    switch (data.type) {
+    case 'settings':
+      redrawCustom();
+      break;
+    case 'loans':
+      redrawAll();
+      break;
     }
   });
 
-  function redrawAll(){
+  function redrawAll() {
     lifecycleService.createLifecycles();
     $scope.$broadcast('redrawAll');
   }
 
-  function redrawCustom(){
+  function redrawCustom() {
     lifecycleService.updateCustom();
     $scope.$broadcast('redrawCustom');
   }
-
-
 
 }
 

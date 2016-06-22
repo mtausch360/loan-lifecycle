@@ -12,12 +12,9 @@ import loan from "./components/loan/loan_directive";
 
 
 angular.module('loanVisualizer', ['ngAnimate']);
-
 angular.module('loanVisualizer').controller('AppController', AppController);
-
 angular.module('loanVisualizer').service('loanService', loanService);
 angular.module('loanVisualizer').service('lifecycleService', lifecycleService);
-
 angular.module('loanVisualizer').directive('lifecycleNav', lifecycleNav);
 angular.module('loanVisualizer').directive('lifecycleGraph', lifecycleGraph);
 angular.module('loanVisualizer').directive('editableInput', editableInput);

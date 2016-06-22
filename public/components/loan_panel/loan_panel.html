@@ -1,13 +1,11 @@
 <div class="loan-panel">
     <div class="settings-container" ng-if="showSettings">
-        Amount Extra: <editable-input model="settings.extra" type="number" on-save="saveSettings()" prefix="$" suffix="/mth"></editable-input>
+        Amount Extra
+        <editable-input model="settings.extra" type="number" on-save="saveSettings()" prefix="$" suffix="/mth"></editable-input>
     </div>
-
     <div class="loans-container" ng-if="!showSettings">
         <div class="loan-options">
-            <span ng-click="addLoan()"><span class="glyphicon glyphicon-plus" ></span> Add Loan</span>
-            
-
+            <span ng-click="addLoan()"><span class="glyphicon glyphicon-plus"></span> Add Loan</span>
         </div>
         <div class="loan-list">
             <loan ng-repeat="loan in loans track by loan.id"></loan>

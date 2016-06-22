@@ -10,7 +10,6 @@ function editableInputDirective() {
     scope: {
       model: '=',
       type: '@',
-      // hover: '=',
       onSave: '&',
       prefix: '@',
       suffix: '@'
@@ -23,30 +22,29 @@ function editableInputDirective() {
         copy: angular.copy(scope.model)
       };
 
-      scope.toggleEdit = ()=>{
+      scope.toggleEdit = () => {
         scope.obj.copy = angular.copy(scope.model);
         scope.view = false;
-      }
+      };
 
-      scope.save = ()=>{
+      scope.save = () => {
         scope.view = true;
         scope.model = scope.obj.copy;
-        // scope.$digest();
 
-        if( scope.onSave )
+        if (scope.onSave)
           scope.onSave();
       };
 
-      scope.cancel = ()=> {
+      scope.cancel = () => {
         scope.view = true;
       };
 
 
-      scope.hoverView = ()=>{
+      scope.hoverView = () => {
         scope.hover = true;
-      }
+      };
 
-      scope.endHoverView = ()=>{
+      scope.endHoverView = () => {
         scope.hover = false;
       };
 
