@@ -5,4 +5,4 @@ Work in progress, change the amount extra  to see the difference in time that it
 
 Check it out at
 
-loan-lifecycle.herokuapp.com
+http://loan-lifecycle.herokuapp.com
