@@ -4,7 +4,7 @@ import tpl from './lifecycle_graph.html';
  * This vis shows current balance as a function of time, and compares two lifecycles to oneanother
  * @return {[type]} [description]
  */
-function lifecycleGraph(lifecycleService) {
+function lifecycleGraph(lifecycleService, $timeout) {
 
   return {
     restrict: 'E',
@@ -34,17 +34,17 @@ function lifecycleGraph(lifecycleService) {
       var customSeries;
       var baseSeries;
       var line;
+      var area;
       var basePath;
       var customPath;
       var zoom;
-
 
       window.addEventListener('resize', render);
       scope.$on('render', render);
 
       scope.$on('redrawCustom', function () {
         console.log('redraw custom recieved');
-        updateCustom()
+        updateCustom();
       });
 
       scope.$on('redrawAll', function () {
@@ -71,14 +71,12 @@ function lifecycleGraph(lifecycleService) {
        */
       function create() {
 
-        //create chart
         chart = d3.select('.lifecycle-graph-container').append('svg');
 
-        //create scales
-        xScale = d3.time.scale().domain([timeHelper(0), timeHelper(base.series.length)]);
+        xScale = d3.time.scale().domain([timeHelper(0), timeHelper(base.lifecycle.series.length)]);
 
         //need to search for highest balance
-        yScale = d3.scale.linear().domain([0, base.series[0].balance]);
+        yScale = d3.scale.linear().domain([0, base.lifecycle.series[0].balance]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
@@ -95,8 +93,9 @@ function lifecycleGraph(lifecycleService) {
 
         plotAreaEl = chart.append('g').classed('plot-area', true).attr('clip-path', 'url(#clip)');
 
-        customSeries = plotAreaEl.append('g').classed('custom series', true);
-        baseSeries = plotAreaEl.append('g').classed('base series', true);
+        customSeries = plotAreaEl.append('g').classed('custom series', true).append('path').attr('class', 'line custom');
+
+        baseSeries = plotAreaEl.append('g').classed('base series', true).append('path').attr('class', 'line base');
 
         line = d3.svg.line()
           .interpolate("cardinal")
@@ -106,6 +105,12 @@ function lifecycleGraph(lifecycleService) {
           .y(function (d) {
             return yScale(d.balance);
           });
+
+        var area = d3.svg.area()
+            .interpolate("step-after")
+            .x(function(d) { return xScale(timeHelper(d.monthIndex)); })
+            .y0(yScale(0))
+            .y1(function(d) { return yScale(d.balance); });
 
         //should be moved
         updateCustom = () => {
@@ -119,21 +124,21 @@ function lifecycleGraph(lifecycleService) {
         };
 
         updateAxes = () => {
-          xScale.domain([timeHelper(0), timeHelper(Math.max(base.series.length, custom.series.length))]);
-          yScale.domain([0, base.series[0].balance]);
+          xScale.domain([timeHelper(0), timeHelper(Math.max(base.lifecycle.series.length, custom.lifecycle.series.length))]);
+          yScale.domain([0, base.lifecycle.series[0].balance]);
           xAxisEl.call(xAxis);
           yAxisEl.call(yAxis);
+          zoomendCb();
         };
 
         render();
 
         zoom = d3.behavior.zoom()
           .x(xScale)
-          .on('zoom', zoomed);
+          .on('zoom', zoomCb)
+          .on('zoomend', zoomendCb)
 
         chart.call(zoom);
-
-
       }
 
       /**
@@ -142,7 +147,7 @@ function lifecycleGraph(lifecycleService) {
        */
       function render() {
         width = document.getElementById('lifecycle-panel').offsetWidth || 800;
-        height = width * .5;
+        height = Math.max(document.documentElement.clientHeight - document.getElementById('nav-bar'), 400) * .7;
         margin = {
           top: 15,
           left: 75,
@@ -192,14 +197,20 @@ function lifecycleGraph(lifecycleService) {
       }
 
       /**
+       * [takeData description]
+       * @return {[type]} [description]
+       */
+      function takeData() {
+        drawBase();
+        drawCustom();
+      }
+
+      /**
        * [drawBase description]
        * @return {[type]} [description]
        */
       function drawBase() {
-        if (basePath) basePath.remove()
-        basePath = baseSeries.datum(base.series)
-          .append('path')
-          .attr('class', 'line base')
+        basePath = baseSeries.data([base.lifecycle.series])
           .attr('d', (d) => {
             return line(d)
           })
@@ -211,10 +222,7 @@ function lifecycleGraph(lifecycleService) {
        * @return {[type]} [description]
        */
       function drawCustom() {
-        if (customPath) customPath.remove()
-        customPath = customSeries.datum(custom.series)
-          .append('path')
-          .attr('class', 'line custom')
+        customPath = customSeries.data([custom.lifecycle.series])
           .attr('d', (d) => {
             return line(d)
           })
@@ -222,10 +230,10 @@ function lifecycleGraph(lifecycleService) {
       }
 
       /**
-       * [zoomed description]
+       * [zoomCb description]
        * @return {[type]} [description]
        */
-      function zoomed() {
+      function zoomCb() {
         render();
 
         let minDate = xScale.domain()[0]
@@ -233,7 +241,7 @@ function lifecycleGraph(lifecycleService) {
         let max = 500; //min scale
 
         //update y scale max based on what's in selection
-        _.each(base.series, function (el, i) {
+        _.each(base.lifecycle.series, function (el, i) {
           let elDate = timeHelper(el.monthIndex);
           if (elDate >= minDate && elDate <= maxDate) {
             if (el.balance > max)
@@ -242,6 +250,15 @@ function lifecycleGraph(lifecycleService) {
         });
 
         yScale.domain([0, max]);
+      }
+
+      /**
+       * [zoomendCb description]
+       * @return {[type]} [description]
+       */
+      function zoomendCb(){
+        lifecycleService.setCurrentSelection(xScale.domain());
+        $timeout();
       }
 
     }

@@ -32,7 +32,7 @@ class Lifecycle {
       series: [],
       totalInterestPaid: 0,
       totalInterestPaidByExtra: 0,
-      totalPrincipalPaid: 0,
+      totalPrincipalPaid: 0, //total + toalPaidByExtra = overall total, poor naming convention
       totalPrincipalPaidByExtra: 0,
       totalExtraPaid: 0,
       totalPaid: 0,
@@ -42,7 +42,7 @@ class Lifecycle {
 
     this.live();
 
-    return this.lifecycle;
+    return this;
   }
 
   /**
@@ -83,6 +83,34 @@ class Lifecycle {
 
       this.monthIndex++;
     }
+  }
+
+  /**
+   * [search description]
+   * @return {[type]} [description]
+   */
+  search([minDate, maxDate] = []) {
+    let res = {
+      totalInterestPaid: 0,
+      totalInterestPaidByExtra: 0,
+      totalPrincipalPaid: 0,
+      totalPrincipalPaidByExtra: 0,
+      totalExtraPaid: 0,
+      totalPaid: 0,
+    };
+    this.lifecycle.series.forEach((el)=>{
+      if( el.date >= minDate && el.date <= maxDate ){
+        res.totalInterestPaid += el.interestPaid;
+        res.totalInterestPaidByExtra += el.interestPaidByExtra;
+
+        res.totalPrincipalPaid += el.principalPaid;
+        res.totalPrincipalPaidByExtra += el.principalPaidByExtra;
+
+        res.totalPaid += el.amountPaid;
+      }
+    });
+    console.log('stuff', res);
+    return res;
   }
 
   /**
@@ -154,6 +182,7 @@ class Lifecycle {
         let extraPaid = principalPaidByExtra + interestPaidByExtra;
         self.amountExtraNow -= extraPaid;
 
+        cumulativeMonth.payments++;
         cumulativeMonth.amountPaid += amountPaid;
         cumulativeMonth.extraPaid += extraPaid;
         cumulativeMonth.principalPaid += principalPaid;
@@ -174,7 +203,6 @@ class Lifecycle {
     this.lifecycle.totalInterestPaid += cumulativeMonth.interestPaid;
     this.lifecycle.totalInterestPaidByExtra += cumulativeMonth.interestPaidByExtra;
 
-
   }
 
   /**
@@ -182,8 +210,11 @@ class Lifecycle {
    * @return {[type]} [description]
    */
   _initMonth() {
+    let date = this._timeHelper(this.monthIndex);
     return {
       monthIndex: this.monthIndex,
+      date: date,
+      payments: 0,
       minimumPayment: 0,
       amountExtraPaid: 0,
       amountPaid: 0,
@@ -198,7 +229,21 @@ class Lifecycle {
     };
   }
 
-}
+  /**
+   * transform month index to new date
+   * @param  {[type]} month [description]
+   * @param  {Number} day   [description]
+   * @return {[type]}       [description]
+   */
+  _timeHelper(month, day = 1) {
+    var d = new Date();
+    var currMonth = d.getMonth();
+    var currYear = d.getFullYear();
 
+    var date = new Date(Math.floor((currMonth + month) / 12) + currYear, (currMonth + month) % 12, day);
+    return date;
+  }
+
+}
 
 export default Lifecycle;

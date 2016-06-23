@@ -21,6 +21,7 @@ function loanPanel(loanService) {
       };
 
       scope.$watch('settings', function () {
+        scope.saveSettings();
         loanService.saveSettings();
       }, true);
 

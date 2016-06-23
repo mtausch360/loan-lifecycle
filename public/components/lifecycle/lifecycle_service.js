@@ -13,12 +13,43 @@ function lifecycleService(loanService) {
     },
     date: null
   };
+  var current = {
+    lifecycleSelection: [null, null],
+    date: null
+  };
 
   return {
     getState,
     createLifecycles,
     updateCustom,
+    getCurrentSelection,
+    setCurrentSelection,
+    getLastSelectionDate
   };
+
+  /**
+   * [getCurrentSelection description]
+   * @return {[type]} [description]
+   */
+  function getCurrentSelection(){
+    return current.lifecycleSelection;
+  }
+
+  /**
+   * [setCurrentSelection description]
+   */
+  function setCurrentSelection(selection){
+    current.lifecycleSelection = selection;
+    current.date = Date.now();
+  }
+
+  /**
+   * [getLastSelectionDate description]
+   * @return {[type]} [description]
+   */
+  function getLastSelectionDate(){
+    return current.date;
+  }
 
   /**
    * [createLifecycles description]
@@ -40,7 +71,7 @@ function lifecycleService(loanService) {
       lifecycleState.custom.lifecycle = custom;
     else
       _.extend(lifecycleState.custom.lifecycle, custom);
-
+    console.log('custom', custom);
     lifecycleState.custom.date = Date.now();
   }
 

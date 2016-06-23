@@ -18,6 +18,11 @@
     transition: @prop 1s ease;
 }
 
+.font-standard{
+    font-family: "Source Sans Pro";
+    font-weight: 300;
+}
+
 //app level styles
 .content-container {
     padding-top: @navHeight;
@@ -38,7 +43,7 @@
     .lifecycle-panel-container {
         width: @lifecyclePanelWidth;
         position: absolute;
-        height: @panelHeight;
+        height: 100%;
         &.full {
             width: 100% !important;
             height: 100%;
@@ -55,6 +60,10 @@
         color: darkblue;
         cursor: pointer;
     }
+}
+
+body{
+    font-family: "Source Sans Pro";
 }
 
 @import "./components/editable_input/editable_input";
