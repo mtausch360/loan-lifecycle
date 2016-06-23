@@ -43,18 +43,17 @@ function lifecycleGraph(lifecycleService, $timeout) {
       scope.$on('render', render);
 
       scope.$on('redrawCustom', function () {
-        console.log('redraw custom recieved');
         updateCustom();
       });
 
       scope.$on('redrawAll', function () {
-        console.log('redrawAll called');
         updateAxes();
         updateCustom();
         updateBase();
       });
 
-      function timeHelper(month, day = 1) {
+      //shouldn't be necessary
+      function timeHelper(month, day) {
         var d = new Date();
         var currMonth = d.getMonth();
         var currYear = d.getFullYear();
@@ -73,6 +72,7 @@ function lifecycleGraph(lifecycleService, $timeout) {
 
         chart = d3.select('.lifecycle-graph-container').append('svg');
 
+        //remember to update
         xScale = d3.time.scale().domain([timeHelper(0), timeHelper(base.lifecycle.series.length)]);
 
         //need to search for highest balance
@@ -100,17 +100,17 @@ function lifecycleGraph(lifecycleService, $timeout) {
         line = d3.svg.line()
           .interpolate("cardinal")
           .x(function (d, i) {
-            return xScale(timeHelper(d.monthIndex));
+            return xScale(d.date);
           })
           .y(function (d) {
             return yScale(d.balance);
           });
 
-        var area = d3.svg.area()
-            .interpolate("step-after")
-            .x(function(d) { return xScale(timeHelper(d.monthIndex)); })
-            .y0(yScale(0))
-            .y1(function(d) { return yScale(d.balance); });
+        // var area = d3.svg.area()
+        //     .interpolate("step-after")
+        //     .x(function(d) { return xScale(timeHelper(d.monthIndex)); })
+        //     .y0(yScale(0))
+        //     .y1(function(d) { return yScale(d.balance); });
 
         //should be moved
         updateCustom = () => {
@@ -124,7 +124,12 @@ function lifecycleGraph(lifecycleService, $timeout) {
         };
 
         updateAxes = () => {
-          xScale.domain([timeHelper(0), timeHelper(Math.max(base.lifecycle.series.length, custom.lifecycle.series.length))]);
+
+          //remember to cahnge
+          xScale.domain([
+            timeHelper(0),
+            timeHelper(Math.max(base.lifecycle.series[base.lifecycle.series.length-1], custom.lifecycle.series.length))
+            ]);
           yScale.domain([0, base.lifecycle.series[0].balance]);
           xAxisEl.call(xAxis);
           yAxisEl.call(yAxis);
@@ -242,8 +247,7 @@ function lifecycleGraph(lifecycleService, $timeout) {
 
         //update y scale max based on what's in selection
         _.each(base.lifecycle.series, function (el, i) {
-          let elDate = timeHelper(el.monthIndex);
-          if (elDate >= minDate && elDate <= maxDate) {
+          if (el.date >= minDate && el.date <= maxDate) {
             if (el.balance > max)
               max = el.balance;
           }

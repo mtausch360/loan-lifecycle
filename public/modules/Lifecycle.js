@@ -12,24 +12,23 @@ class Lifecycle {
   constructor(loans, { method, extra }, isBaseLifecycle) {
     if (isBaseLifecycle)
       extra = 0;
-
+    this.method = method;
+    this.amountExtraPerMonth = extra;
     this.loans = loans;
 
     var Loans = [];
     this.Loans = Loans;
 
-    _.each(loans, function (loan) {
+    loans.forEach((loan) => {
       Loans.push(new Loan(loan));
     });
-
-    this.method = method;
-
-    this.amountExtraPerMonth = extra;
 
     this.lifecycle = {
       method: method,
       amountExtraPerMonth: extra,
       series: [],
+      startDate: new Date(),
+      endDate: null,
       totalInterestPaid: 0,
       totalInterestPaidByExtra: 0,
       totalPrincipalPaid: 0, //total + toalPaidByExtra = overall total, poor naming convention
@@ -46,6 +45,25 @@ class Lifecycle {
   }
 
   /**
+   * [initializeState description]
+   * @return {[type]} [description]
+   */
+  _initializeState(){
+    let self = this;
+    let dates = {};
+    this._state = {};
+    //want to keep track of ordering for applying extra to loan payments
+    _.each(this.Loans, (L)=>{
+      if(L.alive){
+        if( !dates[L.dueDate] )
+          dates[L.dueDate] = self._initSeriesObj(L.dueDate);
+      }
+    });
+    this._state.dates = dates;
+
+  }
+
+  /**
    * fills lifecycle object with series information, calculates all loans provided to instance with setings
    * @return {[type]} [description]
    */
@@ -54,40 +72,90 @@ class Lifecycle {
     var cumulativeMonth;
     var amountExtraNow;
 
-    var init = this.lifecycle.series[0] = this._initMonth();
+    this._initializeState(); //prepare to run lifecycle
 
-    _.each(this.Loans, function (L) {
+    var init = this.lifecycle.series[0] = this._initSeriesObj();
+
+    _.each(this.Loans, (L)=> {
 
       init.minimumPayment += L.minimumPayment;
       init.balance += L.balance;
 
     });
 
+    //main lifecycle loop
     while (this._lifecycleIncomplete()) {
 
-      this.amountExtraNow = this.amountExtraPerMonth;
+      this.monthIndex++;
 
-      switch (this.method) {
-      case 'HI_INTEREST':
-        this._sortByMethod('interestRate');
-        break;
-      case 'LO_BALANCE':
-        this._sortByMethod('balance');
-        break;
-      }
+      this.amountExtraNow = this.amountExtraPerMonth; //refreshes each month
 
-      //initialize lifecycle
-      this.lifecycle.series[this.monthIndex] = this._initMonth();
+      this._sortLoansByMethod();
 
       this._payLoans();
 
-      this.monthIndex++;
     }
+
+    this.lifecycle.endDate = this.lifecycle.series[ this.lifecycle.series.length - 1].date;
   }
 
   /**
-   * [search description]
+   * [_payLoans description]
    * @return {[type]} [description]
+   */
+  _payLoans() {
+
+    let self = this;
+    _.each(this.Loans, function (L, i) {
+      L.age();
+      let cumulativeSeriesDate = self._state.dates[ L.dueDate ];
+      if (L.alive) {
+        let {
+          amountPaid,
+          extraLeft,
+          minimumPaymentLeft,
+
+          principalPaid,
+          principalPaidByExtra,
+
+          interestPaid,
+          interestPaidByExtra
+        } = L.makePayment(self.amountExtraNow);
+
+        let extraPaid = principalPaidByExtra + interestPaidByExtra;
+        self.amountExtraNow -= extraPaid;
+
+        //series object calculations
+        cumulativeSeriesDate.payments++;
+        cumulativeSeriesDate.amountPaid += amountPaid;
+        cumulativeSeriesDate.extraPaid += extraPaid;
+        cumulativeSeriesDate.principalPaid += principalPaid;
+        cumulativeSeriesDate.principalPaidByExtra += principalPaidByExtra;
+        cumulativeSeriesDate.interestPaid += interestPaid;
+        cumulativeSeriesDate.interestPaidByExtra += interestPaidByExtra;
+        cumulativeSeriesDate.interest += L.interest;
+        cumulativeSeriesDate.principal += L.principal;
+        cumulativeSeriesDate.balance += L.balance;
+
+        //aggregate calculations
+        self.lifecycle.totalPaid += amountPaid;
+        self.lifecycle.totalExtraPaid += extraPaid;
+        self.lifecycle.totalPrincipalPaid += principalPaid;
+        self.lifecycle.totalPrincipalPaidByExtra += principalPaidByExtra;
+        self.lifecycle.totalInterestPaid += interestPaid;
+        self.lifecycle.totalInterestPaidByExtra += interestPaidByExtra;
+      }
+
+    });
+
+    //put all date series objects into series array
+    _.forIn(this._state.dates, (el)=> self.lifecycle.series.push(el) );
+
+  }
+
+  /**
+   * looks in series and returns aggregation of series elements inside of range
+   * @return {[obj]} [description]
    */
   search([minDate, maxDate] = []) {
     let res = {
@@ -109,7 +177,6 @@ class Lifecycle {
         res.totalPaid += el.amountPaid;
       }
     });
-    console.log('stuff', res);
     return res;
   }
 
@@ -136,7 +203,7 @@ class Lifecycle {
    * @param  {[type]} key   [description]
    * @return {[type]}       [description]
    */
-  _sortByMethod(key) {
+  _sortLoans(key) {
     var flag = false;
     var prev = this.Loans[0];
     for (var i = 1; i < this.Loans.length; i++) {
@@ -151,68 +218,34 @@ class Lifecycle {
     if (!flag)
       return this.Loans;
     else
-      return this._sortByMethod(key);
+      return this._sortLoans(key);
   }
 
   /**
-   * [_payLoans description]
+   * [_sortLoansByMethod description]
    * @return {[type]} [description]
    */
-  _payLoans() {
+  _sortLoansByMethod(){
 
-    let cumulativeMonth = this.lifecycle.series[this.monthIndex];
-    let self = this;
-    _.each(this.Loans, function (L, i) {
-      L.age();
-
-      if (L.alive) {
-
-        let {
-          amountPaid,
-          extraLeft,
-          minimumPaymentLeft,
-
-          principalPaid,
-          principalPaidByExtra,
-
-          interestPaid,
-          interestPaidByExtra
-        } = L.makePayment(self.amountExtraNow);
-
-        let extraPaid = principalPaidByExtra + interestPaidByExtra;
-        self.amountExtraNow -= extraPaid;
-
-        cumulativeMonth.payments++;
-        cumulativeMonth.amountPaid += amountPaid;
-        cumulativeMonth.extraPaid += extraPaid;
-        cumulativeMonth.principalPaid += principalPaid;
-        cumulativeMonth.principalPaidByExtra += principalPaidByExtra;
-        cumulativeMonth.interestPaid += interestPaid;
-        cumulativeMonth.interestPaidByExtra += interestPaidByExtra;
-        cumulativeMonth.interest += L.interest;
-        cumulativeMonth.principal += L.principal;
-        cumulativeMonth.balance += L.balance;
-      }
-
-    });
-
-    this.lifecycle.totalPaid += cumulativeMonth.amountPaid;
-    this.lifecycle.totalExtraPaid += cumulativeMonth.extraPaid;
-    this.lifecycle.totalPrincipalPaid += cumulativeMonth.principalPaid;
-    this.lifecycle.totalPrincipalPaidByExtra += cumulativeMonth.principalPaidByExtra;
-    this.lifecycle.totalInterestPaid += cumulativeMonth.interestPaid;
-    this.lifecycle.totalInterestPaidByExtra += cumulativeMonth.interestPaidByExtra;
-
+    switch (this.method) {
+      case 'HI_INTEREST':
+        this._sortLoans('interestRate');
+        break;
+      case 'LO_BALANCE':
+        this._sortLoans('balance');
+        break;
+    }
   }
 
   /**
    * returns initialized month object for series
    * @return {[type]} [description]
    */
-  _initMonth() {
-    let date = this._timeHelper(this.monthIndex);
+  _initSeriesObj(day) {
+    let date = this._timeHelper(this.monthIndex, day);
     return {
       monthIndex: this.monthIndex,
+      day: day,
       date: date,
       payments: 0,
       minimumPayment: 0,
