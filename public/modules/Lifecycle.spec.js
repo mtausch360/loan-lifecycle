@@ -23,6 +23,12 @@ describe('Lifecycle module', function () {
       dueDate: 2,
       interestRate: 0.08,
       minimumPayment: 200,
+    },{
+      name: 'sm3',
+      balance: 1000,
+      dueDate: 11,
+      interestRate: 0.08,
+      minimumPayment: 200,
     }];
 
   });
@@ -34,10 +40,12 @@ describe('Lifecycle module', function () {
 
   it('should give series objects in order of date', ()=>{
     var lifecycle = new Lifecycle(loans, { extra: 0, method: 'HI_BALANCE' });
-    console.log('lifecycle', lifecycle.lifecycle);
+    console.log('lifecycle', lifecycle.lifecycle.series.length);
     expect(lifecycle.lifecycle.series[0].day).toBe(2);
     expect(lifecycle.lifecycles.series[1].day).toBe(3);
     expect(lifecycle.lifecycle.series[2].day).toBe(8);
+    expect(lifecycle.lifecycle.series[3].day).toBe(11);
+
   });
 
   it('should order loans based on method', ()=>{

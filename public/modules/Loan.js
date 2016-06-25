@@ -1,3 +1,5 @@
+var Big = require('big.js');
+Big.DP = 4;
 class Loan {
 
   /**
@@ -16,7 +18,7 @@ class Loan {
     this.name = name;
     this.id = id;
     this.dueDate = dueDate; //not used yet
-    this.interestRate = interestRate;
+    this.interestRate = interestRate; //nominal interest Rate
     this.compoundingRate = compoundingRate; //not used yet
     this.minimumPayment = minimumPayment;
     this.principal = principal;
@@ -134,12 +136,13 @@ class Loan {
    */
   age() {
 
-    //assume capitalization
+    //capitalize previous interest
     this.principal += this.interest;
     this.interest = 0;
 
-    //need better way to deal with specific dates, losing significance slightly over 1 year
-    var monthlyInterestAccrued = Number((this.interestRate / 12 * this.principal).toFixed(2));
+    //A=P(1+r/n)^n
+    let effectiveInterestRate = Big(this.interestRate).div(12);
+    let monthlyInterestAccrued = effectiveInterestRate * (this.principal);
 
     this.interest += monthlyInterestAccrued;
     this.interestAccrued += monthlyInterestAccrued;
@@ -157,14 +160,16 @@ class Loan {
 
       if (this.balance <= 0)
         this.alive = false;
-    }
-    /**
-     * throws if not a valid loan
-     *
-     */
+  }
+
+  /**
+   * throws if not a valid loan
+   *
+   */
   _validate() {
 
   }
+
 }
 
 export default Loan;

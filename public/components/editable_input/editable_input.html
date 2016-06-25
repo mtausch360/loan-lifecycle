@@ -1,7 +1,9 @@
 <div class="editable-input"  ng-mouseover="hoverView()" ng-mouseout="endHoverView()">
     <div class="view" ng-show="view">
         {{prefix}}{{model}}{{suffix}}
-        <div class="edit-button glyphicon glyphicon-pencil" ng-show="hover" ng-click="toggleEdit()"></div>
+        <div class="action-box"  ng-show="hover">
+            <div class="edit-button glyphicon glyphicon-pencil" ng-click="toggleEdit()"></div>
+        </div>
     </div>
     <div class="edit" ng-show="!view">
         <div class="input-container">

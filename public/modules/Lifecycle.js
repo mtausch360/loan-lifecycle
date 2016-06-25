@@ -45,25 +45,6 @@ class Lifecycle {
   }
 
   /**
-   * [initializeState description]
-   * @return {[type]} [description]
-   */
-  _initializeState(){
-    let self = this;
-    let dates = {};
-    this._state = {};
-    //want to keep track of ordering for applying extra to loan payments
-    _.each(this.Loans, (L)=>{
-      if(L.alive){
-        if( !dates[L.dueDate] )
-          dates[L.dueDate] = self._initSeriesObj(L.dueDate);
-      }
-    });
-    this._state.dates = dates;
-
-  }
-
-  /**
    * fills lifecycle object with series information, calculates all loans provided to instance with setings
    * @return {[type]} [description]
    */
@@ -92,11 +73,32 @@ class Lifecycle {
 
       this._sortLoansByMethod();
 
+      this._initializeState();
+
       this._payLoans();
 
     }
 
     this.lifecycle.endDate = this.lifecycle.series[ this.lifecycle.series.length - 1].date;
+  }
+
+  /**
+   * [initializeState description]
+   * @return {[type]} [description]
+   */
+  _initializeState(){
+    let self = this;
+    let dates = {};
+    this._state = {};
+    //want to keep track of ordering for applying extra to loan payments
+    _.each(this.Loans, (L)=>{
+      if(L.alive){
+        if( !dates[L.dueDate] )
+          dates[L.dueDate] = self._initSeriesObj(L.dueDate);
+      }
+    });
+    this._state.dates = dates;
+
   }
 
   /**
@@ -107,9 +109,11 @@ class Lifecycle {
 
     let self = this;
     _.each(this.Loans, function (L, i) {
-      L.age();
+
       let cumulativeSeriesDate = self._state.dates[ L.dueDate ];
+
       if (L.alive) {
+        L.age();
         let {
           amountPaid,
           extraLeft,
@@ -157,7 +161,7 @@ class Lifecycle {
    * looks in series and returns aggregation of series elements inside of range
    * @return {[obj]} [description]
    */
-  search([minDate, maxDate] = []) {
+  search([minDate, maxDate] = [minDate=0, maxDate=0]) {
     let res = {
       totalInterestPaid: 0,
       totalInterestPaidByExtra: 0,

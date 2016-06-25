@@ -7,7 +7,7 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
         browsers: ['PhantomJS'],
         files: [{ pattern: 'spec.bundle.js', watched: false }],
-        logLevel: config.LOG_INFO,
+        logLevel: config.LOG_DEBUG,
 
         preprocessors: { 'spec.bundle.js': ['webpack', 'babel'] },
 
@@ -16,7 +16,7 @@ module.exports = function(config) {
         webpackMiddleware: {
             // webpack-dev-middleware configuration
             // i. e.
-            noInfo: false
+            noInfo: true
         },
 
         singleRun: true

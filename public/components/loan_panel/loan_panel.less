@@ -1,19 +1,36 @@
 @panelMarginTop: 20px;
-.loan-panel {
-    .menu-container {
-        overflow-y: hidden;
-        max-height: @panelHeight;
-        min-height: @panelHeight;
+.loan-panel-container {
+    width: @loanPanelWidth;
+    min-width: 400px;
+    border-right: 1px solid @borderColor;
+    position: relative;
+    display: inline-block;
+    &.full {
+        margin-left: -@loanPanelWidth;
     }
-    .loans-container {
-        .menu-container;
-        .loan-options {
-            height: 30px;
+    .panel;
+    .swingTransition(margin-left);
+    .loan-panel {
+        .menu-container {
+            overflow-y: hidden;
+            max-height: @panelHeight;
+            min-height: @panelHeight;
         }
-        .loan-list {
-            height: @panelHeight - 30px;
-            overflow-y: scroll;
+        .loans-container {
+            .menu-container;
+            .loan-options {
+                height: 30px;
+            }
+            .loan-list {
+                height: @panelHeight - 30px;
+                overflow-y: scroll;
+            }
+        }
+        .settings-container {}
+        .prop{
+          display: inline-block;
+          width: 180px;
         }
     }
-    .settings-container {}
+    @import "./../loan/loan";
 }

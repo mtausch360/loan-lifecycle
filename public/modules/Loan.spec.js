@@ -17,12 +17,23 @@ describe("Loan module", function () {
     expect(loan.balance).toBe(loan.principal + loan.interest);
   });
 
-  //http://www.bankrate.com/calculators/mortgages/loan-calculator.aspx?loanAmount=5000&years=5&terms=60&interestRate=4.50&loanStartDate=24+May+2016&show=true&showRt=false&prods=216&monthlyAdditionalAmount=0&yearlyAdditionalAmount=0&yearlyPaymentMonth=&oneTimeAdditionalPayment=0&oneTimeAdditionalPaymentInMY=&ic_id=mtg_loan_calc_amortization_btn
   it("Should age correctly", function () {
 
     loan.age();
     expect(loan.interest).toBe(18.75);
     expect(loan.principal).toBe(5000);
+
+    var l = new Loan({
+      principal: 1000,
+      interestRate: 0.1, // 10% annually, 
+      minimumPayment: 100
+    });
+
+    for(var i = 0; i < 12; i++) l.age();
+
+    // 1000(1 + .1/12 )^12 = 1104.7131
+    expect(l.balance).toBe(1104.7131);
+
 
   });
 
@@ -44,6 +55,8 @@ describe("Loan module", function () {
     expect(interestPaid).toBe(18.75);
 
   });
+
+
 
   //test is close to passing, other calculator take dates to be more accurate than what we do (dividing months by 12 evenly)
   //fix to gain more precision, but for now this is accurate enough

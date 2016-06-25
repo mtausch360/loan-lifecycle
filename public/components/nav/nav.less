@@ -1,6 +1,7 @@
 .nav-bar {
     position: fixed;
     width: 100%;
+    min-width: @minLoanPanelWidth + @minLifecyclePanelWidth;
     background-color: white;
     overflow-y: hidden;
     border-bottom: 1px solid @borderColor;
@@ -9,6 +10,7 @@
     .font-standard;
     .loan-panel-nav {
         width: @loanPanelWidth;
+        min-width: @minLoanPanelWidth;
         border-right: 1px solid @borderColor;
         .swingTransition(margin-left);
         &.full {
@@ -29,6 +31,7 @@
     }
     .lifecycle-panel-nav {
         width: @lifecyclePanelWidth;
+        min-width: @minLifecyclePanelWidth;
         float: right;
         .swingTransition(width);
         &.full {

@@ -1,3 +1,4 @@
+
 import AppController from "./app_controller";
 import lifecycleNav from "./components/nav/nav_directive";
 
@@ -9,7 +10,6 @@ import lifecycleService from "./components/lifecycle/lifecycle_service";
 
 import loanService from "./components/loan_panel/loan_panel_service";
 import loan from "./components/loan/loan_directive";
-
 
 angular.module('loanVisualizer', ['ngAnimate']);
 angular.module('loanVisualizer').controller('AppController', AppController);

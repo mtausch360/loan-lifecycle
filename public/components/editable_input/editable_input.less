@@ -5,11 +5,12 @@
   @inputHeight: @height/2;
   @backgroundColor: lightBlue;
   padding: 5px;
-  display: inline-block;
+  display: block;
   position: relative;
   transition: background-color 500ms ease;
   height: @height;
   .font-standard;
+  font-size: 16px;
   &.big{
     font-size: 18px;
     font-weight: 600;
@@ -17,10 +18,29 @@
   &:hover {
     background-color: @backgroundColor;
   }
+
+  .input-container{
+    display: inline-block;
+  }
   input {
     width: @inputWidth;
     height: @inputHeight;
-    display: inline;
+    display: inline-block;
+  }
+
+  .action-box{
+    display: inline-block;
+    position: absolute;
+    transition: background-color 500ms ease;
+    margin-left: 5px;
+    padding: 0px 5px;
+    background-color: lightgrey;
+    border-radius: 9px;
+    box-shadow: #8c8c8c 1px 2px 1px;
+    border: 1px solid #cecece;
+    &.ng-hide{
+      transition: none;
+    }
   }
 
   .view {
@@ -30,7 +50,6 @@
       transition: none;
     }
     .edit-button {
-      display: inline;
       transition: all 250ms ease;
       &.ng-hide{
         transition: none;
@@ -44,11 +63,5 @@
     width: @width;
   }
 
-  .action-box{
-    display: inline-block;
-    position: absolute;
-    // background-color: blue;
-    transition: background-color 500ms ease;
-    .element{}
-  }
+  
 }
