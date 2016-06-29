@@ -1,10 +1,13 @@
-// import Loan from "../../public/modules/Loan.js";
 import Lifecycle from "./Lifecycle.js";
+import {inRange} from "./util.js";
 
-describe('Lifecycle module', function () {
+describe('Lifecycle module', ()=>{
   var loans;
+  var simpleLoan;
+  var longLoan;
 
-  beforeEach(function () {
+  beforeEach(()=>{
+
     loans = [{
       name: 'sm1',
       balance: 1000,
@@ -31,25 +34,64 @@ describe('Lifecycle module', function () {
       minimumPayment: 200,
     }];
 
+    simpleLoan = [{
+      balance: 1005,
+      dueDate: 1,
+      interestRate: .01,
+      minimumPayment: 84
+    }];
+
+    longLoan = [{
+      balance: 100000,
+      interestRate: .045,
+      minimumPayment: 632.65
+    }];
+
+
+
   });
 
-  it('should complete the lifecycle without errors', function () {
-    var lifecycle = new Lifecycle(loans, { extra: 0, method: 'HI_BALANCE' });
+  it('should complete the lifecycle without errors', ()=>{
+    var lifecycle = new Lifecycle(loans);
     expect(lifecycle).not.toBe(undefined);
   });
 
-  it('should give series objects in order of date', ()=>{
-    var lifecycle = new Lifecycle(loans, { extra: 0, method: 'HI_BALANCE' });
-    console.log('lifecycle', lifecycle.lifecycle.series.length);
-    expect(lifecycle.lifecycle.series[0].day).toBe(2);
-    expect(lifecycle.lifecycles.series[1].day).toBe(3);
-    expect(lifecycle.lifecycle.series[2].day).toBe(8);
-    expect(lifecycle.lifecycle.series[3].day).toBe(11);
-
+  it('should complete lifecycle with relative accuracy', ()=>{
+    var lifecycle = new Lifecycle(simpleLoan);
+    expect(lifecycle.lifecycle.series.length ).toBe(13);
   });
 
-  it('should order loans based on method', ()=>{
-    var lifecycle = new Lifecycle(loans, { extra: 0, method: 'HI_BALANCE' });
+  //http://www.bankrate.com/calculators/mortgages/loan-calculator.aspx?loanAmount=100000&years=20.000&terms=240&interestRate=4.500&loanStartDate=28+Jun+2016&show=true&showRt=false&prods=387&monthlyAdditionalAmount=0&yearlyAdditionalAmount=0&yearlyPaymentMonth=+Jun+&oneTimeAdditionalPayment=0&oneTimeAdditionalPaymentInMY=+Jul+2016&ic_id=mtg_loan_calc_amortization_btn
+  it('should handle longer lifecycles correctly',()=>{
+    var lifecycle = new Lifecycle(longLoan);
+    let expectedInterestPaid = 51835.85;
+    let expectedPrincipalPaid = longLoan[0].balance;
+    expect( inRange(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid) ).toBe(true);
+    expect( inRange(lifecycle.lifecycle.totalPaid, expectedInterestPaid + longLoan[0].balance) ).toBe(true);
+    expect( lifecycle.lifecycle.series.length ).toBe(240);
+    let counter = 0;
+    let longLoanObj = longLoan[0];
+    while(counter < 10){
+
+
+      var factor = (1 +  5 * Math.random());
+
+      for( let key in longLoanObj){
+        console.log(longLoanObj[key]);
+        longLoanObj[key] *= factor;
+        console.log(longLoanObj[key]);
+      }
+      var lifecycle = new Lifecycle(longLoan);
+
+      let expectedInterestPaid = 51835.85 * factor;
+      let expectedPrincipalPaid = 100000;
+      console.log(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid * factor)
+      expect( inRange(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid * factor) ).toBe(true);
+      expect( inRange(lifecycle.lifecycle.totalPaid, (expectedInterestPaid + longLoan[0].balance) * factor ) ).toBe(true);
+      // expect( lifecycle.lifecycle.series.length ).toBe(240);
+
+      counter++;
+    }
 
   });
 

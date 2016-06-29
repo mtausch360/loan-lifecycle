@@ -1,15 +1,15 @@
 <div class="loan-container">
     <span style="float: right; z-index:10;" class="glyphicon glyphicon-trash" ng-click="removeLoan(loan)"></span>
     <editable-input class="big" model="loan.name" type="text" on-save="saveLoans()"></editable-input>
-    <div class="balance">
+    <div class="balance loan-el">
         <div class="prop">Balance</div>
         <editable-input prefix="$" model="loan.balance" type="number" on-save="saveLoans()"></editable-input>
     </div>
-    <div class="minimum-payment">
+    <div class="minimum-payment loan-el">
         <div class="prop">Minimum Payment</div>
         <editable-input model="loan.minimumPayment" type="number" prefix="$" on-save="saveLoans()"></editable-input>
     </div>
-    <div class="interest-rate">
+    <div class="interest-rate loan-el">
         <div class="prop">Interest Rate</div>
         <editable-input model="loan.interestRate" type="number" suffix="%" on-save="saveLoans()"></editable-input>
     </div>

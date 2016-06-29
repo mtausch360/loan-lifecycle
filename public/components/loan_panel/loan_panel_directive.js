@@ -11,13 +11,11 @@ function loanPanel(loanService) {
       scope.settings = loanService.getSettings();
       scope.loans = loanService.getLoans();
       scope.addLoan = loanService.addLoan;
-
-      scope.saveSettings = () => {
-        scope.$emit('edit', { type: 'settings' });
-      };
-
       scope.saveLoans = () => {
         scope.$emit('edit', { type: 'loans' });
+      };
+      scope.saveSettings = () => {
+        scope.$emit('edit', { type: 'settings' });
       };
 
       scope.$watch('settings', function () {

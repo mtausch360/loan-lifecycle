@@ -1,5 +1,5 @@
 var Big = require('big.js');
-Big.DP = 4;
+Big.DP = 25;
 class Loan {
 
   /**
@@ -14,29 +14,30 @@ class Loan {
    * @param  {Number} options.interest        [description]
    * @return {[type]}                         [description]
    */
-  constructor({ name="", id, interestRate=0, compoundingRate="MONTHLY", dueDate=1, minimumPayment=0, principal=0, interest=0 }) {
+  constructor({ name = "", id, interestRate = 0, compoundingRate = "MONTHLY", dueDate = 1, minimumPayment = 0, balance = 0, principal = 0, interest = 0 }) {
     this.name = name;
     this.id = id;
-    this.dueDate = dueDate; //not used yet
+    this.dueDate = dueDate;
     this.interestRate = interestRate; //nominal interest Rate
     this.compoundingRate = compoundingRate; //not used yet
     this.minimumPayment = minimumPayment;
-    this.principal = principal;
-    this.interest = interest;
+    if (balance) {
+      this.principal = balance;
+      this.interest = 0;
+    } else {
+      this.principal = principal;
+      this.interest = interest;
+    }
     this.interestAccrued = 0;
     this.alive = true;
     this._calculateBalance();
 
-    try {
-      this._validate();
-    } catch (e) {
-      console.error(e);
-    }
+    this._validate();
+    return this;
   }
 
   /**
    * Payments assume that any overpayment is applied to principal balance.
-   * Calling this function also ages the Loan one month and capitalizes any previous interest
    *
    * @param  {[number]} amount [total money to paydown on this loan]
    * @return {[type]}     [description]
@@ -104,8 +105,6 @@ class Loan {
       extra = 0;
     }
 
-
-
     this._calculateBalance();
 
     let res = {
@@ -142,7 +141,7 @@ class Loan {
 
     //A=P(1+r/n)^n
     let effectiveInterestRate = Big(this.interestRate).div(12);
-    let monthlyInterestAccrued = effectiveInterestRate * (this.principal);
+    let monthlyInterestAccrued = Number(Big(effectiveInterestRate).times(this.principal));
 
     this.interest += monthlyInterestAccrued;
     this.interestAccrued += monthlyInterestAccrued;
@@ -156,18 +155,23 @@ class Loan {
    * @return {[type]} [description]
    */
   _calculateBalance() {
-      this.balance = this.principal + this.interest;
+    this.balance = this.principal + this.interest;
 
-      if (this.balance <= 0)
-        this.alive = false;
+    if (this.balance <= 0)
+      this.alive = false;
   }
 
   /**
    * throws if not a valid loan
+   *   minimum payment won't touch the interest grown in a month
    *
    */
   _validate() {
-
+    let condition = Number(Big(this.interestRate).div(12).times(this.principal)) > this.minimumPayment;
+    if (condition > this.minimumPayment) {
+      console.error("INVALID LOAN");
+      throw "Invalid Loan";
+    }
   }
 
 }

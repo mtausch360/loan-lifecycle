@@ -62,6 +62,8 @@ function lifecycleGraph(lifecycleService, $timeout) {
         return date;
       }
 
+      var parseDate = d3.time.format("%m/%d/%Y").parse;
+
       create();
 
       /**
@@ -73,10 +75,14 @@ function lifecycleGraph(lifecycleService, $timeout) {
         chart = d3.select('.lifecycle-graph-container').append('svg');
 
         //remember to update
-        xScale = d3.time.scale().domain([timeHelper(0), timeHelper(base.lifecycle.series.length)]);
+        xScale = d3.time.scale().domain([base.lifecycle.series.startDate, base.lifecycle.series.endDate]);
 
         //need to search for highest balance
-        yScale = d3.scale.linear().domain([0, base.lifecycle.series[0].balance]);
+        yScale = d3.scale.linear().domain([0,
+          d3.max(base.lifecycle.series, (d)=>{
+            return d.balance;
+          });
+          ]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
@@ -98,11 +104,14 @@ function lifecycleGraph(lifecycleService, $timeout) {
         baseSeries = plotAreaEl.append('g').classed('base series', true).append('path').attr('class', 'line base');
 
         line = d3.svg.line()
-          .interpolate("cardinal")
-          .x(function (d, i) {
+          // .interpolate("cardinal")
+          .x((d, i)=>{
             return xScale(d.date);
           })
-          .y(function (d) {
+          .y((d)=>{
+            // console.log('d y ', d, d.balance, yScale.domain(), yScale(d.balance));
+            if(!yScale(d.balance))
+              console.log("D>BALANCE", d.balance, yScale.domain(), yScale(d.balance));
             return yScale(d.balance);
           });
 
@@ -124,13 +133,13 @@ function lifecycleGraph(lifecycleService, $timeout) {
         };
 
         updateAxes = () => {
+          let yScaleMax = d3.max(base.lifecycle.series, (d)=>{
+            return d.balance;
+          });
 
           //remember to cahnge
-          xScale.domain([
-            timeHelper(0),
-            timeHelper(Math.max(base.lifecycle.series[base.lifecycle.series.length-1], custom.lifecycle.series.length))
-            ]);
-          yScale.domain([0, base.lifecycle.series[0].balance]);
+          xScale.domain([(base.lifecycle.startDate),(base.lifecycle.endDate)]);
+          yScale.domain([0, yScaleMax]);
           xAxisEl.call(xAxis);
           yAxisEl.call(yAxis);
           zoomendCb();
