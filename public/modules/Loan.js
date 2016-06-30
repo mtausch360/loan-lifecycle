@@ -32,6 +32,11 @@ class Loan {
     this.alive = true;
     this._calculateBalance();
 
+    let condition = Number(Big(this.interestRate).div(12).times(this.principal)) > this.minimumPayment;
+    if (condition > this.minimumPayment) {
+      console.error("INVALID LOAN");
+      throw "Invalid Loan";
+    }
     this._validate();
     return this;
   }

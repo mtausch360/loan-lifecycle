@@ -80,7 +80,7 @@ function lifecycleService(loanService) {
    * @return {[type]} [description]
    */
   function updateBase() {
-    let base = new Lifecycle(loanService.getLoans(), loanService.getSettings(), /* base lifecycle */ true);
+    let base = new Lifecycle(loanService.getLoans());
     if (!lifecycleState.base.lifecycle)
       lifecycleState.base.lifecycle = base;
     else

@@ -6,7 +6,11 @@
 @lifecyclePanelWidth: 2 / 3 * 100%;
 @minLifecyclePanelWidth: 600px;
 
+@customLifecycleColor: #99E3E2;
+@baseLifecycleColor: #FF5200;
+
 @panelHeight: 800px;
+@shadowColor: lightgrey;
 //mixins
 .panel {
     height: @panelHeight;
@@ -14,7 +18,7 @@
 }
 
 .shadow {
-    box-shadow: lightgrey 1px 1px 1px;
+    box-shadow: @shadowColor 1px 1px 1px;
 }
 
 .swingTransition(@prop) {

@@ -196,13 +196,13 @@ function repaymentBreakdown(lifecycleService) {
        * @return {[type]} [description]
        */
       function updateBase() {
-        Base.totalPrincipal
+        Base.totalPrincipal.transition()
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 0 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(baseData.totalPrincipalPaid))
           .attr('height', () => bar.height)
           .attr('fill', 'red')
 
-        Base.totalInterest
+        Base.totalInterest.transition()
           .attr('transform', 'translate(' + xScale(baseData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 0 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(baseData.totalInterestPaid))
           .attr('height', () => bar.height)
@@ -214,19 +214,19 @@ function repaymentBreakdown(lifecycleService) {
        * @return {[type]} [description]
        */
       function updateCustom() {
-        Custom.totalPrincipal
+        Custom.totalPrincipal.transition()
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalPrincipalPaid))
           .attr('height', () => bar.height)
           .attr('fill', 'red')
 
-        Custom.totalPrincipalPaidByExtra
+        Custom.totalPrincipalPaidByExtra.transition()
           .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalPrincipalPaidByExtra))
           .attr('height', () => bar.height)
           .attr('fill', 'pink')
 
-        Custom.totalInterest
+        Custom.totalInterest.transition()
           .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid + customData.totalPrincipalPaidByExtra) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalInterestPaid))
           .attr('height', () => bar.height)

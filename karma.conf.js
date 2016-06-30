@@ -19,6 +19,8 @@ module.exports = function(config) {
             noInfo: true
         },
 
+        reporters: ['spec'],
+
         singleRun: true
     });
 };

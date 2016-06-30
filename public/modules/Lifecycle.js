@@ -9,10 +9,9 @@ class Lifecycle {
    * @param  {Boolean} isBaseLifecycle [description]
    * @return {[type]}                  [description]
    */
-  constructor(loans, { method="NONE", extra=0 } = { method:"NONE", extra:0 }, isBaseLifecycle=false) {
-    if (isBaseLifecycle) extra = 0;
+  constructor(loans, { method="NONE", extra=0 } = { method:"NONE", extra:0 }, {vanilla=false, test=false}={}) {
     this.method = method;
-    this.amountExtraPerMonth = extra;
+    this.extra = extra;
 
     if( !loans ) throw "No Loans Provided";
     var Loans = [];
@@ -24,9 +23,9 @@ class Lifecycle {
 
     this.lifecycle = {
       method: method,
-      amountExtraPerMonth: extra,
+      extra: extra,
       series: [],
-      startDate: new Date(),
+      startDate: null,
       endDate: null,
       totalInterestPaid: 0,
       totalInterestPaidByExtra: 0,
@@ -45,7 +44,8 @@ class Lifecycle {
       principal: 0
     };
 
-    this.live();
+    if(!test)
+      this.live();
 
     return this;
   }
@@ -70,7 +70,7 @@ class Lifecycle {
     }
 
     this.lifecycle.endDate =
-      this.lifecycle.length ?
+      this.lifecycle.series.length ?
         this.lifecycle.series[ this.lifecycle.series.length - 1].date :
         new Date();
   }
@@ -80,7 +80,7 @@ class Lifecycle {
    * @return {[type]} [description]
    */
   _initializeState(){
-    this._state.amountExtraNow = this.amountExtraPerMonth;
+    this._state.amountExtraNow = this.extra;
     this._state.balance = 0;
     this._state.interest = 0;
     this._state.principal = 0;
@@ -162,11 +162,14 @@ class Lifecycle {
     _.forIn(this._state.dates, (el)=> {
       self._state.balance -= el.amountPaid;
       self._state.principal -= (el.principalPaid + el.principalPaidByExtra);
-      self._state.interest -= (el.interestPaid + el.interestPaidByExtra);
+      self._state.interest += (el.interestPaid + el.interestPaidByExtra);
 
       el.balance = self._state.balance;
       el.principal = self._state.principal;
       el.interest = self._state.interest;
+
+      if(!self.lifecycle.startDate)
+        self.lifecycle.startDate = el.date;
 
       self.lifecycle.series.push(el);
 
@@ -178,26 +181,34 @@ class Lifecycle {
    * looks in series and returns aggregation of series elements inside of range
    * @return {[obj]} [description]
    */
-  search([minDate, maxDate] = [minDate=0, maxDate=0]) {
+  search([minDate, maxDate]=[minDate=0, maxDate=0], returnElements=false ) {
+    let res;
 
-    let res = {
-      totalInterestPaid: 0,
-      totalInterestPaidByExtra: 0,
-      totalPrincipalPaid: 0,
-      totalPrincipalPaidByExtra: 0,
-      totalExtraPaid: 0,
-      totalPaid: 0,
-    };
+    if(returnElements)
+      res = [];
+    else
+      res = {
+        totalInterestPaid: 0,
+        totalInterestPaidByExtra: 0,
+        totalPrincipalPaid: 0,
+        totalPrincipalPaidByExtra: 0,
+        totalExtraPaid: 0,
+        totalPaid: 0,
+      };
 
     this.lifecycle.series.forEach((el)=>{
       if( el.date >= minDate && el.date <= maxDate ){
-        res.totalInterestPaid += el.interestPaid;
-        res.totalInterestPaidByExtra += el.interestPaidByExtra;
+        if(returnElements){
+          res.push(el);
+        } else {
+          res.totalInterestPaid += el.interestPaid;
+          res.totalInterestPaidByExtra += el.interestPaidByExtra;
 
-        res.totalPrincipalPaid += el.principalPaid;
-        res.totalPrincipalPaidByExtra += el.principalPaidByExtra;
+          res.totalPrincipalPaid += el.principalPaid;
+          res.totalPrincipalPaidByExtra += el.principalPaidByExtra;
 
-        res.totalPaid += el.amountPaid;
+          res.totalPaid += el.amountPaid;
+        }
       }
     });
     return res;
@@ -271,17 +282,18 @@ class Lifecycle {
       day,
       date,
       payments: 0,
-      minimumPayment: 0,
-      amountExtraPaid: 0,
-      amountPaid: 0,
+
       balance: 0,
-      principal: 0,
       interest: 0,
+      principal: 0,
+
+      minimumPayment: 0,
+      amountPaid: 0,
+      extraPaid: 0,
       interestPaid: 0,
       interestPaidByExtra: 0,
       principalPaid: 0,
       principalPaidByExtra: 0,
-      extraPaid: 0
     };
   }
 

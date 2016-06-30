@@ -12,6 +12,7 @@ function lifecycleGraph(lifecycleService, $timeout) {
     link: (scope, element, attrs) => {
       let base = scope.lifecycles.base.lifecycle;
       let custom = scope.lifecycles.custom.lifecycle;
+      let customEl;
       var updateCustom;
       var updateBase;
       var updateAxes;
@@ -24,7 +25,8 @@ function lifecycleGraph(lifecycleService, $timeout) {
       var defs; //not used
       var clipPath;
 
-      var chart;
+      var svg;
+      var background;
       var xScale;
       var yScale;
       var xAxis;
@@ -52,17 +54,7 @@ function lifecycleGraph(lifecycleService, $timeout) {
         updateBase();
       });
 
-      //shouldn't be necessary
-      function timeHelper(month, day) {
-        var d = new Date();
-        var currMonth = d.getMonth();
-        var currYear = d.getFullYear();
-
-        var date = new Date(Math.floor((currMonth + month) / 12) + currYear, (currMonth + month) % 12, day);
-        return date;
-      }
-
-      var parseDate = d3.time.format("%m/%d/%Y").parse;
+      var parseDate = d3.time.format("%m/%d/%Y");
 
       create();
 
@@ -72,78 +64,48 @@ function lifecycleGraph(lifecycleService, $timeout) {
        */
       function create() {
 
-        chart = d3.select('.lifecycle-graph-container').append('svg');
+        svg = d3.select('.lifecycle-graph-container').append('svg');
 
         //remember to update
-        xScale = d3.time.scale().domain([base.lifecycle.series.startDate, base.lifecycle.series.endDate]);
+        xScale = d3.time.scale().domain([base.lifecycle.startDate, base.lifecycle.endDate]);
 
         //need to search for highest balance
         yScale = d3.scale.linear().domain([0,
           d3.max(base.lifecycle.series, (d)=>{
             return d.balance;
-          });
+          })
           ]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
         yAxis = d3.svg.axis().scale(yScale).orient('left');
 
-        xAxisEl = chart.append('g').classed('x-axis', true);
+        xAxisEl = svg.append('g').classed('x-axis', true);
 
-        yAxisEl = chart.append('g').classed('y-axis', true);
+        yAxisEl = svg.append('g').classed('y-axis', true);
 
-        clipPath = chart
+        clipPath = svg
           .append('clipPath')
           .attr('id', 'clip')
           .append('rect');
 
-        plotAreaEl = chart.append('g').classed('plot-area', true).attr('clip-path', 'url(#clip)');
+        background = svg.append('rect').classed('background', true);
 
-        customSeries = plotAreaEl.append('g').classed('custom series', true).append('path').attr('class', 'line custom');
+        plotAreaEl = svg.append('g').classed('plot-area', true).attr('clip-path', 'url(#clip)');
+        customEl = plotAreaEl.append('g').classed('custom series', true)
+        customSeries = customEl.append('path').attr('class', 'line custom');
 
         baseSeries = plotAreaEl.append('g').classed('base series', true).append('path').attr('class', 'line base');
 
         line = d3.svg.line()
-          // .interpolate("cardinal")
+          .interpolate("cardinal")
           .x((d, i)=>{
-            return xScale(d.date);
+
+            return xScale( d.date );
           })
-          .y((d)=>{
-            // console.log('d y ', d, d.balance, yScale.domain(), yScale(d.balance));
-            if(!yScale(d.balance))
-              console.log("D>BALANCE", d.balance, yScale.domain(), yScale(d.balance));
+          .y((d, i)=>{
             return yScale(d.balance);
           });
-
-        // var area = d3.svg.area()
-        //     .interpolate("step-after")
-        //     .x(function(d) { return xScale(timeHelper(d.monthIndex)); })
-        //     .y0(yScale(0))
-        //     .y1(function(d) { return yScale(d.balance); });
-
-        //should be moved
-        updateCustom = () => {
-          customPath.remove();
-          drawCustom();
-        };
-
-        updateBase = () => {
-          basePath.remove();
-          drawBase()
-        };
-
-        updateAxes = () => {
-          let yScaleMax = d3.max(base.lifecycle.series, (d)=>{
-            return d.balance;
-          });
-
-          //remember to cahnge
-          xScale.domain([(base.lifecycle.startDate),(base.lifecycle.endDate)]);
-          yScale.domain([0, yScaleMax]);
-          xAxisEl.call(xAxis);
-          yAxisEl.call(yAxis);
-          zoomendCb();
-        };
 
         render();
 
@@ -152,7 +114,7 @@ function lifecycleGraph(lifecycleService, $timeout) {
           .on('zoom', zoomCb)
           .on('zoomend', zoomendCb)
 
-        chart.call(zoom);
+        background.call(zoom);
       }
 
       /**
@@ -174,8 +136,8 @@ function lifecycleGraph(lifecycleService, $timeout) {
           height: height - margin.top - margin.bottom
         };
 
-        //create chart
-        chart
+        //create svg
+        svg
           .attr('width', width)
           .attr('height', height);
 
@@ -205,9 +167,18 @@ function lifecycleGraph(lifecycleService, $timeout) {
           .attr('height', height - margin.top - margin.bottom)
           .attr('transform', 'translate(' + (margin.left) + ', ' + (margin.top) + ')');
 
+        background
+          .attr('width', width - margin.left - margin.right)
+          .attr('height', height - margin.top - margin.bottom)
+          .attr('transform', 'translate(' + (margin.left) + ', ' + (margin.top) + ')');
+
+
 
         drawBase();
         drawCustom();
+
+        drawPayments();
+
       }
 
       /**
@@ -228,7 +199,6 @@ function lifecycleGraph(lifecycleService, $timeout) {
           .attr('d', (d) => {
             return line(d)
           })
-          .attr('stroke', 'blue');
       }
 
       /**
@@ -240,7 +210,6 @@ function lifecycleGraph(lifecycleService, $timeout) {
           .attr('d', (d) => {
             return line(d)
           })
-          .attr('stroke', 'red')
       }
 
       /**
@@ -273,6 +242,64 @@ function lifecycleGraph(lifecycleService, $timeout) {
         lifecycleService.setCurrentSelection(xScale.domain());
         $timeout();
       }
+
+
+      /**
+       * [updateCustom description]
+       * @return {[type]} [description]
+       */
+      function updateCustom (){
+        customPath.remove();
+        drawCustom();
+      }
+
+      /**
+       * [updateBase description]
+       * @return {[type]} [description]
+       */
+      function updateBase (){
+        basePath.remove();
+        drawBase()
+      }
+
+      /**
+       * [updateAxes description]
+       * @return {[type]} [description]
+       */
+      function updateAxes (){
+        let yScaleMax = d3.max(base.lifecycle.series, (d)=>{
+          return d.balance;
+        });
+
+        xScale.domain([(base.lifecycle.startDate),(base.lifecycle.endDate)]);
+        yScale.domain([0, yScaleMax]);
+        xAxisEl.call(xAxis);
+        yAxisEl.call(yAxis);
+        zoomendCb();
+      }
+
+      const SIX_MONTHS_MILLI = 1000 * 60 * 60 * 24 * 7 * 4.5 * 6;
+      function drawPayments(){
+        // let [min, max] = xScale.domain();
+
+        // if( max.getTime() - min.getTime() <  SIX_MONTHS_MILLI ){
+        //   d3.selectAll('custom-payment-circle').remove();
+        //   let customFrame = custom.search([min, max], true);
+        //   console.log('custom Frame', customFrame, [min, max]);
+        //   let customPayments = plotAreaEl.select('.custom').data(customFrame)
+        //       .append('circle')
+        //         .classed('custom-payment-circle', true)
+        //         .attr('cx', (d)=>{
+        //           console.log('here', d);
+        //           return xScale(d.date)
+        //         })
+        //         .attr('cy', (d)=>{
+        //           return yScale(d.balance)
+        //         })
+        //         .attr('r', 5)
+        // }
+      };
+
 
     }
   }

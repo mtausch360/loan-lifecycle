@@ -1,5 +1,5 @@
 import Lifecycle from "./Lifecycle.js";
-import {inRange} from "./util.js";
+import {inRange, randomLoan} from "./util.js";
 
 describe('Lifecycle module', ()=>{
   var loans;
@@ -69,30 +69,44 @@ describe('Lifecycle module', ()=>{
     expect( inRange(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid) ).toBe(true);
     expect( inRange(lifecycle.lifecycle.totalPaid, expectedInterestPaid + longLoan[0].balance) ).toBe(true);
     expect( lifecycle.lifecycle.series.length ).toBe(240);
-    let counter = 0;
-    let longLoanObj = longLoan[0];
-    while(counter < 10){
+
+    //not ready yet
+    // let counter = 0;
+    // let longLoanObj = longLoan[0];
+    // while(counter < 10){
 
 
-      var factor = (1 +  5 * Math.random());
+    //   var factor = (1 +  5 * Math.random());
 
-      for( let key in longLoanObj){
-        console.log(longLoanObj[key]);
-        longLoanObj[key] *= factor;
-        console.log(longLoanObj[key]);
-      }
-      var lifecycle = new Lifecycle(longLoan);
+    //   for( let key in longLoanObj){
+    //     console.log(longLoanObj[key]);
+    //     longLoanObj[key] *= factor;
+    //     console.log(longLoanObj[key]);
+    //   }
+    //   var lifecycle = new Lifecycle(longLoan);
 
-      let expectedInterestPaid = 51835.85 * factor;
-      let expectedPrincipalPaid = 100000;
-      console.log(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid * factor)
-      expect( inRange(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid * factor) ).toBe(true);
-      expect( inRange(lifecycle.lifecycle.totalPaid, (expectedInterestPaid + longLoan[0].balance) * factor ) ).toBe(true);
-      // expect( lifecycle.lifecycle.series.length ).toBe(240);
+    //   let expectedInterestPaid = 51835.85 * factor;
+    //   let expectedPrincipalPaid = 100000;
+    //   console.log(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid * factor)
+    //   expect( inRange(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid * factor) ).toBe(true);
+    //   expect( inRange(lifecycle.lifecycle.totalPaid, (expectedInterestPaid + longLoan[0].balance) * factor ) ).toBe(true);
+    //   // expect( lifecycle.lifecycle.series.length ).toBe(240);
 
-      counter++;
+    //   counter++;
+    // }
+
+  });
+
+
+  it('should handle random perfect loans', ()=>{
+    let count = 0;
+    while( count < 1 ){
+      let l = randomLoan();
+      let life = new Lifecycle([l]);
+      console.log(life.lifecycle);
+      expect( life.lifecycle.series.length ).toBe(l.n+1);
+      count++;
     }
-
   });
 
 });
