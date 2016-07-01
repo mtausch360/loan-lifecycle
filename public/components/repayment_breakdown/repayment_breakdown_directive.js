@@ -178,7 +178,7 @@ function repaymentBreakdown(lifecycleService) {
       function pruneData(){
         customData = custom.search(currentSelection);
         baseData = base.search(currentSelection);
-        console.log('currentSelectin', currentSelection, customData, baseData);
+        // console.log('currentSelectin', currentSelection, customData, baseData);
         drawAll();
       }
 

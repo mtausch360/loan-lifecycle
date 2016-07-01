@@ -30,11 +30,11 @@
     font-weight: 300;
 }
 
+
 //app level styles
 .content-container {
     padding-top: @navHeight;
     position: relative;
-    @import "./components/loan_panel/loan_panel";
 
     .lifecycle-panel-container {
         width: @lifecyclePanelWidth;
@@ -47,7 +47,6 @@
         }
         .panel;
         .swingTransition(width);
-        @import "./components/lifecycle/lifecycle";
     }
 }
 
@@ -66,5 +65,8 @@ body{
     font-family: "Source Sans Pro";
 }
 
+@import "./components/loan_panel/loan_panel";
+@import "./components/lifecycle/lifecycle";
+@import './components/lifecycle_graph/lifecycle_graph';
 @import "./components/editable_input/editable_input";
 @import "./components/nav/nav";

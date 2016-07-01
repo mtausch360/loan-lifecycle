@@ -1,3 +1,5 @@
+var Big = require('big.js');
+Big.DP = 25;
 
 import AppController from "./app_controller";
 import lifecycleNav from "./components/nav/nav_directive";

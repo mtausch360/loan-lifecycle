@@ -1,0 +1,54 @@
+.lifecycle-graph-container{
+
+  .series{
+    path{
+      -webkit-filter: drop-shadow( -5px -5px 5px #000 );
+      filter: drop-shadow( -5px -5px 5px #000 );
+    }
+    .circle{
+      stroke: rgba(255,255,255,0.47);
+      stroke-width: 1px;
+      transition: fill 500ms ease;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &.custom{
+      path{
+        stroke: @customLifecycleColor;
+
+      }
+      .custom-payment-circle {
+        fill: @customLifecycleColor;
+        .circle;
+        &:hover{
+          fill: darken(@customLifecycleColor, 10%);
+        }
+      }
+    }
+    &.base{
+      path{
+        stroke: @baseLifecycleColor;
+      }
+      .base-payment-circle {
+        fill: @baseLifecycleColor;
+        .circle;
+        &:hover{
+          fill: darken(@baseLifecycleColor, 10%);
+        }
+      }
+    }
+  }
+
+}
+
+.lifecycle-graph-tooltip{
+  position: absolute;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  &:hover {
+    transition: all 500ms ease;
+  }
+}

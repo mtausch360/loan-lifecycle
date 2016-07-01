@@ -4,7 +4,7 @@ import tpl from './lifecycle_graph.html';
  * This vis shows current balance as a function of time, and compares two lifecycles to oneanother
  * @return {[type]} [description]
  */
-function lifecycleGraph(lifecycleService, $timeout) {
+function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
   return {
     restrict: 'E',
@@ -12,7 +12,6 @@ function lifecycleGraph(lifecycleService, $timeout) {
     link: (scope, element, attrs) => {
       let base = scope.lifecycles.base.lifecycle;
       let custom = scope.lifecycles.custom.lifecycle;
-      let customEl;
       var updateCustom;
       var updateBase;
       var updateAxes;
@@ -29,10 +28,13 @@ function lifecycleGraph(lifecycleService, $timeout) {
       var background;
       var xScale;
       var yScale;
+      var pointScale;
       var xAxis;
       var yAxis;
       var xAxisEl;
       var yAxisEl;
+      var customContainer;
+      var baseContainer;
       var customSeries;
       var baseSeries;
       var line;
@@ -40,6 +42,7 @@ function lifecycleGraph(lifecycleService, $timeout) {
       var basePath;
       var customPath;
       var zoom;
+      var tooltip;
 
       window.addEventListener('resize', render);
       scope.$on('render', render);
@@ -66,15 +69,13 @@ function lifecycleGraph(lifecycleService, $timeout) {
 
         svg = d3.select('.lifecycle-graph-container').append('svg');
 
-        //remember to update
         xScale = d3.time.scale().domain([base.lifecycle.startDate, base.lifecycle.endDate]);
-
-        //need to search for highest balance
         yScale = d3.scale.linear().domain([0,
           d3.max(base.lifecycle.series, (d)=>{
             return d.balance;
           })
           ]);
+        pointScale = d3.scale.linear().domain([0, base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime() ]).range([3, 3]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
@@ -92,13 +93,19 @@ function lifecycleGraph(lifecycleService, $timeout) {
         background = svg.append('rect').classed('background', true);
 
         plotAreaEl = svg.append('g').classed('plot-area', true).attr('clip-path', 'url(#clip)');
-        customEl = plotAreaEl.append('g').classed('custom series', true)
-        customSeries = customEl.append('path').attr('class', 'line custom');
 
-        baseSeries = plotAreaEl.append('g').classed('base series', true).append('path').attr('class', 'line base');
+        customContainer = plotAreaEl.append('g').classed('custom series', true);
+        customSeries = customContainer.append('path').attr('class', 'line custom');
+
+        baseContainer = plotAreaEl.append('g').classed('base series', true);
+        baseSeries = baseContainer.append('path').attr('class', 'line base');
+
+        tooltip = d3.select("body").append("div")
+            .attr("class", "lifecycle-graph-tooltip lifecycle-tooltip")
+            .style("display", "none");
 
         line = d3.svg.line()
-          .interpolate("cardinal")
+          // .interpolate("cardinal")
           .x((d, i)=>{
 
             return xScale( d.date );
@@ -122,6 +129,7 @@ function lifecycleGraph(lifecycleService, $timeout) {
        * @return {[type]} [description]
        */
       function render() {
+
         width = document.getElementById('lifecycle-panel').offsetWidth || 800;
         height = Math.max(document.documentElement.clientHeight - document.getElementById('nav-bar'), 400) * .7;
         margin = {
@@ -136,13 +144,11 @@ function lifecycleGraph(lifecycleService, $timeout) {
           height: height - margin.top - margin.bottom
         };
 
-        //create svg
+        xScale.range([0, plotArea.width]);
+        yScale.range([plotArea.height, 0]);
         svg
           .attr('width', width)
           .attr('height', height);
-
-        xScale.range([0, plotArea.width]);
-        yScale.range([plotArea.height, 0]);
 
         xAxisEl
           .classed('x-axis', true)
@@ -176,9 +182,7 @@ function lifecycleGraph(lifecycleService, $timeout) {
 
         drawBase();
         drawCustom();
-
         drawPayments();
-
       }
 
       /**
@@ -270,36 +274,105 @@ function lifecycleGraph(lifecycleService, $timeout) {
         let yScaleMax = d3.max(base.lifecycle.series, (d)=>{
           return d.balance;
         });
-
+        let [minDate, maxDate] = xScale.domain();
         xScale.domain([(base.lifecycle.startDate),(base.lifecycle.endDate)]);
         yScale.domain([0, yScaleMax]);
+        pointScale.domain([0, base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime() ])
         xAxisEl.call(xAxis);
         yAxisEl.call(yAxis);
         zoomendCb();
       }
 
-      const SIX_MONTHS_MILLI = 1000 * 60 * 60 * 24 * 7 * 4.5 * 6;
+      // const SIX_MONTHS_MILLI = 1000 * 60 * 60 * 24 * 7 * 4.5 * 12 * 2;
+
+      /**
+       * [drawPayments description]
+       * @return {[type]} [description]
+       */
       function drawPayments(){
-        // let [min, max] = xScale.domain();
 
-        // if( max.getTime() - min.getTime() <  SIX_MONTHS_MILLI ){
-        //   d3.selectAll('custom-payment-circle').remove();
-        //   let customFrame = custom.search([min, max], true);
-        //   console.log('custom Frame', customFrame, [min, max]);
-        //   let customPayments = plotAreaEl.select('.custom').data(customFrame)
-        //       .append('circle')
-        //         .classed('custom-payment-circle', true)
-        //         .attr('cx', (d)=>{
-        //           console.log('here', d);
-        //           return xScale(d.date)
-        //         })
-        //         .attr('cy', (d)=>{
-        //           return yScale(d.balance)
-        //         })
-        //         .attr('r', 5)
-        // }
-      };
+        let customPayments = custom.search(xScale.domain(), true);
+        let basePayments = base.search(xScale.domain(), true);
 
+        drawPaymentCircle(customPayments, 'custom');
+        drawPaymentCircle(basePayments, 'base');
+      }
+
+      /**
+       * [drawPaymentCircle description]
+       * @param  {[arr]} payments [array of series dates]
+       * @return {[type]}          [description]
+       */
+      function drawPaymentCircle(payments, identifier){
+        console.log(xScale.domain());
+        let viewingLength = xScale.domain()[1].getTime() - xScale.domain()[0].getTime();
+        console.log("R", pointScale(viewingLength), viewingLength);
+        let classStr = '.' + identifier;
+        let container = identifier === "custom" ? customContainer : baseContainer;
+        if( payments.length <= 250 ){
+
+          let paymentCircles = container.selectAll(classStr + '-payment-circle').data(payments)
+
+          paymentCircles.enter()
+            .append('circle')
+              .classed(identifier + '-payment-circle', true)
+              .on('mouseenter', mouseEnter)
+              .on('mouseout', mouseOut);
+
+          drawCircles(paymentCircles, viewingLength);
+
+          paymentCircles.exit().remove();
+
+        } else {
+          container.selectAll(classStr + '-payment-circle').remove()
+        }
+
+      }
+
+
+      /**
+       * [drawCircles description]
+       * @param  {[type]} sel [description]
+       * @return {[type]}     [description]
+       */
+      function drawCircles(sel,length){
+        sel
+          .attr('cx', (d)=>{
+            // console.log('here', d);
+            return xScale(d.date)
+          })
+          .attr('cy', (d)=>{
+            return yScale(d.balance)
+          })
+          .attr('r', ()=> pointScale(length) )
+
+      }
+
+      /**
+       * [mouseEnter description]
+       * @param  {[type]} d [description]
+       * @return {[type]}   [description]
+       */
+      function mouseEnter(d){
+        let dateFilter = $filter('date')
+        var HTML = "<div>" + dateFilter(d.date, 'mediumDate') + "</div>"
+        console.log(arguments)
+        tooltip
+          .style('display', 'block')
+          .html(HTML)
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY -  28 ) + "px");
+
+        console.log(d);
+      }
+
+      /**
+       * [mouseOut description]
+       * @return {[type]} [description]
+       */
+      function mouseOut(){
+        tooltip.style('display', 'none').html('');
+      }
 
     }
   }

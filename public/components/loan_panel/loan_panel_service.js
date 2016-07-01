@@ -65,7 +65,7 @@ function loanService() {
         name: 'sm1',
         balance: 11350.12,
         principal: 11350.12,
-        dueDate: 3,
+        dueDate: 7,
         compoundingRate: "MONTHLY",
         interest: 0,
         interestRate: 0.0825,
@@ -81,7 +81,7 @@ function loanService() {
         minimumPayment: 136.10,
       }, {
         name: 'sm3',
-        dueDate: 3,
+        dueDate: 7,
         compoundingRate: "MONTHLY",
         balance: 5738.86,
         principal: 5738.86,
@@ -110,7 +110,7 @@ function loanService() {
         minimumPayment: 53.82,
       }, {
         name: 'GLS2',
-        dueDate: 22,
+        dueDate: 23,
         compoundingRate: "MONTHLY",
         balance: 7563.24,
         principal: 7563.24,
