@@ -47,7 +47,7 @@ function randomLoan(){
 }
 
 /**
- *     // 1000(1 + .1/12 )^12 = 1104.7131
+ *     // 1000(1 + .1/12 )^n = balance
  * @param  {[type]} l [description]
  * @return {[type]}   [description]
  */

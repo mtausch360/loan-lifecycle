@@ -133,17 +133,15 @@ describe("Loan module", function () {
   //payments
   xit("should apply payments to randomly generated true loans", () => {
     let count = 0;
-    while (count < 1) {
+    while (count < 100) {
       let l = new Loan(randomLoan());
-      while (loan.alive) {
-        l.age();
-        let lBalanceBefore = l.balance;
-        l.makePayment();
-        expect(l.balance).toBe(lBalanceBefore - l.minimumPayment);
-      }
+      l.age();
+      let lBalanceBefore = l.balance;
+      l.makePayment();
+      expect(l.balance).toBe(lBalanceBefore - l.minimumPayment);
       count++;
     }
   });
 
-  it("should")
+  // it("should")
 });

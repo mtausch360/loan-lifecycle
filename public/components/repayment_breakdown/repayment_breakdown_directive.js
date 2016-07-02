@@ -84,7 +84,7 @@ function repaymentBreakdown(lifecycleService) {
         yScale = d3.scale.ordinal().domain(domainMap);
         xScale = d3.scale.linear().domain([0, Math.max(base.totalPaid, custom.totalPaid)]);
 
-        xAxis = d3.svg.axis().scale(xScale).orient('bottom');
+        xAxis = d3.svg.axis().scale(xScale).orient('top');
         yAxis = d3.svg.axis().scale(yScale).orient('left');
 
         xAxisEl = svg.append('g')
@@ -115,7 +115,7 @@ function repaymentBreakdown(lifecycleService) {
        */
       function render() {
         width = document.getElementById('lifecycle-panel').offsetWidth;
-        height = Math.max(document.documentElement.clientHeight - document.getElementById('nav-bar'), 200)*.3;
+        height = Math.max(document.documentElement.clientHeight - document.getElementById('nav-bar'), 200)*.25;
         margin = {
           top: 0,
           left: 75,
@@ -146,7 +146,7 @@ function repaymentBreakdown(lifecycleService) {
         xScale.range([0, bar.maxWidth]);
 
         xAxisEl
-          .attr('transform', 'translate(' + margin.left + ',' + (margin.top + plotArea.height) + ')')
+          .attr('transform', 'translate(' + margin.left + ',' + (margin.top ) + ')')
           .call(xAxis);
 
         yAxisEl
@@ -196,13 +196,13 @@ function repaymentBreakdown(lifecycleService) {
        * @return {[type]} [description]
        */
       function updateBase() {
-        Base.totalPrincipal.transition()
+        Base.totalPrincipal
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 0 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(baseData.totalPrincipalPaid))
           .attr('height', () => bar.height)
           .attr('fill', 'red')
 
-        Base.totalInterest.transition()
+        Base.totalInterest
           .attr('transform', 'translate(' + xScale(baseData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 0 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(baseData.totalInterestPaid))
           .attr('height', () => bar.height)
@@ -214,19 +214,19 @@ function repaymentBreakdown(lifecycleService) {
        * @return {[type]} [description]
        */
       function updateCustom() {
-        Custom.totalPrincipal.transition()
+        Custom.totalPrincipal
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalPrincipalPaid))
           .attr('height', () => bar.height)
           .attr('fill', 'red')
 
-        Custom.totalPrincipalPaidByExtra.transition()
+        Custom.totalPrincipalPaidByExtra
           .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalPrincipalPaidByExtra))
           .attr('height', () => bar.height)
           .attr('fill', 'pink')
 
-        Custom.totalInterest.transition()
+        Custom.totalInterest
           .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid + customData.totalPrincipalPaidByExtra) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalInterestPaid))
           .attr('height', () => bar.height)

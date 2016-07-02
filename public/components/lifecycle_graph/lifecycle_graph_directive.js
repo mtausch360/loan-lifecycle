@@ -10,6 +10,9 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
     restrict: 'E',
     template: tpl,
     link: (scope, element, attrs) => {
+      let dateFilter = $filter('date');
+      let numberFilter = $filter('number');
+
       let base = scope.lifecycles.base.lifecycle;
       let custom = scope.lifecycles.custom.lifecycle;
       var updateCustom;
@@ -44,6 +47,11 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
       var zoom;
       var tooltip;
 
+      var totalXLengthMs;
+      var currentSelectionLengthMs;
+      const THREE_MONTHS_MILLI = 1000 * 60 * 60 * 24 * 7 * 4.5 * 3;
+
+
       window.addEventListener('resize', render);
       scope.$on('render', render);
 
@@ -52,14 +60,18 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
       });
 
       scope.$on('redrawAll', function () {
-        updateAxes();
-        updateCustom();
-        updateBase();
+
       });
 
       var parseDate = d3.time.format("%m/%d/%Y");
 
       create();
+
+      function redrawAll(){
+        updateAxes();
+        updateCustom();
+        updateBase();
+      }
 
       /**
        * [create description]
@@ -75,7 +87,10 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
             return d.balance;
           })
           ]);
-        pointScale = d3.scale.linear().domain([0, base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime() ]).range([3, 3]);
+
+        totalXLengthMs = base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime();
+
+        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI]).range([-60, 10]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
@@ -105,7 +120,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
             .style("display", "none");
 
         line = d3.svg.line()
-          // .interpolate("cardinal")
+          .interpolate("step-after")
           .x((d, i)=>{
 
             return xScale( d.date );
@@ -115,6 +130,8 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           });
 
         render();
+
+        setCurrentSelection();
 
         zoom = d3.behavior.zoom()
           .x(xScale)
@@ -146,6 +163,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
         xScale.range([0, plotArea.width]);
         yScale.range([plotArea.height, 0]);
+
         svg
           .attr('width', width)
           .attr('height', height);
@@ -186,15 +204,6 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
       }
 
       /**
-       * [takeData description]
-       * @return {[type]} [description]
-       */
-      function takeData() {
-        drawBase();
-        drawCustom();
-      }
-
-      /**
        * [drawBase description]
        * @return {[type]} [description]
        */
@@ -217,25 +226,46 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
       }
 
       /**
+       * [updateScales description]
+       * @return {[type]} [description]
+       */
+      function updateScales(){
+        let minDate = xScale.domain()[0]
+        let maxDate = xScale.domain()[1];
+        let max = 1000; //min scale
+        let min;
+        //update y scale max based on what's in selection
+        _.each(base.lifecycle.series, (el, i)=>{
+          if (el.date >= minDate && el.date <= maxDate) {
+            if (el.balance > max)
+              max = el.balance;
+            if( el.balance < min || min === undefined){
+              min = el.balance;
+            }
+          }
+        });
+
+        _.each(custom.lifecycle.series, (el)=>{
+          if (el.date >= minDate && el.date <= maxDate) {
+            if (el.balance > max)
+              max = el.balance;
+            if( el.balance < min || min === undefined){
+              min = el.balance;
+            }
+          }
+        })
+        min += -min/6;
+        yScale.domain([Math.max(min,0), max + max/4]);
+      }
+      /**
        * [zoomCb description]
        * @return {[type]} [description]
        */
       function zoomCb() {
+        currentSelectionLengthMs = xScale.domain()[1].getTime() - xScale.domain()[0].getTime();
         render();
-
-        let minDate = xScale.domain()[0]
-        let maxDate = xScale.domain()[1];
-        let max = 500; //min scale
-
-        //update y scale max based on what's in selection
-        _.each(base.lifecycle.series, function (el, i) {
-          if (el.date >= minDate && el.date <= maxDate) {
-            if (el.balance > max)
-              max = el.balance;
-          }
-        });
-
-        yScale.domain([0, max]);
+        updateScales()
+        updateAxes();
       }
 
       /**
@@ -243,6 +273,14 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
        * @return {[type]} [description]
        */
       function zoomendCb(){
+        setCurrentSelection();
+      }
+
+      /**
+       * [setCurrentSelection description]
+       * @return {[type]} [description]
+       */
+      function setCurrentSelection(){
         lifecycleService.setCurrentSelection(xScale.domain());
         $timeout();
       }
@@ -271,19 +309,10 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
        * @return {[type]} [description]
        */
       function updateAxes (){
-        let yScaleMax = d3.max(base.lifecycle.series, (d)=>{
-          return d.balance;
-        });
-        let [minDate, maxDate] = xScale.domain();
-        xScale.domain([(base.lifecycle.startDate),(base.lifecycle.endDate)]);
-        yScale.domain([0, yScaleMax]);
-        pointScale.domain([0, base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime() ])
         xAxisEl.call(xAxis);
-        yAxisEl.call(yAxis);
-        zoomendCb();
+        yAxisEl.transition().duration(250).ease().call(yAxis);
       }
 
-      // const SIX_MONTHS_MILLI = 1000 * 60 * 60 * 24 * 7 * 4.5 * 12 * 2;
 
       /**
        * [drawPayments description]
@@ -304,12 +333,11 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
        * @return {[type]}          [description]
        */
       function drawPaymentCircle(payments, identifier){
-        console.log(xScale.domain());
-        let viewingLength = xScale.domain()[1].getTime() - xScale.domain()[0].getTime();
-        console.log("R", pointScale(viewingLength), viewingLength);
         let classStr = '.' + identifier;
         let container = identifier === "custom" ? customContainer : baseContainer;
-        if( payments.length <= 250 ){
+        const maxPaymentsAllowed = 250
+
+        if( payments.length <= maxPaymentsAllowed ){
 
           let paymentCircles = container.selectAll(classStr + '-payment-circle').data(payments)
 
@@ -319,7 +347,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
               .on('mouseenter', mouseEnter)
               .on('mouseout', mouseOut);
 
-          drawCircles(paymentCircles, viewingLength);
+          updatePaymentCircles(paymentCircles);
 
           paymentCircles.exit().remove();
 
@@ -331,11 +359,11 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
 
       /**
-       * [drawCircles description]
+       * [updatePaymentCircles description]
        * @param  {[type]} sel [description]
        * @return {[type]}     [description]
        */
-      function drawCircles(sel,length){
+      function updatePaymentCircles(sel){
         sel
           .attr('cx', (d)=>{
             // console.log('here', d);
@@ -344,8 +372,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           .attr('cy', (d)=>{
             return yScale(d.balance)
           })
-          .attr('r', ()=> pointScale(length) )
-
+          .attr('r', ()=> Math.max(pointScale(currentSelectionLengthMs), 0) )
       }
 
       /**
@@ -353,17 +380,21 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
        * @param  {[type]} d [description]
        * @return {[type]}   [description]
        */
-      function mouseEnter(d){
-        let dateFilter = $filter('date')
+      function mouseEnter(d, i){
+        let circle = d3.select(this);
+
+        circle.transition().duration(500).attr('r', (2 * circle.attr('r')) );
+
         var HTML = "<div>" + dateFilter(d.date, 'mediumDate') + "</div>"
-        console.log(arguments)
+        HTML += "<div>" + d.payments + ' payment' + (d.payments !== 1 ? 's' : '') + '</div>';
+        HTML += "<div>$" + numberFilter(d.amountPaid, 2) + ' paid' + '</div>';
+
         tooltip
           .style('display', 'block')
           .html(HTML)
-          .style("left", (d3.event.pageX) + "px")
-          .style("top", (d3.event.pageY -  28 ) + "px");
+          .style("left", (d3.event.pageX + 10 ) + "px")
+          .style("top", (d3.event.pageY -  100 ) + "px");
 
-        console.log(d);
       }
 
       /**
@@ -371,6 +402,8 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
        * @return {[type]} [description]
        */
       function mouseOut(){
+        let circle = d3.select(this);
+        circle.transition().duration(500).attr('r', pointScale(currentSelectionLengthMs) );
         tooltip.style('display', 'none').html('');
       }
 
