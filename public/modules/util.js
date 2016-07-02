@@ -3,7 +3,7 @@ let big = require('big.js');
 //test suite settings
 const max = {
   principal: 500000,
-  n: 300,
+  n: 500,
   interestRate: .27,
   dueDate: 28
 };
@@ -36,6 +36,7 @@ function randomLoan(){
     console.log(e, interestRate, principal, n);
   }
   let loan = {
+    name: randomName(),
     interestRate,
     principal,
     minimumPayment,
@@ -53,6 +54,24 @@ function randomLoan(){
  */
 function expectedGrowth(l, n){
   return Number(big(l.principal).times(Number(big(1 + Number(big(l.interestRate).div(12))).pow(n))));
+}
+
+/**
+ * [randomName description]
+ * @return {[type]} [description]
+ */
+function randomName(){
+  let adjectives = ['big', 'sweet', 'fortitious', 'sanctimonious', 'kind', 'sweet', 'old', 'wrong', 'deft', 'swift', 'gargantuan',
+    'large', 'wholesome', 'toothsome', 'freaky', 'stupid', 'rad', 'miniscule', 'pretty'];
+  let nouns = ['loan', 'bond', 'annuity', 'pain', 'burden', 'afterthought', 'weight', 'thing', 'chunk', 'tuition', 'morsel', 'piece', 'threat'];
+  let randomAdjectives = _.random(1,3);
+  let str = '';
+  for( var i = 0; i < randomAdjectives; i++){
+    if(str.length)
+      str += ', ';
+    str += adjectives[ _.random(0, adjectives.length - 1, false) ];
+  }
+  return str + (str.length ? ' ' : '') + nouns[ _.random(0, nouns.length - 1, false ) ];
 }
 
 export { inRange, randomLoan, expectedGrowth };

@@ -90,7 +90,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
         totalXLengthMs = base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime();
 
-        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI]).range([-60, 10]);
+        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI/2]).range([-60, 10]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
@@ -383,7 +383,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
       function mouseEnter(d, i){
         let circle = d3.select(this);
 
-        circle.transition().duration(500).attr('r', (2 * circle.attr('r')) );
+        circle.transition().duration(250).attr('r', (2 * circle.attr('r')) );
 
         var HTML = "<div>" + dateFilter(d.date, 'mediumDate') + "</div>"
         HTML += "<div>" + d.payments + ' payment' + (d.payments !== 1 ? 's' : '') + '</div>';
@@ -403,7 +403,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
        */
       function mouseOut(){
         let circle = d3.select(this);
-        circle.transition().duration(500).attr('r', pointScale(currentSelectionLengthMs) );
+        circle.transition().duration(250).attr('r', pointScale(currentSelectionLengthMs) );
         tooltip.style('display', 'none').html('');
       }
 

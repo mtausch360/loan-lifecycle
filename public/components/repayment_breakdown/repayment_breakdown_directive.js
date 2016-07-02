@@ -24,8 +24,8 @@ function repaymentBreakdown(lifecycleService) {
       var Base = {};
       var svg;
       var domain = {
-        base: 0,
-        custom: 1
+        "Default Lifecycle": 0,
+        "My Lifecycle": 1
       };
       var domainMap = Object.keys(domain);
       var yScale;
@@ -98,12 +98,12 @@ function repaymentBreakdown(lifecycleService) {
         customBreakdown = plotAreaEl.append('g').classed('custom breakdown', true);
         baseBreakdown = plotAreaEl.append('g').classed('base breakdown', true);
 
-        Base.totalPrincipal = baseBreakdown.append('rect');
-        Base.totalInterest = baseBreakdown.append('rect');
+        Base.totalPrincipal = baseBreakdown.append('rect').classed('principal', true);
+        Base.totalInterest = baseBreakdown.append('rect').classed('interest', true);;
 
-        Custom.totalPrincipal = customBreakdown.append('rect');
-        Custom.totalPrincipalPaidByExtra = customBreakdown.append('rect');
-        Custom.totalInterest = customBreakdown.append('rect');
+        Custom.totalPrincipal = customBreakdown.append('rect').classed('principal', true);
+        Custom.totalPrincipalPaidByExtra = customBreakdown.append('rect').classed('principal', true);
+        Custom.totalInterest = customBreakdown.append('rect').classed('interest', true);
 
         render();
 
@@ -117,10 +117,10 @@ function repaymentBreakdown(lifecycleService) {
         width = document.getElementById('lifecycle-panel').offsetWidth;
         height = Math.max(document.documentElement.clientHeight - document.getElementById('nav-bar'), 200)*.25;
         margin = {
-          top: 0,
-          left: 75,
-          bottom: 50,
-          right: 20
+          top: 50,
+          left: width * .15,
+          bottom: 0,
+          right: width * .1
         };
         plotArea = {
           width: width - margin.left - margin.right,
@@ -200,13 +200,11 @@ function repaymentBreakdown(lifecycleService) {
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 0 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(baseData.totalPrincipalPaid))
           .attr('height', () => bar.height)
-          .attr('fill', 'red')
 
         Base.totalInterest
           .attr('transform', 'translate(' + xScale(baseData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 0 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(baseData.totalInterestPaid))
           .attr('height', () => bar.height)
-          .attr('fill', 'blue')
       }
 
       /**
@@ -218,19 +216,16 @@ function repaymentBreakdown(lifecycleService) {
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalPrincipalPaid))
           .attr('height', () => bar.height)
-          .attr('fill', 'red')
 
         Custom.totalPrincipalPaidByExtra
           .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalPrincipalPaidByExtra))
           .attr('height', () => bar.height)
-          .attr('fill', 'pink')
 
         Custom.totalInterest
           .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid + customData.totalPrincipalPaidByExtra) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalInterestPaid))
           .attr('height', () => bar.height)
-          .attr('fill', 'blue')
 
       }
     }

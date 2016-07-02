@@ -1,4 +1,5 @@
 import Loan from '../../modules/Loan';
+import {randomLoan} from '../../modules/util';
 
 function loanService() {
   var appName = 'loanLifecycleState'
@@ -60,66 +61,72 @@ function loanService() {
    */
   function initLoans() {
     // loans = JSON.parse(localStorage.getItem('loans')) || [];
+    let randomLoans = []
+    let count = 0;
+    let max = _.random(1, 5);
+    while( count < max ){
+      randomLoans.push( randomLoan() )
+      count++
+    }
+    _.each( randomLoans
+      // [{
+      //   name: 'sm1',
+      //   balance: 11350.12,
+      //   principal: 11350.12,
+      //   dueDate: 7,
+      //   compoundingRate: "MONTHLY",
+      //   interest: 0,
+      //   interestRate: 0.0825,
+      //   minimumPayment: 229.88,
+      // }, {
+      //   name: 'sm2',
+      //   dueDate: 3,
+      //   compoundingRate: "MONTHLY",
+      //   balance: 7897.15,
+      //   principal: 7897.15,
+      //   interest: 0,
+      //   interestRate: 0.0725,
+      //   minimumPayment: 136.10,
+      // }, {
+      //   name: 'sm3',
+      //   dueDate: 7,
+      //   compoundingRate: "MONTHLY",
+      //   balance: 5738.86,
+      //   principal: 5738.86,
+      //   interest: 0,
+      //   interestRate: 0.0725,
+      //   minimumPayment: 98.29,
+      // }, {
+      //   name: 'AES1',
+      //   dueDate: 15,
+      //   compoundingRate: "MONTHLY",
+      //   balance: 8778.63,
+      //   principal: 8778.63,
+      //   interest: 0,
+      //   interestRate: 0.0377,
+      //   minimumPayment: 53.82,
+      // },
 
-    _.each([{
-        name: 'sm1',
-        balance: 11350.12,
-        principal: 11350.12,
-        dueDate: 7,
-        compoundingRate: "MONTHLY",
-        interest: 0,
-        interestRate: 0.0825,
-        minimumPayment: 229.88,
-      }, {
-        name: 'sm2',
-        dueDate: 3,
-        compoundingRate: "MONTHLY",
-        balance: 7897.15,
-        principal: 7897.15,
-        interest: 0,
-        interestRate: 0.0725,
-        minimumPayment: 136.10,
-      }, {
-        name: 'sm3',
-        dueDate: 7,
-        compoundingRate: "MONTHLY",
-        balance: 5738.86,
-        principal: 5738.86,
-        interest: 0,
-        interestRate: 0.0725,
-        minimumPayment: 98.29,
-      }, {
-        name: 'AES1',
-        dueDate: 15,
-        compoundingRate: "MONTHLY",
-        balance: 8778.63,
-        principal: 8778.63,
-        interest: 0,
-        interestRate: 0.0377,
-        minimumPayment: 53.82,
-      },
-
-      {
-        name: 'GLS1',
-        dueDate: 22,
-        compoundingRate: "MONTHLY",
-        balance: 11293.97,
-        principal: 11293.97,
-        interest: 0,
-        interestRate: 0.034,
-        minimumPayment: 53.82,
-      }, {
-        name: 'GLS2',
-        dueDate: 23,
-        compoundingRate: "MONTHLY",
-        balance: 7563.24,
-        principal: 7563.24,
-        interest: 0,
-        interestRate: 0.0386,
-        minimumPayment: 53.82,
-      }
-
-    ], function (l) {
+      // {
+      //   name: 'GLS1',
+      //   dueDate: 22,
+      //   compoundingRate: "MONTHLY",
+      //   balance: 11293.97,
+      //   principal: 11293.97,
+      //   interest: 0,
+      //   interestRate: 0.034,
+      //   minimumPayment: 53.82,
+      // }, {
+      //   name: 'GLS2',
+      //   dueDate: 23,
+      //   compoundingRate: "MONTHLY",
+      //   balance: 7563.24,
+      //   principal: 7563.24,
+      //   interest: 0,
+      //   interestRate: 0.0386,
+      //   minimumPayment: 53.82,
+      // }]
+      , function (l) {
       addLoan(l);
     });
     saveLoans();

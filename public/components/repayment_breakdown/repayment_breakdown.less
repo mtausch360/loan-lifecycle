@@ -1,0 +1,28 @@
+.repayment-breakdown-container{
+
+  .repayment-rectangle(@color){
+    rect{
+      fill: @color;
+      transition: fill 500ms ease;
+      &:hover{
+        fill: darken(@color, 20%);
+      }
+    }
+  }
+  .principal{
+
+  }
+
+  .interest {
+    fill-opacity: .46;
+
+  }
+
+  .base{
+    .repayment-rectangle(@baseLifecycleColor);
+  }
+
+  .custom{
+    .repayment-rectangle(@customLifecycleColor);
+  }
+}

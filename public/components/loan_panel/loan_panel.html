@@ -20,6 +20,9 @@
         <div class="loan-options">
             <span ng-click="addLoan()"><span class="glyphicon glyphicon-plus"></span> Add Loan</span>
         </div>
+<!--         <div class="loan-options">
+            <span ng-click="addRandomLoan()"><span class="glyphicon glyphicon-plus"></span> Add Random Loan</span>
+        </div> -->
         <div class="loan-list">
             <loan ng-repeat="loan in loans track by loan.id"></loan>
         </div>
