@@ -93,15 +93,15 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
         totalXLengthMs = base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime();
 
-        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI/2]).range([-50, 8]);
+        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI/12]).range([-50, 8]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
         yAxis = d3.svg.axis().scale(yScale).orient('left');
 
-        xAxisEl = svg.append('g').classed('x-axis', true);
+        xAxisEl = svg.append('g').classed('x-axis axis', true);
 
-        yAxisEl = svg.append('g').classed('y-axis', true);
+        yAxisEl = svg.append('g').classed('y-axis axis', true);
 
         clipPath = svg
           .append('clipPath')
