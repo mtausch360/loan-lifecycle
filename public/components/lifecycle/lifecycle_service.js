@@ -85,6 +85,7 @@ function lifecycleService(loanService) {
       lifecycleState.base.lifecycle = base;
     else
       _.extend(lifecycleState.base.lifecycle, base);
+    console.log('base', base);
 
     lifecycleState.base.date = Date.now();
   }

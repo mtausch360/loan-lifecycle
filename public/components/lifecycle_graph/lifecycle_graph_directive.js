@@ -58,7 +58,8 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
       scope.$on('redrawCustom', function () {
         removePaymentCircles('custom')
         drawCustom();
-        drawPayments()
+        drawPayments();
+        setCurrentSelection();
       });
 
       scope.$on('redrawAll', function () {
@@ -92,7 +93,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
         totalXLengthMs = base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime();
 
-        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI/2]).range([-60, 10]);
+        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI/2]).range([-50, 8]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
@@ -133,7 +134,6 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
         render();
 
-        setCurrentSelection();
 
         zoom = d3.behavior.zoom()
           .x(xScale)
@@ -142,6 +142,9 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           .on('zoomend', zoomendCb)
 
         background.call(zoom);
+
+        //not exactly sure why this works
+        setTimeout(setCurrentSelection, 1);
       }
 
       /**

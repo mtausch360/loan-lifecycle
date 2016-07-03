@@ -120,7 +120,7 @@ function loanService() {
     // loans = JSON.parse(localStorage.getItem('loans')) || [];
     let randomLoans = []
     let count = 0;
-    let max = _.random(1, 10);
+    let max = _.random(1, 5);
     while( count < max ){
       randomLoans.push( randomLoan() )
       count++

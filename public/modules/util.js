@@ -23,15 +23,15 @@ function inRange(num, comparison){
  * A = P ( i + (i / ( ( 1 + i )^n - 1) ))
  * @return {[type]} [description]
  */
-function randomLoan(){
+function randomLoan({interestRate=_.random(.01, max.interestRate, true), principal=_.random(1000, max.principal, true), n=_.random(100, max.n, false) }={}){
 
-  let interestRate = _.random(.01, max.interestRate, true);
-  let principal = _.random(1000, max.principal, true);
-  let n = _.random(100, max.n, false);
+  // let interestRate = _.random(.01, max.interestRate, true);
+  // let principal = _.random(1000, max.principal, true);
+  // let n = _.random(100, max.n, false);
   let dueDate = _.random(1, max.dueDate, false)
-
-  let minimumPayment = interestRate/12 + Number( big(interestRate).div( big( 1 + interestRate/12).pow(n).minus(1) ) );
-  minimumPayment *= principal;
+  let i = big(interestRate).div(12);
+  let minimumPayment = big( i ).div( big(1).minus( big( big(i).plus(1) ).pow(-n) ) );
+  minimumPayment = Number( big(minimumPayment).times(principal) );
   let loan = {
     name: randomName(),
     interestRate,
@@ -59,16 +59,20 @@ function expectedGrowth(l, n){
  */
 function randomName(){
   let adjectives = ['big', 'sweet', 'fortitious', 'sanctimonious', 'kind', 'sweet', 'old', 'wrong', 'deft', 'swift', 'gargantuan',
-    'large', 'wholesome', 'toothsome', 'freaky', 'stupid', 'rad', 'miniscule', 'pretty'];
-  let nouns = ['loan', 'bond', 'annuity', 'pain', 'burden', 'afterthought', 'weight', 'thing', 'chunk', 'tuition', 'morsel', 'piece', 'threat'];
+    'large', 'wholesome', 'toothsome', 'freaky', 'stupid', 'rad', 'miniscule', 'pretty', 'petty', 'dusty', 'crude', 'negative', 'hella',
+    'virulent', 'intense', 'uppity', 'hostile', 'angry'
+  ];
+  let nouns = ['loan', 'bond', 'annuity', 'pain', 'burden', 'afterthought', 'weight', 'thing', 'chunk', 'tuition', 'morsel', 'piece', 'threat',
+    'pal', 'cash', 'scrilla', 'nickels', 'eternity', 'bucks', 'cheddar', 'cabbage', 'clams', 'Gs', 'loot', 'shekels', 'scratch','neggo-dollas'
+  ];
   let randomAdjectives = _.random(1,3);
   let str = '';
   for( var i = 0; i < randomAdjectives; i++){
     if(str.length)
       str += ', ';
-    str += adjectives[ _.random(0, adjectives.length - 1, false) ];
+    str += _.capitalize( adjectives[ _.random(0, adjectives.length - 1, false) ] );
   }
-  return str + (str.length ? ' ' : '') + nouns[ _.random(0, nouns.length - 1, false ) ];
+  return str + (str.length ? ' ' : '') + _.capitalize(nouns[ _.random(0, nouns.length - 1, false ) ]);
 }
 
 export { inRange, randomLoan, expectedGrowth };

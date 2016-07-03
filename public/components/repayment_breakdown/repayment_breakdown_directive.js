@@ -106,7 +106,6 @@ function repaymentBreakdown(lifecycleService) {
         Custom.totalInterest = customBreakdown.append('rect').classed('interest', true);
 
         render();
-
       }
 
       /**
@@ -147,10 +146,12 @@ function repaymentBreakdown(lifecycleService) {
 
         xAxisEl
           .attr('transform', 'translate(' + margin.left + ',' + (margin.top ) + ')')
+          .transition()
           .call(xAxis);
 
         yAxisEl
           .attr('transform', 'translate(' + margin.left + ',' + (margin.top) + ')')
+          .transition()
           .call(yAxis);
 
         plotAreaEl
@@ -187,8 +188,8 @@ function repaymentBreakdown(lifecycleService) {
        * @return {[type]} [description]
        */
       function updateAxes() {
-        xScale.domain([0, Math.max(baseData.totalPaid, customData.totalPaid)]);
-        xAxisEl.call(xAxis);
+        xScale.domain([0, Math.max(baseData.totalPaid*1.1, customData.totalPaid*1.1, 1000)]);
+        xAxisEl.transition().call(xAxis);
       }
 
       /**
@@ -196,12 +197,12 @@ function repaymentBreakdown(lifecycleService) {
        * @return {[type]} [description]
        */
       function updateBase() {
-        Base.totalPrincipal
+        Base.totalPrincipal.transition().duration(100).delay(50)
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 0 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(baseData.totalPrincipalPaid))
           .attr('height', () => bar.height)
 
-        Base.totalInterest
+        Base.totalInterest.transition().duration(100).delay(50)
           .attr('transform', 'translate(' + xScale(baseData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 0 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(baseData.totalInterestPaid))
           .attr('height', () => bar.height)
@@ -212,7 +213,7 @@ function repaymentBreakdown(lifecycleService) {
        * @return {[type]} [description]
        */
       function updateCustom() {
-        Custom.totalPrincipal
+        Custom.totalPrincipal.transition().duration(100).delay(50)
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalPrincipalPaid + customData.totalPrincipalPaidByExtra))
           .attr('height', () => bar.height)
@@ -222,7 +223,7 @@ function repaymentBreakdown(lifecycleService) {
         //   .attr('width', ()=> xScale(customData.totalPrincipalPaidByExtra))
         //   .attr('height', () => bar.height)
 
-        Custom.totalInterest
+        Custom.totalInterest.transition().duration(100).delay(50)
           .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid + customData.totalPrincipalPaidByExtra) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
           .attr('width', ()=> xScale(customData.totalInterestPaid))
           .attr('height', () => bar.height)
