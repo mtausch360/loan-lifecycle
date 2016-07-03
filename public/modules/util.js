@@ -2,9 +2,9 @@ let big = require('big.js');
 
 //test suite settings
 const max = {
-  principal: 500000,
-  n: 500,
-  interestRate: .27,
+  principal: 50000,
+  n: 1000,
+  interestRate: .5,
   dueDate: 28
 };
 
@@ -26,8 +26,8 @@ function randomLoan(){
 
   let interestRate = _.random(.01, max.interestRate, true);
   let principal = _.random(1000, max.principal, true);
-  let n = _.random(5, max.n, false);
-  let dueDate = _.random(5, max.dueDate, false)
+  let n = _.random(50, max.n, false);
+  let dueDate = _.random(1, max.dueDate, false)
   let minimumPayment;
   try{
     minimumPayment = principal * ( interestRate + Number( big(interestRate).div( Number(big( 1 + interestRate, n).pow(n)) - 1) ) );
