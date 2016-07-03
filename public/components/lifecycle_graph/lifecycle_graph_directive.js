@@ -135,6 +135,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
         zoom = d3.behavior.zoom()
           .x(xScale)
+          .scaleExtent([1, 40])
           .on('zoom', zoomCb)
           .on('zoomend', zoomendCb)
 
@@ -386,6 +387,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
         circle.transition().duration(250).attr('r', (2 * circle.attr('r')) );
 
         var HTML = "<div>" + dateFilter(d.date, 'mediumDate') + "</div>"
+        HTML += "<div>Balance $" + numberFilter(d.balance, 2) + '</div>';
         HTML += "<div>" + d.payments + ' payment' + (d.payments !== 1 ? 's' : '') + '</div>';
         HTML += "<div>$" + numberFilter(d.amountPaid, 2) + ' paid' + '</div>';
 
