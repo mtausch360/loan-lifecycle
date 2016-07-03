@@ -2,9 +2,9 @@ let big = require('big.js');
 
 //test suite settings
 const max = {
-  principal: 50000,
-  n: 1000,
-  interestRate: .5,
+  principal: 25000,
+  n: 500,
+  interestRate: .25,
   dueDate: 28
 };
 
@@ -20,21 +20,18 @@ function inRange(num, comparison){
 
 /**
  * https://en.wikipedia.org/wiki/Amortization_calculator
+ * A = P ( i + (i / ( ( 1 + i )^n - 1) ))
  * @return {[type]} [description]
  */
 function randomLoan(){
 
   let interestRate = _.random(.01, max.interestRate, true);
   let principal = _.random(1000, max.principal, true);
-  let n = _.random(50, max.n, false);
+  let n = _.random(100, max.n, false);
   let dueDate = _.random(1, max.dueDate, false)
-  let minimumPayment;
-  try{
-    minimumPayment = principal * ( interestRate + Number( big(interestRate).div( Number(big( 1 + interestRate, n).pow(n)) - 1) ) );
-  }
-  catch(e){
-    console.log(e, interestRate, principal, n);
-  }
+
+  let minimumPayment = interestRate/12 + Number( big(interestRate).div( big( 1 + interestRate/12).pow(n).minus(1) ) );
+  minimumPayment *= principal;
   let loan = {
     name: randomName(),
     interestRate,

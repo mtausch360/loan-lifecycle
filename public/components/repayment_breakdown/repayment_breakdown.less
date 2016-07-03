@@ -1,11 +1,17 @@
 .repayment-breakdown-container{
 
-  .repayment-rectangle(@color){
+  .repayment-rectangle(@pColor, @iColor){
     rect{
-      fill: @color;
+      fill: @pColor;
       transition: fill 500ms ease;
       &:hover{
-        fill: darken(@color, 20%);
+        fill: darken(@pColor, 20%);
+      }
+      &.interest{
+        fill: @iColor;
+        &:hover{
+          fill: darken(@iColor, 30%);
+        }
       }
     }
   }
@@ -14,15 +20,14 @@
   }
 
   .interest {
-    fill-opacity: .46;
 
   }
 
   .base{
-    .repayment-rectangle(@baseLifecycleColor);
+    .repayment-rectangle(@baseLifecycleColor, @baseLifecycleInterestColor);
   }
 
   .custom{
-    .repayment-rectangle(@customLifecycleColor);
+    .repayment-rectangle(@customLifecycleColor, @customLifecycleInterestColor);
   }
 }

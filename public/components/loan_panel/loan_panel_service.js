@@ -120,14 +120,14 @@ function loanService() {
     // loans = JSON.parse(localStorage.getItem('loans')) || [];
     let randomLoans = []
     let count = 0;
-    let max = _.random(1, 15);
+    let max = _.random(1, 10);
     while( count < max ){
       randomLoans.push( randomLoan() )
       count++
     }
     _.each(
-      //randomLoans
-      defaultLoans
+      randomLoans
+      // defaultLoans
       , function (l) {
       addLoan(l);
     });

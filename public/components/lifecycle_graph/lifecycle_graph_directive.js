@@ -56,7 +56,9 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
       scope.$on('render', render);
 
       scope.$on('redrawCustom', function () {
-        updateCustom();
+        removePaymentCircles('custom')
+        drawCustom();
+        drawPayments()
       });
 
       scope.$on('redrawAll', function () {
@@ -135,7 +137,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
         zoom = d3.behavior.zoom()
           .x(xScale)
-          .scaleExtent([1, 40])
+          // .scaleExtent([1, 40])
           .on('zoom', zoomCb)
           .on('zoomend', zoomendCb)
 
@@ -255,7 +257,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
             }
           }
         })
-        min += -min/6;
+        min += -(min/4);
         yScale.domain([Math.max(min,0), max + max/4]);
       }
       /**
@@ -356,6 +358,15 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           container.selectAll(classStr + '-payment-circle').remove()
         }
 
+      }
+
+      /**
+       * [removePaymentCircles description]
+       * @return {[type]} [description]
+       */
+      function removePaymentCircles(identifier){
+        let container = identifier === "custom" ? customContainer : baseContainer;
+        let paymentCircles = container.selectAll( '.' + identifier + '-payment-circle').remove()
       }
 
 

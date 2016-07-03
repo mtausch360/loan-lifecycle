@@ -102,7 +102,7 @@ function repaymentBreakdown(lifecycleService) {
         Base.totalInterest = baseBreakdown.append('rect').classed('interest', true);;
 
         Custom.totalPrincipal = customBreakdown.append('rect').classed('principal', true);
-        Custom.totalPrincipalPaidByExtra = customBreakdown.append('rect').classed('principal', true);
+        // Custom.totalPrincipalPaidByExtra = customBreakdown.append('rect').classed('principal', true);
         Custom.totalInterest = customBreakdown.append('rect').classed('interest', true);
 
         render();
@@ -214,13 +214,13 @@ function repaymentBreakdown(lifecycleService) {
       function updateCustom() {
         Custom.totalPrincipal
           .attr('transform', 'translate(' + 0 + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
-          .attr('width', ()=> xScale(customData.totalPrincipalPaid))
+          .attr('width', ()=> xScale(customData.totalPrincipalPaid + customData.totalPrincipalPaidByExtra))
           .attr('height', () => bar.height)
 
-        Custom.totalPrincipalPaidByExtra
-          .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
-          .attr('width', ()=> xScale(customData.totalPrincipalPaidByExtra))
-          .attr('height', () => bar.height)
+        // Custom.totalPrincipalPaidByExtra
+        //   .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
+        //   .attr('width', ()=> xScale(customData.totalPrincipalPaidByExtra))
+        //   .attr('height', () => bar.height)
 
         Custom.totalInterest
           .attr('transform', 'translate(' + xScale(customData.totalPrincipalPaid + customData.totalPrincipalPaidByExtra) + ',' + (bar.sectionHeight * 1 + bar.margin.top) + ')')
