@@ -414,7 +414,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
         HTML += "<div>$" + numberFilter(d.amountPaid, 2) + ' paid' + '</div>';
 
         tooltip
-          // .style('display', 'block')
+          .style('display', 'block')
           .html(HTML)
           .style("left", (d3.event.pageX + 10 ) + "px")
           .style("top", (d3.event.pageY -  100 ) + "px");
