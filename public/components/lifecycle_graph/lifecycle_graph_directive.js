@@ -130,7 +130,6 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           });
 
         updateScales();
-
         render();
 
 
@@ -267,13 +266,15 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
         if( !customPayments || !basePayments)
           min = 0;
         yScale.domain([Math.max(min,0), max + max/4]);
+        currentSelectionLengthMs = xScale.domain()[1].getTime() - xScale.domain()[0].getTime();
+
       }
       /**
        * [zoomCb description]
        * @return {[type]} [description]
        */
       function zoomCb() {
-        currentSelectionLengthMs = xScale.domain()[1].getTime() - xScale.domain()[0].getTime();
+        // currentSelectionLengthMs = xScale.domain()[1].getTime() - xScale.domain()[0].getTime();
         render();
         updateScales()
         updateAxes();
@@ -392,7 +393,9 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           .attr('cy', (d)=>{
             return yScale(d.balance)
           })
-          .attr('r', ()=> Math.max(pointScale(currentSelectionLengthMs), 0) )
+          .attr('r', ()=>{
+            return Math.max(pointScale(currentSelectionLengthMs), 0);
+          })
       }
 
       /**
