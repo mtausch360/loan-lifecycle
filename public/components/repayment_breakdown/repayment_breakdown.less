@@ -1,5 +1,7 @@
 .repayment-breakdown-container{
 
+
+
   .repayment-rectangle(@pColor, @iColor){
     rect{
       fill: @pColor;
@@ -15,13 +17,6 @@
       }
     }
   }
-  .principal{
-
-  }
-
-  .interest {
-
-  }
 
   .base{
     .repayment-rectangle(@baseLifecycleColor, @baseLifecycleInterestColor);
@@ -29,5 +24,12 @@
 
   .custom{
     .repayment-rectangle(@customLifecycleColor, @customLifecycleInterestColor);
+  }
+}
+
+.axis{
+  text{
+    font-size: 18px;
+    font-weight: 100;
   }
 }

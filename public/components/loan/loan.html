@@ -3,14 +3,38 @@
     <editable-input class="big" model="loan.name" type="text" on-save="saveLoans()"></editable-input>
     <div class="balance loan-el">
         <div class="prop">Balance</div>
-        <editable-input prefix="$" model="loan.balance" type="number" on-save="saveLoans()"></editable-input>
+        <editable-input
+            prefix="$"
+            model="loan.balance"
+            type="number"
+            on-save="saveLoans()"
+            settings="{decimals: 2}">
+        </editable-input>
     </div>
     <div class="minimum-payment loan-el">
         <div class="prop">Minimum Payment</div>
-        <editable-input model="loan.minimumPayment" type="number" prefix="$" on-save="saveLoans()"></editable-input>
+        <editable-input
+            model="loan.minimumPayment"
+            type="number"
+            prefix="$"
+            on-save="saveLoans()"
+            settings="{decimals: 2}"></editable-input>
     </div>
     <div class="interest-rate loan-el">
         <div class="prop">Interest Rate</div>
-        <editable-input model="loan.interestRate" type="number" suffix="%" on-save="saveLoans()"></editable-input>
+        <editable-input
+            model="loan.interestRate"
+            type="number"
+            suffix="%"
+            on-save="saveLoans()"
+            settings="{decimals: 3}"></editable-input>
+    </div>
+    <div class="due-date loan-el">
+        <div class="prop">Due Date</div>
+        <editable-input
+            model="loan.dueDate"
+            type="number"
+            on-save="saveLoans()"
+            settings="{decimals: 0, min: 0, max:28}"></editable-input>
     </div>
 </div>

@@ -2,6 +2,7 @@ import tpl from './loan.html';
 
 function loan(loanService) {
   return {
+    replace: true,
     restrict: "E",
     template: tpl,
     link: function(scope, element, attrs){

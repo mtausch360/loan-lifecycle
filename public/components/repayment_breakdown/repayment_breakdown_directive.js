@@ -2,6 +2,7 @@ import tpl from './repayment_breakdown.html';
 
 function repaymentBreakdown(lifecycleService) {
   return {
+    replace: true,
     restrict: 'E',
     template: tpl,
     link: (scope, element, attrs) => {
@@ -39,15 +40,6 @@ function repaymentBreakdown(lifecycleService) {
       var baseBreakdown;
       var currentSelection = [0,0];
 
-      function timeHelper(month, day = 1) {
-        var d = new Date();
-        var currMonth = d.getMonth();
-        var currYear = d.getFullYear();
-
-        var date = new Date(Math.floor((currMonth + month) / 12) + currYear, (currMonth + month) % 12, day);
-        return date;
-      }
-
       scope.$on('redrawCustom', function () {
         updateCustom()
       });
@@ -84,14 +76,14 @@ function repaymentBreakdown(lifecycleService) {
         yScale = d3.scale.ordinal().domain(domainMap);
         xScale = d3.scale.linear().domain([0, Math.max(base.totalPaid, custom.totalPaid)]);
 
-        xAxis = d3.svg.axis().scale(xScale).orient('top');
+        xAxis = d3.svg.axis().scale(xScale).orient('top').ticks(4) ;
         yAxis = d3.svg.axis().scale(yScale).orient('left');
 
         xAxisEl = svg.append('g')
-          .classed('x-axis', true);
+          .classed('x-axis axis', true);
 
         yAxisEl = svg.append('g')
-          .classed('y-axis', true);
+          .classed('y-axis axis', true);
 
         plotAreaEl = svg.append('g').classed('plot-area', true)
 
@@ -116,7 +108,7 @@ function repaymentBreakdown(lifecycleService) {
         width = document.getElementById('lifecycle-panel').offsetWidth;
         height = Math.max(document.documentElement.clientHeight - document.getElementById('nav-bar'), 200)*.25;
         margin = {
-          top: 50,
+          top: 25,
           left: width * .15,
           bottom: 0,
           right: width * .1

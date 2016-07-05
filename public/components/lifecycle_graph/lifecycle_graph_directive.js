@@ -7,6 +7,7 @@ import tpl from './lifecycle_graph.html';
 function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
   return {
+    replace: true,
     restrict: 'E',
     template: tpl,
     link: (scope, element, attrs) => {
@@ -85,15 +86,11 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
         svg = d3.select('.lifecycle-graph-container').append('svg');
 
         xScale = d3.time.scale().domain([base.lifecycle.startDate, base.lifecycle.endDate]);
-        yScale = d3.scale.linear().domain([0,
-          d3.max(base.lifecycle.series, (d)=>{
-            return d.balance;
-          })
-          ]);
+        yScale = d3.scale.linear();
 
         totalXLengthMs = base.lifecycle.endDate.getTime() - base.lifecycle.startDate.getTime();
 
-        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI/12]).range([-50, 8]);
+        pointScale = d3.scale.linear().domain([ totalXLengthMs ,THREE_MONTHS_MILLI/(3.5*12)]).range([-50, 9]);
 
         xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
 
@@ -131,6 +128,8 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           .y((d, i)=>{
             return yScale(d.balance);
           });
+
+        updateScales();
 
         render();
 
@@ -240,9 +239,12 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
         let maxDate = xScale.domain()[1];
         let max = 1000; //min scale
         let min;
+        let basePayments = 0;
+        let customPayments = 0;
         //update y scale max based on what's in selection
         _.each(base.lifecycle.series, (el, i)=>{
           if (el.date >= minDate && el.date <= maxDate) {
+            basePayments++;
             if (el.balance > max)
               max = el.balance;
             if( el.balance < min || min === undefined){
@@ -253,6 +255,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
 
         _.each(custom.lifecycle.series, (el)=>{
           if (el.date >= minDate && el.date <= maxDate) {
+            customPayments++;
             if (el.balance > max)
               max = el.balance;
             if( el.balance < min || min === undefined){
@@ -261,6 +264,8 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           }
         })
         min += -(min/4);
+        if( !customPayments || !basePayments)
+          min = 0;
         yScale.domain([Math.max(min,0), max + max/4]);
       }
       /**
@@ -406,7 +411,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
         HTML += "<div>$" + numberFilter(d.amountPaid, 2) + ' paid' + '</div>';
 
         tooltip
-          .style('display', 'block')
+          // .style('display', 'block')
           .html(HTML)
           .style("left", (d3.event.pageX + 10 ) + "px")
           .style("top", (d3.event.pageY -  100 ) + "px");

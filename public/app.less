@@ -16,16 +16,18 @@
 @shadowColor: lightgrey;
 //mixins
 .panel {
-    height: @panelHeight;
-    display: inline-block;
+    height: 100%;
+    position:fixed;
 }
 
 .shadow {
     box-shadow: @shadowColor 1px 1px 1px;
 }
 
-.swingTransition(@prop) {
-    transition: @prop 1s ease;
+.swingTransition(@rest) {
+    transition-duration: 1s;
+    transition-timing-function: ease;
+    transition-property: @rest;
 }
 
 .font-standard{
@@ -38,19 +40,6 @@
 .content-container {
     padding-top: @navHeight;
     position: relative;
-
-    .lifecycle-panel-container {
-        width: @lifecyclePanelWidth;
-        min-width: @minLifecyclePanelWidth;
-        position: absolute;
-        height: 100%;
-        &.full {
-            width: 100% !important;
-            height: 100%;
-        }
-        .panel;
-        .swingTransition(width);
-    }
 }
 
 .glyphicon {
@@ -69,6 +58,7 @@ body{
 }
 
 @import "./components/loan_panel/loan_panel";
+@import "./components/loan/loan";
 @import "./components/lifecycle/lifecycle";
 @import './components/lifecycle_graph/lifecycle_graph';
 @import './components/repayment_breakdown/repayment_breakdown';

@@ -1,13 +1,20 @@
 <div class="editable-input"  ng-mouseover="hoverView()" ng-mouseout="endHoverView()">
     <div class="view" ng-show="view">
-        {{prefix}}{{model}}{{suffix}}
+        {{prefix}}
+        <span ng-if="type==='number'">{{model | number:(settings.decimals) }}</span>
+        <span ng-if="type==='text'">{{model}}</span>
+        {{suffix}}
         <div class="action-box"  ng-show="hover">
             <div class="edit-button glyphicon glyphicon-pencil" ng-click="toggleEdit()"></div>
         </div>
     </div>
     <div class="edit" ng-show="!view">
         <div class="input-container">
-            {{prefix}}<input ng-model="obj.copy" type="{{type}}">{{suffix}}
+            {{prefix}}
+            <input ng-if="type==='number'" ng-model="obj.copy" type="{{type}}" min="{{settings.min}}" max="{{settings.max}}">
+            <input ng-if="type!=='number'" ng-model="obj.copy" type="{{type}}">
+
+            {{suffix}}
         </div>
         <div class="action-box">
             <span class="glyphicon glyphicon-ok" ng-click="save()"></span>

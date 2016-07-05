@@ -58,7 +58,7 @@ function expectedGrowth(l, n){
  * @return {[type]} [description]
  */
 function randomName(){
-  let adjectives = ['big', 'sweet', 'fortitious', 'sanctimonious', 'kind', 'sweet', 'old', 'wrong', 'deft', 'swift', 'gargantuan',
+  let adjectives = ['big', 'sweet', 'fortuitous', 'sanctimonious', 'kind', 'sweet', 'old', 'wrong', 'deft', 'swift', 'gargantuan',
     'large', 'wholesome', 'toothsome', 'freaky', 'stupid', 'rad', 'miniscule', 'pretty', 'petty', 'dusty', 'crude', 'negative', 'hella',
     'virulent', 'intense', 'uppity', 'hostile', 'angry'
   ];

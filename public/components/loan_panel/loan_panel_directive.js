@@ -4,6 +4,7 @@ import tpl from './loan_panel.html';
 function loanPanel(loanService) {
 
   return {
+    replace: true,
     restrict: 'E',
     template: tpl,
     link: function (scope, element, attrs) {

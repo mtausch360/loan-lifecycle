@@ -12,11 +12,12 @@ function editableInputDirective() {
       type: '@',
       onSave: '&',
       prefix: '@',
-      suffix: '@'
+      suffix: '@',
+      settings: '@'
     },
     link: (scope, element, attrs) => {
+      console.log(scope.settings);  
       scope.hover = scope.hover || false;
-
       scope.view = true;
       scope.obj = {
         copy: angular.copy(scope.model)
