@@ -73,6 +73,8 @@ class Lifecycle {
       this.lifecycle.series.length ?
         this.lifecycle.series[ this.lifecycle.series.length - 1].date :
         new Date();
+    if( !this.lifecycle.startDate )
+      this.lifecycle.startDate = new Date();
   }
 
   /**
@@ -94,9 +96,9 @@ class Lifecycle {
           dates[L.dueDate] = self._initSeriesObj(L.dueDate);
         }
 
-        self._state.balance += L.balance;
-        self._state.interest += L.interest;
-        self._state.principal += L.principal;
+        self._state.balance = Number( Big(self._state.balance).plus(L.balance) );
+        self._state.interest = Number( Big(self._state.interest).plus(L.interest) );
+        self._state.principal = Number( Big(self._state.principal).plus(L.principal) );
       }
     });
 

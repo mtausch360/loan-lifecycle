@@ -24,8 +24,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
       var margin;
       var plotArea;
       var plotAreaEl;
-
-      var defs; //not used
+      var defs;
       var clipPath;
 
       var svg;
@@ -104,6 +103,36 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           .append('clipPath')
           .attr('id', 'clip')
           .append('rect');
+
+        defs = svg.append('defs');
+
+        // <defs>
+        //        <filter id="filter1" x="0" y="0">
+        //            <feOffset result="offOut" in="SourceAlpha" dx="-5" dy="-5" />
+        //            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+        //            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+        //     </filter>
+        // </defs>
+        let filter = defs.append('filter')
+          .attr('id', 'dropshadow')
+          .attr('x', 0)
+          .attr('y', 0)
+
+        filter.append('feOffset')
+          .attr('result', 'offOut')
+          .attr('in', 'SourceAlpha')
+          .attr('dx', 5)
+          .attr('dy', -5)
+
+        filter.append('feGaussianBlur')
+          .attr('result', 'blurOut')
+          .attr('in', 'offOut')
+          .attr('stdDeviation', 1)
+
+        filter.append('feBlend')
+          .attr('in', 'sourceGraphic')
+          .attr('in2', 'blurOut')
+          .attr('mode', 'normal')
 
         background = svg.append('rect').classed('background', true);
 
@@ -216,6 +245,9 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           .attr('d', (d) => {
             return line(d)
           })
+
+          // basePath.call(zoom);
+          // .attr('filter', 'url(#dropshadow')
       }
 
       /**
@@ -227,6 +259,8 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
           .attr('d', (d) => {
             return line(d)
           })
+          // customPath.call(zoom);
+          // .attr('filter', 'url(#dropshadow')
       }
 
       /**
@@ -238,6 +272,8 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
         let maxDate = xScale.domain()[1];
         let max = 1000; //min scale
         let min;
+        let baseMin;
+        let customMin;
         let basePayments = 0;
         let customPayments = 0;
         //update y scale max based on what's in selection
@@ -265,8 +301,9 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
         min += -(min/4);
         if( !customPayments || !basePayments)
           min = 0;
-        yScale.domain([Math.max(min,0), max + max/4]);
+
         currentSelectionLengthMs = xScale.domain()[1].getTime() - xScale.domain()[0].getTime();
+        yScale.domain([Math.max(min,0), max + max/4]);
 
       }
       /**
@@ -427,7 +464,7 @@ function lifecycleGraph(lifecycleService, $timeout, $filter) {
        */
       function mouseOut(){
         let circle = d3.select(this);
-        circle.transition().duration(250).attr('r', pointScale(currentSelectionLengthMs) );
+        circle.transition().duration(250).attr('r', Math.max(pointScale(currentSelectionLengthMs), 0) );
         tooltip.style('display', 'none').html('');
       }
 

@@ -23,6 +23,9 @@ module.exports = {
     }, {
       test: /\.less$/,
       loader: "style!css!less",
+    }, {
+      test: /\.css$/,
+      loader: "style!css",
     }]
   }
 };

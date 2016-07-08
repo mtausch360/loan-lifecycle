@@ -1,0 +1,37 @@
+<div class="">
+    <h3>Add Loan</h3>
+    <div class="row">
+        <div class="col-md-6">Name</div>
+        <div class="col-md-6">
+            <input ng-model="loan.name">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">Balance</div>
+        <div class="col-md-6">
+            $<input ng-model="loan.balance" type="number">
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6">Minimum Payment</div>
+        <div class="col-md-6">
+            $<input ng-model="loan.minimumPayment" type="number">
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6">Interest Rate</div>
+        <div class="col-md-6">
+            <input ng-model="loan.interestRate" type="number">%
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">Due Date</div>
+        <div class="col-md-6">
+            <input ng-model="loan.dueDate" type="number">
+        </div>
+    </div>
+    <button ng-click="close()">Close</button>
+    <button ng-click="save()">Save</button>
+</div>

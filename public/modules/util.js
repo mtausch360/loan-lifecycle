@@ -14,7 +14,7 @@ const max = {
  * @return {[type]}     [description]
  */
 function inRange(num, comparison){
-  console.log("Expect ",num, ' between ', comparison - 1, comparison + 1 )
+  // console.log("Expect ",num, ' between ', comparison - 1, comparison + 1 )
   return _.inRange(num, comparison - 1, comparison + 1);
 }
 
@@ -36,12 +36,29 @@ function randomLoan({interestRate=_.random(.01, max.interestRate, true), princip
     name: randomName(),
     interestRate,
     principal,
+    balance: principal,
     minimumPayment,
     dueDate,
     n
   };
   console.log('random loan', JSON.stringify(loan) );
   return loan;
+}
+
+/**
+ * [randomLoans description]
+ * @return {[type]} [description]
+ */
+function randomLoans(){
+    let res = []
+    let count = 0;
+    let max = _.random(3, 7);
+    while( count < max ){
+      res.push( randomLoan() )
+      count++
+    }
+
+    return res;
 }
 
 /**
@@ -63,7 +80,7 @@ function randomName(){
     'virulent', 'intense', 'uppity', 'hostile', 'angry'
   ];
   let nouns = ['loan', 'bond', 'annuity', 'pain', 'burden', 'afterthought', 'weight', 'thing', 'chunk', 'tuition', 'morsel', 'piece', 'threat',
-    'pal', 'cash', 'scrilla', 'nickels', 'eternity', 'bucks', 'cheddar', 'cabbage', 'clams', 'Gs', 'loot', 'shekels', 'scratch','neggo-dollas'
+    'pal', 'cash', 'scrilla', 'nickels', 'eternity', 'bucks', 'cheddar', 'cabbage', 'clams', 'Gs', 'loot', 'shekels', 'scratch','nega-dollas'
   ];
   let randomAdjectives = _.random(1,3);
   let str = '';
@@ -75,4 +92,4 @@ function randomName(){
   return str + (str.length ? ' ' : '') + _.capitalize(nouns[ _.random(0, nouns.length - 1, false ) ]);
 }
 
-export { inRange, randomLoan, expectedGrowth };
+export { inRange, randomLoan, randomLoans, expectedGrowth };

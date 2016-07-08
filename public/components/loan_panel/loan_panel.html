@@ -23,12 +23,15 @@
     <div class="loans-container" ng-if="!showSettings">
         <div class="loan-options">
             <span ng-click="addLoan()"><span class="glyphicon glyphicon-plus"></span> Add Loan</span>
+            <span ng-click="demo()">Take Demo</span>
         </div>
 <!--         <div class="loan-options">
             <span ng-click="addRandomLoan()"><span class="glyphicon glyphicon-plus"></span> Add Random Loan</span>
         </div> -->
+        {{loans.length}} loans
         <div class="loan-list">
             <loan ng-repeat="loan in loans track by loan.id"></loan>
+            
         </div>
     </div>
 </div>
