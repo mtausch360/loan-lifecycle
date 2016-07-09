@@ -14,6 +14,7 @@ class Lifecycle {
     this.extra = extra;
 
     if( !loans ) throw "No Loans Provided";
+    this.loans = loans;
     var Loans = [];
     this.Loans = Loans;
 
@@ -59,8 +60,6 @@ class Lifecycle {
     //main lifecycle loop
     while (this._lifecycleIncomplete()) {
 
-      this._sortLoansByMethod();
-
       this._initializeState();
 
       this._payLoans();
@@ -82,6 +81,8 @@ class Lifecycle {
    * @return {[type]} [description]
    */
   _initializeState(){
+    this._sortLoansByMethod();
+    
     this._state.amountExtraNow = this.extra;
     this._state.balance = 0;
     this._state.interest = 0;

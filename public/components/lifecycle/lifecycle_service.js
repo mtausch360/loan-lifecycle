@@ -15,24 +15,46 @@ function lifecycleService(loanService) {
   };
   var current = {
     lifecycleSelection: [null, null],
+    baseSelectionData: null,
+    customSelectionData: null,
     date: null
   };
 
   return {
     getState,
+    getBase,
+    getCustom,
+
     createLifecycles,
     updateCustom,
+    updateBase,
     getCurrentSelection,
     setCurrentSelection,
     getLastSelectionDate
   };
 
   /**
+   * [getCustom description]
+   * @return {[type]} [description]
+   */
+  function getCustom(){
+    return lifecycleState.custom;
+  }
+
+  /**
+   * [getBase description]
+   * @return {[type]} [description]
+   */
+  function getBase(){
+    return lifecycleState.base;
+  }
+
+  /**
    * [getCurrentSelection description]
    * @return {[type]} [description]
    */
   function getCurrentSelection(){
-    return current.lifecycleSelection;
+    return current;
   }
 
   /**
@@ -40,6 +62,8 @@ function lifecycleService(loanService) {
    */
   function setCurrentSelection(selection){
     current.lifecycleSelection = selection;
+    current.customSelectionData = lifecycleState.custom.lifecycle.search(selection);
+    current.baseSelectionData = lifecycleState.base.lifecycle.search(selection);
     current.date = Date.now();
   }
 
@@ -58,7 +82,6 @@ function lifecycleService(loanService) {
   function createLifecycles() {
     updateCustom();
     updateBase();
-    lifecycleState.date = Date.now();
   }
 
   /**
@@ -66,6 +89,7 @@ function lifecycleService(loanService) {
    * @return {[type]} [description]
    */
   function updateCustom() {
+    console.log("updating lifecycle with ", loanService.getLoans());
     let custom = new Lifecycle(loanService.getLoans(), loanService.getSettings());
     if (!lifecycleState.custom.lifecycle)
       lifecycleState.custom.lifecycle = custom;
@@ -73,6 +97,7 @@ function lifecycleService(loanService) {
       _.extend(lifecycleState.custom.lifecycle, custom);
     console.log('custom', custom);
     lifecycleState.custom.date = Date.now();
+    lifecycleState.date = Date.now();
   }
 
   /**
@@ -86,8 +111,8 @@ function lifecycleService(loanService) {
     else
       _.extend(lifecycleState.base.lifecycle, base);
     console.log('base', base);
-
     lifecycleState.base.date = Date.now();
+    lifecycleState.date = Date.now();
   }
 
   /**

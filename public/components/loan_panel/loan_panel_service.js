@@ -179,6 +179,7 @@ function loanService($uibModal) {
    * @return {[type]} [description]
    */
   function saveLoans() {
+    console.log('saveing loans', loans);
     localStorage.setItem('loans', JSON.stringify(loans));
   }
 
