@@ -6,3 +6,6 @@ Work in progress, change the amount extra  to see the difference in time that it
 Check it out at
 
 http://loan-lifecycle.herokuapp.com
+
+#Technologies
+Angular 1.5, ES6, Webpack, Babel, Less, D3, Less
