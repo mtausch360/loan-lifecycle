@@ -35,12 +35,12 @@ function RepaymentBreakdownFactory(){
   var customBreakdown;
   var baseBreakdown;
 
-
-  return {
+  let instance = {
     create,
     update,
     render
   };
+  return instance;
 
   /**
    * [create description]
@@ -72,8 +72,9 @@ function RepaymentBreakdownFactory(){
     Base.totalInterest = baseBreakdown.append('rect').classed('interest', true);;
 
     Custom.totalPrincipal = customBreakdown.append('rect').classed('principal', true);
-    // Custom.totalPrincipalPaidByExtra = customBreakdown.append('rect').classed('principal', true);
     Custom.totalInterest = customBreakdown.append('rect').classed('interest', true);
+
+    return instance;
 
   }
 
@@ -142,7 +143,7 @@ function RepaymentBreakdownFactory(){
   function update({baseSelectionData, customSelectionData}){
     customData = customSelectionData;
     baseData = baseSelectionData;
-    console.log('update repayment', customData, baseData);
+    // console.log('update repayment', customData, baseData);
     updateScales();
     render();
   }

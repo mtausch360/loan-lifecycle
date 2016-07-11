@@ -1,5 +1,6 @@
 import lodash from 'lodash';
-
+var Big = require('big.js');
+Big.DP = 25;
 
 // We use the context method on `require` which Webpack created
 // in order to signify which files we actually want to require or import.

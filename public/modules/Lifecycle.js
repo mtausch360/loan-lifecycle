@@ -9,7 +9,7 @@ class Lifecycle {
    * @param  {Boolean} isBaseLifecycle [description]
    * @return {[type]}                  [description]
    */
-  constructor(loans, { method="NONE", extra=0 } = { method:"NONE", extra:0 }, {vanilla=false, test=false}={}) {
+  constructor(loans, { method="NONE", extra=0 }={method:"NONE",extra:0}, {vanilla=false, test=false}={}) {
     this.method = method;
     this.extra = extra;
 

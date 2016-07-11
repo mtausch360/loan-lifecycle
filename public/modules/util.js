@@ -80,7 +80,7 @@ function randomName(){
     'virulent', 'intense', 'uppity', 'hostile', 'angry'
   ];
   let nouns = ['loan', 'bond', 'annuity', 'pain', 'burden', 'afterthought', 'weight', 'thing', 'chunk', 'tuition', 'morsel', 'piece', 'threat',
-    'pal', 'cash', 'scrilla', 'nickels', 'eternity', 'bucks', 'cheddar', 'cabbage', 'clams', 'Gs', 'loot', 'shekels', 'scratch','nega-dollas'
+    'pal', 'cash', 'scrilla', 'nickels', 'eternity', 'bucks', 'cheddar', 'cabbage', 'clams', 'Gs', 'loot', 'shekels', 'scratch','nega-dollars', 'doll hairs'
   ];
   let randomAdjectives = _.random(1,3);
   let str = '';

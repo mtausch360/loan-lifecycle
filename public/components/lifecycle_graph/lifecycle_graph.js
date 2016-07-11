@@ -1,9 +1,9 @@
 /**
  * basic factory for lifecycle graphs
  *
- * @returns object with basic functionality hooks, rendering, updating and hooks into zoomEnd function=
+ * @returns object with basic functionality hooks, rendering, updating and hooks into zoomEnd function
  */
-function LifecycleGraphFactory({ selectionCb }){
+function LifecycleGraphFactory({ selectionCb }={}){
   let _state = {
     created: false,
     udpated: false
@@ -61,8 +61,7 @@ function LifecycleGraphFactory({ selectionCb }){
   var currentSelectionLengthMs;
 
   var parseDate = d3.time.format("%m/%d/%Y");
-
-  return {
+  let instance = {
     create,
     render,
     update,
@@ -70,6 +69,8 @@ function LifecycleGraphFactory({ selectionCb }){
     // updateCustom,
     // getCurrentSelection
   };
+
+  return instance;
 
   /**
    * Creates chart svg on dom, assigns variables, prereq to call update or render,
@@ -122,6 +123,8 @@ function LifecycleGraphFactory({ selectionCb }){
       });
 
     _state.created = true;
+
+    return instance;
   }
 
   /**
@@ -180,6 +183,13 @@ function LifecycleGraphFactory({ selectionCb }){
       .attr('transform', 'translate(' + (margin.left) + ', ' + (margin.top) + ')');
 
 
+    zoom = d3.behavior.zoom()
+      .x(xScale)
+      // .scaleExtent([1, 40])
+      .on('zoom', zoomCb)
+      .on('zoomend', zoomendCb)
+
+    background.call(zoom);
 
     drawBase();
     drawCustom();
@@ -208,17 +218,12 @@ function LifecycleGraphFactory({ selectionCb }){
     calculateScales();
 
     if(!_state.updated){
-      zoom = d3.behavior.zoom()
-        .x(xScale)
-        // .scaleExtent([1, 40])
-        .on('zoom', zoomCb)
-        .on('zoomend', zoomendCb)
-      background.call(zoom);
       _state.updated = true;
 
       if(selectionCb)
         selectionCb(xScale.domain())
     }
+    // zoom.scaleExtent(zoomExtent.x)
 
 
     //draw
@@ -245,9 +250,10 @@ function LifecycleGraphFactory({ selectionCb }){
     //dates in current selection
     let minDate = xScale.domain()[0]
     let maxDate = xScale.domain()[1];
-
     totalXLengthMs = baseLifecycle.endDate.getTime() - baseLifecycle.startDate.getTime();
     currentSelectionLengthMs = minDate.getTime() - maxDate.getTime();
+
+    pointScale.domain([ totalXLengthMs ,THREE_MONTHS_MILLI/3]).range([5, -50]);
 
     let max = 1000; //min scale
     let min;
@@ -320,6 +326,7 @@ function LifecycleGraphFactory({ selectionCb }){
     calculateScales();
     zoomTranslate();
     updateAxes();
+
     render();
   }
 

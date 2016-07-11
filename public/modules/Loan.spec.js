@@ -81,11 +81,10 @@ describe("Loan module", function () {
   });
 
   it("should follow its proper lifecycle", function () {
-    var last;
     var counter = 0;
     while (loan.alive) {
       loan.age();
-      last = loan.makePayment();
+      let last = loan.makePayment();
       counter++;
     }
 

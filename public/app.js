@@ -1,5 +1,6 @@
 var Big = require('big.js');
 Big.DP = 25;
+import d3 from 'd3';
 
 import modal from 'angular-ui-bootstrap/src/modal';
 
