@@ -1,4 +1,3 @@
-let big = require('big.js');
 
 //test suite settings
 const max = {
@@ -21,7 +20,7 @@ function inRange(num, comparison){
 /**
  * https://en.wikipedia.org/wiki/Amortization_calculator
  * A = P ( i + (i / ( ( 1 + i )^n - 1) ))
- * @return {[type]} [description]
+ * @return {Object} Returns randomized loan within test suite settings
  */
 function randomLoan({interestRate=_.random(.01, max.interestRate, true), principal=_.random(1000, max.principal, true), n=_.random(100, max.n, false) }={}){
 
@@ -29,9 +28,9 @@ function randomLoan({interestRate=_.random(.01, max.interestRate, true), princip
   // let principal = _.random(1000, max.principal, true);
   // let n = _.random(100, max.n, false);
   let dueDate = _.random(1, max.dueDate, false)
-  let i = big(interestRate).div(12);
-  let minimumPayment = big( i ).div( big(1).minus( big( big(i).plus(1) ).pow(-n) ) );
-  minimumPayment = Number( big(minimumPayment).times(principal) );
+  let i = Big(interestRate).div(12);
+  let minimumPayment = Big( i ).div( Big(1).minus( Big( Big(i).plus(1) ).pow(-n) ) );
+  minimumPayment = Number( Big(minimumPayment).times(principal) );
   let loan = {
     name: randomName(),
     interestRate,
@@ -46,8 +45,7 @@ function randomLoan({interestRate=_.random(.01, max.interestRate, true), princip
 }
 
 /**
- * [randomLoans description]
- * @return {[type]} [description]
+ * Returns random amount of random loans, used for demo purposes
  */
 function randomLoans(){
     let res = []
@@ -63,19 +61,20 @@ function randomLoans(){
 
 /**
  *     // 1000(1 + .1/12 )^n = balance
+ *     Terting function
  * @param  {[type]} l [description]
  * @return {[type]}   [description]
  */
 function expectedGrowth(l, n){
-  return Number(big(l.principal).times(Number(big(1 + Number(big(l.interestRate).div(12))).pow(n))));
+  return Number(Big(l.principal).times(Number(Big(1 + Number(Big(l.interestRate).div(12))).pow(n))));
 }
 
 /**
- * [randomName description]
- * @return {[type]} [description]
+ * returns random name for loans
+ *
  */
 function randomName(){
-  let adjectives = ['big', 'sweet', 'fortuitous', 'sanctimonious', 'kind', 'sweet', 'old', 'wrong', 'deft', 'swift', 'gargantuan',
+  let adjectives = ['Big', 'sweet', 'fortuitous', 'sanctimonious', 'kind', 'sweet', 'old', 'wrong', 'deft', 'swift', 'gargantuan',
     'large', 'wholesome', 'toothsome', 'freaky', 'stupid', 'rad', 'miniscule', 'pretty', 'petty', 'dusty', 'crude', 'negative', 'hella',
     'virulent', 'intense', 'uppity', 'hostile', 'angry'
   ];

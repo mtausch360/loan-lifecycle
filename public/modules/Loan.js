@@ -1,24 +1,27 @@
-
+/**
+ * Main class modeling Loans, their aging, growth and payments
+ */
 class Loan {
 
   /**
    * [constructor description]
-   * @param  {String} options.name            [description]
-   * @param  {[type]} options.id              [description]
-   * @param  {Number} options.interestRate    [description]
-   * @param  {String} options.compoundingRate [description]
-   * @param  {Number} options.dueDate         [description]
-   * @param  {Number} options.minimumPayment  [description]
-   * @param  {Number} options.principal       [description]
-   * @param  {Number} options.interest        [description]
-   * @return {[type]}                         [description]
+   * @param  {String} options.name            Name of Loan
+   * @param  {[type]} options.id              Id of loan, not used in class, passed on to instance if provided
+   * @param  {Number} options.interestRate    Annual interest rate of loan
+   * @param  {String} options.compoundingRate How often is interest compounded? Currently only supports monthly
+   * @param  {Number} options.dueDate         what day is payment due for this loan?
+   * @param  {Number} options.minimumPayment
+   * @param  {Number} options.balance         What is current balance of loan? Balance is applied to principal internally
+   * @param  {Number} options.principal       Current principal balance
+   * @param  {Number} options.interest        Current outstanding interest
+   * @return {[type]}                         returns loan instance
    */
-  constructor({ name = "", id, interestRate = 0, compoundingRate = "MONTHLY", dueDate = 1, minimumPayment = 0, balance = 0, principal = 0, interest = 0 }) {
+  constructor({ name="", id, interestRate=0, compoundingRate="MONTHLY", dueDate=1, minimumPayment=0, balance=0, principal=0, interest=0 }) {
     this.name = name;
     this.id = id;
     this.dueDate = dueDate;
     this.interestRate = interestRate; //nominal interest Rate
-    this.compoundingRate = compoundingRate; //not used yet
+    this.compoundingRate = compoundingRate; //not used yet, placeholder
     this.minimumPayment = minimumPayment;
     if (balance) {
       this.principal = balance;
@@ -44,7 +47,7 @@ class Loan {
    * Payments assume that any overpayment is applied to principal balance.
    *
    * @param  {[number]} amount [total money to paydown on this loan]
-   * @return {[type]}     [description]
+   * @return {Object}           Returns receipt object, used primarily in Lifecycle Module
    */
   makePayment(extra = 0) {
 
@@ -135,7 +138,6 @@ class Loan {
 
   /**
    * Ages the loan one month and capitalizes any previous interest
-   * @return {[type]} [description]
    */
   age() {
 
@@ -155,7 +157,7 @@ class Loan {
   }
 
   /**
-   * [_calculateBalance description]
+   * Recalculates balance for the loan, main way to check if loan is dead
    * @return {[type]} [description]
    */
   _calculateBalance() {
@@ -167,7 +169,8 @@ class Loan {
 
   /**
    * throws if not a valid loan
-   *   minimum payment won't touch the interest grown in a month
+   * Cases to throw:
+   *   - if minimum payment won't cover the interest grown in a month
    *
    */
   _validate() {

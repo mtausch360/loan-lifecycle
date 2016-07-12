@@ -5,7 +5,14 @@ Work in progress, change the amount extra  to see the difference in time that it
 
 Check it out at
 
-http://loan-lifecycle.herokuapp.com
+  http://loan-lifecycle.herokuapp.com
 
 ###Technologies
 Angular 1.5, ES6, Webpack, Babel, Less, D3, Big.js, Karma, PhantomJS
+
+Todo:
+  Error handling
+  Persisting of loans
+  Extra for individual loans
+  filter to display any selection of loans in lifecycle
+  General UI polish
