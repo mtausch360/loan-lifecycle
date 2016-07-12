@@ -1,12 +1,12 @@
 import Loan from './Loan.js';
 
 /**
- * Class which models loans
+ * Class which models loan's balance over time which includes payments and interest grown
+ * also accepts extra to applied to loans over their lifecycle
  */
 class Lifecycle {
 
   /**
-   * [constructor description]
    * @param  {[type]}  loans           Loan objects to convert into Loan instances
    * @param  {String}  options.method  how should global amount extra be applied over span of lifecycle
    * @param  {[type]}  options.extra   how much global extra should be applied to loans
@@ -83,7 +83,6 @@ class Lifecycle {
 
   /**
    * Refreshes internal values used to calculate series objects in a month's span
-   * @return {[type]} [description]
    */
   _initializeState() {
     this._sortLoansByMethod();
@@ -116,7 +115,8 @@ class Lifecycle {
 
   /**
    * Main series calculations done here
-   * @return {[type]} [description]
+   * For one month, Loans age and are paid off for the month
+   * Balance calculations for each individual date are done at the end of method
    */
   _payLoans() {
     let self = this;

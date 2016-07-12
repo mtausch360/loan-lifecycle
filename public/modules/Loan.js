@@ -4,7 +4,6 @@
 class Loan {
 
   /**
-   * [constructor description]
    * @param  {String} options.name            Name of Loan
    * @param  {[type]} options.id              Id of loan, not used in class, passed on to instance if provided
    * @param  {Number} options.interestRate    Annual interest rate of loan
