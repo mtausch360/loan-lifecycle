@@ -53,7 +53,4 @@ function editableInputDirective() {
 
 }
 
-
-
-
 export default editableInputDirective;

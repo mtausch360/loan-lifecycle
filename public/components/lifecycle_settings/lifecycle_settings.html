@@ -1,0 +1,26 @@
+<div class="settings-container" ng-if="showSettings">
+    <div class="global-amount-extra-container">
+        <div class="extra">
+            <div class="props">Amount Extra</div>
+            <editable-input model="settings.extra" type="number" prefix="$" suffix="/mth"></editable-input>
+        </div>
+        <div class="method">
+            <div class="prop">Method</div>
+            <div class="method-container">
+                <label>
+                   <input type="radio" ng-model="settings.method" ng-value="'HI_INTEREST'">
+                   Highest Interest First
+                 </label>
+            </div>
+            <div class="method-container">
+                 <label>
+                   <input type="radio" ng-model="settings.method" ng-value="'LO_BALANCE'">
+                   Lowest Balance First
+                 </label>
+            </div>
+        </div>
+    </div>
+    <div class="loan-extra-container">
+        <div class="extra"></div>
+    </div>
+</div>

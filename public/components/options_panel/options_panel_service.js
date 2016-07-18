@@ -2,8 +2,13 @@
 import {randomLoans} from '../../modules/util';
 import addLoanModalTpl from '../../templates/add_loan_modal.html';
 
-function loanService($uibModal) {
-  var appName = 'loanLifecycleState'
+/**
+ * [optionsPanelService description]
+ * @param  {[type]} $uibModal [description]
+ * @return {[type]}           [description]
+ */
+function optionsPanelService($uibModal) {
+  var appName = 'loanLifecycleState';
   var loans = [];
   var settings;
   var appState;
@@ -186,4 +191,4 @@ function loanService($uibModal) {
 
 }
 
-export default loanService;
+export default optionsPanelService;

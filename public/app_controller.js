@@ -1,3 +1,9 @@
+/**
+ * [AppController description]
+ * @param {[type]} $scope           [description]
+ * @param {[type]} lifecycleService [description]
+ * @param {[type]} $timeout         [description]
+ */
 function AppController($scope, lifecycleService, $timeout) {
 
   $scope.lifecycles = lifecycleService.getState();
@@ -36,8 +42,6 @@ function AppController($scope, lifecycleService, $timeout) {
     lifecycleService.createLifecycles();
     $scope.$broadcast('redrawAll');
   }
-
-
 
 }
 

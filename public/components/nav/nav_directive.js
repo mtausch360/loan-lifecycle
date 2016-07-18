@@ -1,6 +1,6 @@
 import tpl from './nav.html';
 
-function lifecycleNav() {
+function lifecycleNavDirective() {
   return {
     replace: true,
     template: tpl,
@@ -13,4 +13,4 @@ function lifecycleNav() {
   }
 }
 
-export default lifecycleNav;
+export default lifecycleNavDirective;

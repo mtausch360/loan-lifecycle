@@ -1,6 +1,6 @@
 import tpl from './loan.html';
 
-function loan(loanService) {
+function loanDirective(loanService) {
   return {
     replace: true,
     restrict: "E",
@@ -12,5 +12,5 @@ function loan(loanService) {
   }
 }
 
-export default loan;
+export default loanDirective;
 
