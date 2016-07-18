@@ -89,13 +89,11 @@ function lifecycleService(loanService) {
    * @return {[type]} [description]
    */
   function updateCustom() {
-    console.log("updating lifecycle with ", loanService.getLoans());
     let custom = new Lifecycle(loanService.getLoans(), loanService.getSettings());
     if (!lifecycleState.custom.lifecycle)
       lifecycleState.custom.lifecycle = custom;
     else
       _.extend(lifecycleState.custom.lifecycle, custom);
-    console.log('custom', custom);
     lifecycleState.custom.date = Date.now();
     lifecycleState.date = Date.now();
   }
@@ -110,7 +108,6 @@ function lifecycleService(loanService) {
       lifecycleState.base.lifecycle = base;
     else
       _.extend(lifecycleState.base.lifecycle, base);
-    console.log('base', base);
     lifecycleState.base.date = Date.now();
     lifecycleState.date = Date.now();
   }

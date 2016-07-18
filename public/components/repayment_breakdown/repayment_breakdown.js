@@ -1,3 +1,4 @@
+import d3 from 'd3';
 /**
  * [RepaymentBreakdownFactory description]
  */
@@ -22,7 +23,7 @@ function RepaymentBreakdownFactory(){
   var domainMap = Object.keys(domain);
   var yScale;
   var xScale;
-  var o = d3.scale.category20();
+  // var o = d3.scale.category20();
   var xAxis;
   var yAxis;
   var xAxisEl;
@@ -69,7 +70,7 @@ function RepaymentBreakdownFactory(){
     baseBreakdown = plotAreaEl.append('g').classed('base breakdown', true);
 
     Base.totalPrincipal = baseBreakdown.append('rect').classed('principal', true);
-    Base.totalInterest = baseBreakdown.append('rect').classed('interest', true);;
+    Base.totalInterest = baseBreakdown.append('rect').classed('interest', true);
 
     Custom.totalPrincipal = customBreakdown.append('rect').classed('principal', true);
     Custom.totalInterest = customBreakdown.append('rect').classed('interest', true);
@@ -86,9 +87,9 @@ function RepaymentBreakdownFactory(){
     width = document.getElementById('lifecycle-panel').offsetWidth;
     height = Math.max(document.documentElement.clientHeight - document.getElementById('nav-bar'), 200)*.25;
     margin = {
-      top: 25,
+      top: height * .2,
       left: width * .15,
-      bottom: 0,
+      bottom: height * .1,
       right: width * .1
     };
     plotArea = {
@@ -98,10 +99,10 @@ function RepaymentBreakdownFactory(){
 
     bar = {
       maxWidth: plotArea.width,
-      height: plotArea.height * (2 / 8),
+      height: plotArea.height * (6 / 16),
       margin: {
-        top: plotArea.height * (1 / 8),
-        bottom: plotArea.height * (1 / 8)
+        top: plotArea.height * (2 / 16),
+        bottom: plotArea.height * (0 / 16)
       },
     };
 

@@ -35,7 +35,6 @@ class Loan {
 
     let condition = Number(Big(this.interestRate).div(12).times(this.principal)) > this.minimumPayment;
     if (condition > this.minimumPayment) {
-      console.error("INVALID LOAN");
       throw "Invalid Loan";
     }
     this._validate();
@@ -52,8 +51,6 @@ class Loan {
 
     let amountTendered = this.minimumPayment + extra;
     let minimumPayment = this.minimumPayment;
-
-    let amountPaid = 0;
 
     let interestPaid = 0;
     let interestPaidByExtra = 0;
@@ -113,7 +110,7 @@ class Loan {
 
     this._calculateBalance();
 
-    let res = {
+    let receipt = {
       amountTendered,
 
       amountPaid: (interestPaid + interestPaidByExtra + principalPaid + principalPaidByExtra),
@@ -131,7 +128,7 @@ class Loan {
       interestPaidByExtra
     };
 
-    return res;
+    return receipt;
 
   }
 
@@ -175,8 +172,7 @@ class Loan {
   _validate() {
     let condition = Number(Big(this.interestRate).div(12).times(this.principal)) > this.minimumPayment;
     if (condition > this.minimumPayment) {
-      console.error("INVALID LOAN");
-      throw "Invalid Loan";
+      throw("Invalid Loan");
     }
   }
 

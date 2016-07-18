@@ -5,13 +5,13 @@ import { LifecycleGraphFactory } from './lifecycle_graph';
  * This vis shows current balance as a function of time, and compares two lifecycles to oneanother
  * @return {[type]} [description]
  */
-function lifecycleGraphDirective(lifecycleService, $timeout, $filter) {
+function lifecycleGraphDirective(lifecycleService, $timeout) {
 
   return {
     replace: true,
     restrict: 'E',
     template: tpl,
-    link: (scope, element, attrs) => {
+    link: (scope) => {
       //hook into lifecycle graph selection
       let selectionCb = ( selection )=>{
 

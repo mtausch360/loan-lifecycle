@@ -1,12 +1,12 @@
 import tpl from './repayment_breakdown.html';
 import { RepaymentBreakdownFactory } from './repayment_breakdown';
 
-function repaymentBreakdownDirective(lifecycleService, $filter) {
+function repaymentBreakdownDirective(lifecycleService) {
   return {
     replace: true,
     restrict: 'E',
     template: tpl,
-    link: (scope, element, attrs) => {
+    link: (scope) => {
       let Chart = RepaymentBreakdownFactory().create();
 
       scope.$on('render', Chart.render);
@@ -14,7 +14,7 @@ function repaymentBreakdownDirective(lifecycleService, $filter) {
 
       scope.$watch(
         () => lifecycleService.getLastSelectionDate(),
-        (newValue, oldValue, scope) => {
+        (newValue) => {
           if (newValue) {
             Chart.update( lifecycleService.getCurrentSelection() );
           }

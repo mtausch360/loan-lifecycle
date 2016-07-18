@@ -1,7 +1,8 @@
+//not sure how to do this big thing. don't think es6 modules apply
 var Big = require('big.js');
 Big.DP = 25;
-import d3 from 'd3';
 
+import angular from 'angular';
 import modal from 'angular-ui-bootstrap/src/modal';
 
 import AppController from "./app_controller";

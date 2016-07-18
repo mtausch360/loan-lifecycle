@@ -14,7 +14,11 @@ class Lifecycle {
    * @param  {[type]}  options.test    do not run lifecycle, for testing purposes
    * @return {[type]}                  Returns instance of lifecycle instance.
    */
+
+  /* eslint-disable */
   constructor(loans, { method="NONE", extra=0 }={ method: "NONE", extra: 0 }, { vanilla=false, test=false }={}) {
+    /* eslint-enable */
+
     this.method = method;
     this.extra = extra;
 
@@ -75,8 +79,9 @@ class Lifecycle {
 
     this.lifecycle.endDate =
       this.lifecycle.series.length ?
-      this.lifecycle.series[this.lifecycle.series.length - 1].date :
-      new Date();
+        this.lifecycle.series[this.lifecycle.series.length - 1].date :
+        new Date();
+
     if (!this.lifecycle.startDate)
       this.lifecycle.startDate = new Date();
   }
@@ -94,7 +99,7 @@ class Lifecycle {
     let self = this;
     let dates = {};
     //want to keep track of ordering for applying extra to loan payments
-    this.Loans.forEach((L, i) => {
+    this.Loans.forEach((L) => {
       if (L.alive) {
         if (!dates[L.dueDate]) {
           dates[L.dueDate] = self._initSeriesObj(L.dueDate);
@@ -121,7 +126,7 @@ class Lifecycle {
   _payLoans() {
     let self = this;
 
-    this.Loans.forEach(function (L, i) {
+    this.Loans.forEach(function (L) {
       if (L.alive) {
         L.age();
         //grab montly date object
@@ -130,8 +135,6 @@ class Lifecycle {
         //get variables from receipt
         let {
           amountPaid,
-          extraLeft,
-          minimumPaymentLeft,
 
           principalPaid,
           principalPaidByExtra,
@@ -185,10 +188,13 @@ class Lifecycle {
   }
 
   /**
-   * looks in series and returns aggregation of series elements inside of range
-   * @return {[obj]} [description]
+   * [search description]
+   * @param  {[type]}  [minDate       [description]
+   * @param  {[type]}  maxDate]       [description]
+   * @param  {Boolean} returnElements [description]
+   * @return {[type]}                 [description]
    */
-  search([minDate, maxDate] = [minDate = 0, maxDate = 0], returnElements = false) {
+  search([minDate, maxDate], returnElements=false) {
     let res;
 
     if (returnElements)

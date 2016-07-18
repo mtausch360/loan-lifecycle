@@ -22,15 +22,12 @@ function inRange(num, comparison){
  * A = P ( i + (i / ( ( 1 + i )^n - 1) ))
  * @return {Object} Returns randomized loan within test suite settings
  */
-function randomLoan({interestRate=_.random(.01, max.interestRate, true), principal=_.random(1000, max.principal, true), n=_.random(100, max.n, false) }={}){
+function randomLoan({interestRate=_.random(.01, max.interestRate, true), principal=_.random(5000, max.principal, true), n=_.random(100, max.n, false) }={}){
 
-  // let interestRate = _.random(.01, max.interestRate, true);
-  // let principal = _.random(1000, max.principal, true);
-  // let n = _.random(100, max.n, false);
   let dueDate = _.random(1, max.dueDate, false)
   let i = Big(interestRate).div(12);
-  let minimumPayment = Big( i ).div( Big(1).minus( Big( Big(i).plus(1) ).pow(-n) ) );
-  minimumPayment = Number( Big(minimumPayment).times(principal) );
+  let minimumPayment = Number( Big( Big( i ).div( Big(1).minus( Big( Big(i).plus(1) ).pow(-n) ) ).times(principal) ) );
+
   let loan = {
     name: randomName(),
     interestRate,
@@ -40,7 +37,8 @@ function randomLoan({interestRate=_.random(.01, max.interestRate, true), princip
     dueDate,
     n
   };
-  console.log('random loan', JSON.stringify(loan) );
+
+  // console.log('random loan', JSON.stringify(loan) );
   return loan;
 }
 
@@ -61,7 +59,7 @@ function randomLoans(){
 
 /**
  *     // 1000(1 + .1/12 )^n = balance
- *     Terting function
+ *     Testing function
  * @param  {[type]} l [description]
  * @return {[type]}   [description]
  */

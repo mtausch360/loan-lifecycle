@@ -4,7 +4,7 @@ function lifecycleNav() {
   return {
     replace: true,
     template: tpl,
-    link: function (scope, element, attrs) {
+    link: function (scope) {
       scope.showSettings = false;
       scope.toggleShowSettings = (show) => {
         scope.showSettings = show;

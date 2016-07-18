@@ -3,9 +3,6 @@ function AppController($scope, lifecycleService, $timeout) {
   $scope.lifecycles = lifecycleService.getState();
   lifecycleService.createLifecycles();
 
-  let lastCustomDate = $scope.lifecycles.custom.date;
-  let lastBaseDate = $scope.lifecycles.base.date;
-
   $scope.showNav = true;
 
   $scope.toggleNav = () => {
@@ -40,10 +37,7 @@ function AppController($scope, lifecycleService, $timeout) {
     $scope.$broadcast('redrawAll');
   }
 
-  function redrawCustom() {
-    lifecycleService.updateCustom();
-    $scope.$broadcast('redrawCustom');
-  }
+
 
 }
 

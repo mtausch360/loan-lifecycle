@@ -1,4 +1,4 @@
-import Loan from '../../modules/Loan';
+// import Loan from '../../modules/Loan';
 import {randomLoans} from '../../modules/util';
 import addLoanModalTpl from '../../templates/add_loan_modal.html';
 
@@ -179,7 +179,6 @@ function loanService($uibModal) {
    * @return {[type]} [description]
    */
   function saveLoans() {
-    console.log('saveing loans', loans);
     localStorage.setItem('loans', JSON.stringify(loans));
   }
 

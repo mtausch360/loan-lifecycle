@@ -1,4 +1,5 @@
 import tpl from './editable_input.html';
+import angular from 'angular';
 
 function editableInputDirective() {
 
@@ -14,7 +15,7 @@ function editableInputDirective() {
       suffix: '@',
       settings: '@'
     },
-    link: (scope, element, attrs) => {
+    link: (scope) => {
       scope.hover = scope.hover || false;
       scope.view = true;
       scope.obj = {

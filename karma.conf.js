@@ -3,7 +3,6 @@ webpackConfig.entry = {};
 
 module.exports = function(config) {
     config.set({
-        // ... normal karma configuration
         frameworks: ['jasmine'],
         browsers: ['PhantomJS'],
         files: [{ pattern: 'spec.bundle.js', watched: false }],
@@ -14,8 +13,6 @@ module.exports = function(config) {
         webpack: webpackConfig,
 
         webpackMiddleware: {
-            // webpack-dev-middleware configuration
-            // i. e.
             noInfo: true
         },
 

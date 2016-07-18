@@ -1,3 +1,4 @@
+import d3 from 'd3';
 /**
  * basic factory for lifecycle graphs
  *
@@ -21,7 +22,6 @@ function LifecycleGraphFactory({ selectionCb }={}){
   var margin;
   var plotArea;
   var plotAreaEl;
-  var defs;
   var clipPath;
 
   var background;
@@ -34,7 +34,6 @@ function LifecycleGraphFactory({ selectionCb }={}){
   var yAxisEl;
   var updateAxes;
   var line;
-  var area;
   var zoom;
   var zoomExtent = {x: [null, null]}; //not correct
   var tooltip;
@@ -60,14 +59,12 @@ function LifecycleGraphFactory({ selectionCb }={}){
   var totalXLengthMs;
   var currentSelectionLengthMs;
 
-  var parseDate = d3.time.format("%m/%d/%Y");
+  // var parseDate = d3.time.format("%m/%d/%Y");
+
   let instance = {
     create,
     render,
-    update,
-    // updateBase,
-    // updateCustom,
-    // getCurrentSelection
+    update
   };
 
   return instance;
@@ -85,7 +82,7 @@ function LifecycleGraphFactory({ selectionCb }={}){
 
     pointScale = d3.scale.linear();
 
-    xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(4);
+    xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(8);
 
     yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(5);
 
@@ -114,11 +111,11 @@ function LifecycleGraphFactory({ selectionCb }={}){
 
     line = d3.svg.line()
       .interpolate("step-after")
-      .x((d, i)=>{
+      .x((d)=>{
 
         return xScale( d.date );
       })
-      .y((d, i)=>{
+      .y((d)=>{
         return yScale(d.balance);
       });
 
@@ -234,9 +231,9 @@ function LifecycleGraphFactory({ selectionCb }={}){
    * Current selection window, happens to be xScale domain
    * @return array[ date, date ]
    */
-  function getCurrentSelection(){
-    return xScale.domain();
-  }
+  // function getCurrentSelection(){
+  //   return xScale.domain();
+  // }
 
   /**
    * computes min and max of current selection, updates current selection variable, updates yScale based on
@@ -257,13 +254,13 @@ function LifecycleGraphFactory({ selectionCb }={}){
 
     let max = 1000; //min scale
     let min;
-    let baseMin;
-    let customMin;
+    // let baseMin;
+    // let customMin;
     let basePayments = 0;
     let customPayments = 0;
 
     //update y scale min/max based on what's in selection
-    baseLifecycle.series.forEach((el, i)=>{
+    baseLifecycle.series.forEach((el)=>{
       if (el.date >= minDate && el.date <= maxDate) {
         basePayments++;
         if (el.balance > max)
@@ -300,10 +297,10 @@ function LifecycleGraphFactory({ selectionCb }={}){
    * @return {[type]} [description]
    */
   function drawBase() {
-    let path = basePath.data([baseLifecycle.series])
+    let path = basePath.data([baseLifecycle.series]);
     path.attr('d', (d) => {
         return line(d)
-      })
+      });
     path.exit().remove();
   }
 
@@ -312,10 +309,12 @@ function LifecycleGraphFactory({ selectionCb }={}){
    * @return {[type]} [description]
    */
   function drawCustom() {
-    customPath.data([customLifecycle.series])
+    let path = customPath.data([customLifecycle.series]);
+    path
       .attr('d', (d) => {
         return line(d)
-      })
+      });
+    path.exit().remove();
   }
 
   /**
@@ -409,10 +408,10 @@ function LifecycleGraphFactory({ selectionCb }={}){
    * [removePaymentCircles description]
    * @return {[type]} [description]
    */
-  function removePaymentCircles(identifier){
-    let container = identifier === "custom" ? customContainer : baseContainer;
-    let paymentCircles = container.selectAll( '.' + identifier + '-payment-circle').remove()
-  }
+  // function removePaymentCircles(identifier){
+  //   let container = identifier === "custom" ? customContainer : baseContainer;
+  //   let paymentCircles = container.selectAll( '.' + identifier + '-payment-circle').remove()
+  // }
 
 
   /**
@@ -439,7 +438,7 @@ function LifecycleGraphFactory({ selectionCb }={}){
    * @param  {[type]} d [description]
    * @return {[type]}   [description]
    */
-  function mouseEnter(d, i){
+  function mouseEnter(d){
     let circle = d3.select(this);
 
     circle.transition().duration(250).attr('r', (2 * circle.attr('r')) );

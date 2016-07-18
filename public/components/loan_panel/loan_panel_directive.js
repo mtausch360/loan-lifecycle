@@ -1,5 +1,5 @@
 import tpl from './loan_panel.html';
-import Loan from '../../modules/Loan';
+// import Loan from '../../modules/Loan';
 
 function loanPanel(loanService) {
 
@@ -7,7 +7,7 @@ function loanPanel(loanService) {
     replace: true,
     restrict: 'E',
     template: tpl,
-    link: function (scope, element, attrs) {
+    link: function (scope) {
 
       scope.settings = loanService.getSettings();
       scope.loans = loanService.getLoans();

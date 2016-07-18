@@ -5,7 +5,7 @@ function loan(loanService) {
     replace: true,
     restrict: "E",
     template: tpl,
-    link: function(scope, element, attrs){
+    link: function(scope){
       scope.removeLoan = loanService.removeLoan;
       scope.$watch('loan', ()=> loanService.saveLoans(), true)
     }
