@@ -11,8 +11,8 @@ Check it out at http://loan-lifecycle.herokuapp.com
 Angular 1.5, ES6, Webpack, Babel, Less, D3, Big.js, Karma, PhantomJS
 
 Todo:
-  Error handling, preventing infinite loops
-  Persisting of loans, see above
-  Extra for individual loans
-  filter to display any selection of loans in lifecycle
-  General UI/UX polish
+  * Error handling, preventing infinite loops for improper loans
+  * Persisting of loans, see above
+  * Extra for individual loans
+  * filter to display any selection of loans in lifecycle
+  * General UI/UX polish

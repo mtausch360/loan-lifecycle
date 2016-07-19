@@ -1,0 +1,20 @@
+<div class="loans-container" ng-if="!showSettings">
+    <div class="row no-gutters loan-menu">
+        <div class="col-md-6">
+            <span class="loans-num">{{loans.length}} loan{{ loans.length !== 1 ? 's': ''}}</span>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 action">
+                    <span class="ll-link" ng-click="addLoan()"><span class="glyphicon glyphicon-plus"></span> Add Loan</span>
+                </div>
+                <div class="col-md-6 action">
+                    <span class="ll-link" ng-click="demo()">Take Demo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="loan-list">
+        <loan ng-repeat="loan in loans track by loan.id"></loan>
+    </div>
+</div>

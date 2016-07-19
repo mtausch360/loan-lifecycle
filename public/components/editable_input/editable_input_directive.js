@@ -9,13 +9,18 @@ function editableInputDirective() {
     template: tpl,
     scope: {
       model: '=',
-      type: '@',
+      type: '@?',
       onSave: '&',
-      prefix: '@',
-      suffix: '@',
-      settings: '@'
+      prefix: '@?',
+      suffix: '@?',
+      settings: '=?',
     },
     link: (scope) => {
+
+      //range for due date
+      if( scope.settings && scope.settings.select )
+        scope.range = _.range(1, 29);
+
       scope.hover = scope.hover || false;
       scope.view = true;
       scope.obj = {

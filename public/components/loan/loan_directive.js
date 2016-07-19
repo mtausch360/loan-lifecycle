@@ -1,15 +1,16 @@
 import tpl from './loan.html';
 
-function loanDirective(loanService) {
+function loanDirective(optionsService) {
   return {
     replace: true,
     restrict: "E",
     template: tpl,
-    link: function(scope){
-      scope.removeLoan = loanService.removeLoan;
-      scope.$watch('loan', ()=> loanService.saveLoans(), true)
+    link: function link(scope){
+      scope.removeLoan = optionsService.removeLoan;
+      scope.$watch('loan', ()=> optionsService.saveLoans(), true);
+
     }
-  }
+  };
 }
 
 export default loanDirective;

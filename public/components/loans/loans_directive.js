@@ -1,12 +1,17 @@
 import tpl from './loans.html';
 
-function loansDirective(){
+function loansDirective(optionsService){
   return {
     replace: true,
     restrict: "E",
     template: tpl,
-    link: ()=>{}
+    link: (scope)=>{
+
+      scope.addLoan = optionsService.addLoan;
+      scope.demo = optionsService.demo;
+
+    }
   };
 }
 
-export default loansDirective
+export default loansDirective;

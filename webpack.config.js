@@ -4,10 +4,7 @@ const webpack = require('webpack');
 module.exports = {
   entry: [
     './public/app.js',
-    {
-      pattern: 'style.bundle.js',
-      watched: true
-    }
+    './public/app.less'
   ],
   output: {
     path: __dirname + "/public/dist/",
@@ -18,7 +15,8 @@ module.exports = {
     preLoaders: [{
       test: /\.js$/,
       loader: "eslint-loader",
-      exclude: /(node_modules|bundle.js)/
+      exclude: /(node_modules|dist)/
+
     }],
 
     loaders: [{

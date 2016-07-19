@@ -1,19 +1,45 @@
-//variables
+//VARIABLES
 @borderColor: #ccc;
 @navHeight: 43px;
 @loanPanelWidth: 1 / 3 * 100%;
 @minLoanPanelWidth: 400px;
+
+
+//lifecycle colors
 @lifecyclePanelWidth: 2 / 3 * 100%;
 @minLifecyclePanelWidth: 600px;
-
 @customLifecycleColor: #99E3E2;
 @customLifecycleInterestColor: #CFF2F1;
-
 @baseLifecycleColor: #FF5200;
 @baseLifecycleInterestColor: #FFB289;
 
 @panelHeight: 500px;
 @shadowColor: lightgrey;
+
+//LINKS
+@link-color: #009688;
+@link-area-color: #52b7c3;
+
+//link mixins
+.ll-link{
+    color: @link-color;
+    transition: all 250ms ease;
+    &:hover {
+        color: darken(@link-color, 10%);
+        cursor: pointer;
+        text-decoration: underline;
+        &.no-underline{
+            text-decoration: none;
+        }
+        &.lighten-text{
+            color: lighten(@link-color, 15%);
+        }
+    }
+}
+
+//action box
+@actionBoxBGColor: white;
+
 //mixins
 .panel {
     height: 100%;
@@ -35,6 +61,12 @@
     font-weight: 300;
 }
 
+//bootstrap styling
+.no-gutter > [class*='col-'] {
+    padding-right:0;
+    padding-left:0;
+}
+
 
 //app level styles
 .content-container {
@@ -42,25 +74,28 @@
     position: relative;
 }
 
-.glyphicon {
-    transition: color 250ms ease;
-    &:hover {
-        color: lightblue;
-        cursor: pointer;
-    }
-    &.glyphicon-pencil{
-        font-size: 12px;
-    }
-}
+// .glyphicon {
+//     transition: color 250ms ease;
+//     &:hover {
+//         color: lightblue;
+//         cursor: pointer;
+//     }
+//     &.glyphicon-pencil{
+//         font-size: 12px;
+//     }
+// }
+
 
 body{
     font-family: "Source Sans Pro";
 }
 
-@import "./components/loan_panel/loan_panel";
-@import "./components/loan/loan";
-@import "./components/lifecycle/lifecycle";
+@import './components/editable_input/editable_input';
+@import './components/lifecycle/lifecycle';
 @import './components/lifecycle_graph/lifecycle_graph';
+@import './components/loan/loan';
+@import './components/loans/loans';
+@import './components/nav/nav';
+@import './components/options_panel/options_panel';
 @import './components/repayment_breakdown/repayment_breakdown';
-@import "./components/editable_input/editable_input";
-@import "./components/nav/nav";
+
