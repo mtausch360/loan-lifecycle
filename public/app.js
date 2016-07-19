@@ -4,11 +4,7 @@ import modal from 'angular-ui-bootstrap/src/modal';
 //not sure how to do this big thing. don't think es6 modules apply
 var Big = require('big.js');
 Big.DP = 25;
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 226d7fb19d099eac264fe61e6669ea854f7ce862
 
 import AppController from "./app_controller";
 import navDirective from "./components/nav/nav_directive";

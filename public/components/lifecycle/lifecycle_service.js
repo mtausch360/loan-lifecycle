@@ -89,11 +89,10 @@ function lifecycleService(optionsService) {
    * @return {[type]} [description]
    */
   function updateCustom() {
-<<<<<<< HEAD
+
     let custom = new Lifecycle(optionsService.getLoans(), optionsService.getSettings());
-=======
-    let custom = new Lifecycle(loanService.getLoans(), loanService.getSettings());
->>>>>>> 226d7fb19d099eac264fe61e6669ea854f7ce862
+
+
     if (!lifecycleState.custom.lifecycle)
       lifecycleState.custom.lifecycle = custom;
     else
