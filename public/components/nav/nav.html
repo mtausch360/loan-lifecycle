@@ -1,16 +1,16 @@
 <div id="#nav-bar" class="nav-bar">
 
     <div ng-class="{full: !showNav}" class="loan-panel-nav l-nav">
-        <div class="nav-el l-nav-el" ng-class="{'active': !showSettings}" ng-click="toggleShowSettings(false)">
+        <div class="nav-el l-nav-el ll-link no-underline " ng-class="{'active': !showSettings}" ng-click="toggleShowSettings(false)">
             Loans
         </div>
-        <div class="nav-el l-nav-el" ng-class="{'active': showSettings}" ng-click="toggleShowSettings(true)">
+        <div class="nav-el l-nav-el ll-link no-underline " ng-class="{'active': showSettings}" ng-click="toggleShowSettings(true)">
             Settings
         </div>
     </div>
 
     <div ng-class="{full: !showNav}" class="lifecycle-panel-nav l-nav">
-        <div class="nav-el l-nav-el" ng-click="toggleNav()">
+        <div class="nav-el l-nav-el ll-link no-underline " ng-click="toggleNav()">
             <div class="glyphicon"
                 ng-class="{'glyphicon-menu-left': showNav, 'glyphicon-menu-right': !showNav}">
             </div>

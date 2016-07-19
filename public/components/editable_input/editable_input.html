@@ -5,20 +5,32 @@
         <span ng-if="type==='text'">{{model}}</span>
         {{suffix}}
         <div class="action-box"  ng-show="hover">
-            <div class="edit-button glyphicon glyphicon-pencil" ng-click="toggleEdit()"></div>
+            <div class="edit-button glyphicon glyphicon-pencil ll-link no-underline" ng-click="toggleEdit()"></div>
         </div>
     </div>
     <div class="edit" ng-show="!view">
         <div class="input-container">
             {{prefix}}
-            <input ng-if="type==='number'" ng-model="obj.copy" type="{{type}}" min="{{settings.min}}" max="{{settings.max}}">
-            <input ng-if="type!=='number'" ng-model="obj.copy" type="{{type}}">
+            <span ng-if="!settings.select">
+                <input ng-if="type==='number'"
+                    ng-model="obj.copy"
+                    type="{{type}}"
+                    min="{{settings.min}}"
+                    max="{{settings.max}}"
+                    ng-class="{big: settings.inputSize === 'sm'}">
+                <input ng-if="type!=='number'" ng-model="obj.copy" type="{{type}}">
+            </span>
+            <span ng-if="settings.select">
+                <select ng-model="obj.copy" >
+                  <option ng-repeat="val in range" value="{{val}}" selected={{obj.copy === val ? 'selected' : ''}}>{{val}}</option>
+                </select>
+            </span>
 
             {{suffix}}
         </div>
         <div class="action-box">
-            <span class="glyphicon glyphicon-ok" ng-click="save()"></span>
-            <span class="glyphicon glyphicon-remove" ng-click="cancel()"></span>
+            <span class="glyphicon glyphicon-ok ll-link no-underline" ng-click="save()"></span>
+            <span class="glyphicon glyphicon-remove ll-link no-underline" ng-click="cancel()"></span>
         </div>
     </div>
 </div>

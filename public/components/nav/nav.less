@@ -18,7 +18,11 @@
         }
         .nav-el {
             &.active {
-                background-color: darken(lightblue, 5%);
+                background-color: lighten(@link-area-color, 10%);
+                color: white;
+                &:hover{
+
+                }
             }
             width: 50%;
             &:first-child {
@@ -50,7 +54,7 @@
         font-size: 16px;
         &:hover {
             cursor: pointer;
-            background-color: lightblue;
+            background-color: @link-area-color;
         }
     }
 }

@@ -12,9 +12,12 @@ function optionsPanelDirective(optionsService) {
       scope.settings = optionsService.getSettings();
       scope.loans = optionsService.getLoans();
 
+<<<<<<< HEAD
+=======
       scope.addLoan = optionsService.addLoan;
       scope.demo = optionsService.demo;
 
+>>>>>>> 226d7fb19d099eac264fe61e6669ea854f7ce862
       scope.$watch('loans', () => {
         optionsService.saveLoans();
         scope.$emit('edit', { type: 'loans' });

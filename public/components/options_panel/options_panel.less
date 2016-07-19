@@ -1,5 +1,5 @@
 @panelMarginTop: 20px;
-.loan-panel-container {
+.options-panel-container {
     width: @loanPanelWidth;
     min-width: 400px;
     border-right: 1px solid @borderColor;
@@ -10,29 +10,14 @@
     }
     .panel;
     .swingTransition(margin-left);
-    .loan-panel {
+    .options-panel {
         .menu-container {
             overflow-y: hidden;
             max-height: 800px;
             min-height: @panelHeight;
         }
-        .loans-container {
-            .menu-container;
-            .loan-options {
-                height: 30px;
-            }
-            .loan-list {
-                height: 700px;
-                overflow-y: scroll;
-            }
-        }
-        .settings-container {
-            padding: 5px;
-            .method-container{
-                padding-left: 15px;
-                padding-bottom: 10px;
-            }
-        }
+
+
         .prop{
           display: inline-block;
           width: 180px;

@@ -1,20 +1,16 @@
 .editable-input{
   @height: 40px;
   @width: 100%;
-  @inputWidth: 200px;
+  @inputWidth: 120px;
   @inputHeight: @height/2;
-  @backgroundColor: lightBlue;
+  @backgroundColor: @actionBoxBGColor;
   padding: 5px;
   display: block;
   position: relative;
   transition: background-color 500ms ease;
   height: @height;
   .font-standard;
-  font-size: 16px;
-  &.big{
-    font-size: 18px;
-    font-weight: 600;
-  }
+
   &:hover {
     background-color: @backgroundColor;
   }
@@ -22,8 +18,12 @@
   .input-container{
     display: inline-block;
   }
+
   input {
     width: @inputWidth;
+    &.sm{
+      width: @inputWidth/2 !important;
+    }
     height: @inputHeight;
     display: inline-block;
   }
@@ -34,10 +34,9 @@
     transition: background-color 500ms ease;
     margin-left: 5px;
     padding: 0px 5px;
-    background-color: lightgrey;
+    background-color: @backgroundColor;
     border-radius: 9px;
-    box-shadow: #8c8c8c 1px 2px 1px;
-    border: 1px solid #cecece;
+    box-shadow: @shadowColor 1px 2px 1px;
     &.ng-hide{
       transition: none;
     }
@@ -54,14 +53,10 @@
       &.ng-hide{
         transition: none;
       }
-      &:hover {
-        color: blue;
-      }
     }
   }
   .edit {
     width: @width;
   }
 
-  
 }

@@ -70,31 +70,6 @@ describe('Lifecycle module', ()=>{
     expect( inRange(lifecycle.lifecycle.totalPaid, expectedInterestPaid + longLoan[0].balance) ).toBe(true);
     expect( lifecycle.lifecycle.series.length ).toBe(240);
 
-    //not ready yet
-    // let counter = 0;
-    // let longLoanObj = longLoan[0];
-    // while(counter < 10){
-
-
-    //   var factor = (1 +  5 * Math.random());
-
-    //   for( let key in longLoanObj){
-    //     console.log(longLoanObj[key]);
-    //     longLoanObj[key] *= factor;
-    //     console.log(longLoanObj[key]);
-    //   }
-    //   var lifecycle = new Lifecycle(longLoan);
-
-    //   let expectedInterestPaid = 51835.85 * factor;
-    //   let expectedPrincipalPaid = 100000;
-    //   console.log(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid * factor)
-    //   expect( inRange(lifecycle.lifecycle.totalInterestPaid, expectedInterestPaid * factor) ).toBe(true);
-    //   expect( inRange(lifecycle.lifecycle.totalPaid, (expectedInterestPaid + longLoan[0].balance) * factor ) ).toBe(true);
-    //   // expect( lifecycle.lifecycle.series.length ).toBe(240);
-
-    //   counter++;
-    // }
-
   });
 
 

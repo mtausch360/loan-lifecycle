@@ -1,6 +1,6 @@
 import Lifecycle from '../../modules/Lifecycle.js';
 
-function lifecycleService(loanService) {
+function lifecycleService(optionsService) {
 
   var lifecycleState = {
     base: {
@@ -89,7 +89,11 @@ function lifecycleService(loanService) {
    * @return {[type]} [description]
    */
   function updateCustom() {
+<<<<<<< HEAD
+    let custom = new Lifecycle(optionsService.getLoans(), optionsService.getSettings());
+=======
     let custom = new Lifecycle(loanService.getLoans(), loanService.getSettings());
+>>>>>>> 226d7fb19d099eac264fe61e6669ea854f7ce862
     if (!lifecycleState.custom.lifecycle)
       lifecycleState.custom.lifecycle = custom;
     else
@@ -103,7 +107,7 @@ function lifecycleService(loanService) {
    * @return {[type]} [description]
    */
   function updateBase() {
-    let base = new Lifecycle(loanService.getLoans());
+    let base = new Lifecycle(optionsService.getLoans());
     if (!lifecycleState.base.lifecycle)
       lifecycleState.base.lifecycle = base;
     else

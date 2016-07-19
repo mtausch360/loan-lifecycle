@@ -228,6 +228,8 @@ function LifecycleGraphFactory({ selectionCb }={}){
   }
 
   /**
+<<<<<<< HEAD
+=======
    * Current selection window, happens to be xScale domain
    * @return array[ date, date ]
    */
@@ -236,6 +238,7 @@ function LifecycleGraphFactory({ selectionCb }={}){
   // }
 
   /**
+>>>>>>> 226d7fb19d099eac264fe61e6669ea854f7ce862
    * computes min and max of current selection, updates current selection variable, updates yScale based on
    * view selection
    *
@@ -282,12 +285,12 @@ function LifecycleGraphFactory({ selectionCb }={}){
       }
     });
 
-    min += -(min/4);
+    min -= (min/64);
 
     if( !customPayments || !basePayments) //if one is gone, show from 0 on y axis
       min = 0;
 
-    yScale.domain([Math.max(min,0), max + max/4]);
+    yScale.domain([Math.max(min,0), max + max/64]);
 
   }
 
