@@ -1,4 +1,4 @@
-#Loan Lifecycle
+# Loan Lifecycle
 
 Work in progress. Exploration and visualization tool to control your loan's amortization and repayment schedule.
 
@@ -8,7 +8,7 @@ All calculations are done on browser and all data is stored in LocalStorage.
 
 Check it out at http://loan-lifecycle.herokuapp.com
 
-###Technologies
+### Technologies
 Angular 1.5, ES6, Webpack, Babel, Less, D3, Big.js, Karma, PhantomJS
 
 Todo:
