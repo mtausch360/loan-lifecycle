@@ -1,5 +1,6 @@
 #Loan Lifecycle
-Work in progress. Visualization tool to control your loan's amortization schedule.
+
+Work in progress. Exploration and visualization tool to control your loan's amortization and repayment schedule.
 
 Loans are currently randomly generated and will randomize on load (refresh to get a new set!). These random loans are meant to model realistic loan balances and interest rates, amortizing over lengthy periods of time. Change the amount extra in the settings tab to see the difference in time that it would take to pay off all loans. Even making $50 extra monthly payments tends to have drastic effects on total repayment of loans over time.
 
