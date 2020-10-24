@@ -6,8 +6,13 @@ function loanDirective(optionsService) {
     restrict: "E",
     template: tpl,
     link: function link(scope){
+
       scope.removeLoan = optionsService.removeLoan;
-      scope.$watch('loan', ()=> optionsService.saveLoans(), true);
+
+      scope.toggleVisibility = (l) => {
+        optionsService.toggleVisibility(l);
+      }
+
 
     }
   };

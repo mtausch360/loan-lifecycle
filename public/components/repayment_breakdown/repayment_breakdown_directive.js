@@ -13,12 +13,12 @@ function repaymentBreakdownDirective(lifecycleService) {
       window.addEventListener('resize', Chart.render);
 
       scope.$watch(
-        () => lifecycleService.getLastSelectionDate(),
+        () => lifecycleService.getCurrentWindow().date,
         (newValue) => {
           if (newValue) {
-            Chart.update( lifecycleService.getCurrentSelection() );
+            Chart.update(lifecycleService.getCurrentWindow());
           }
-        });
+      });
 
     }
   }

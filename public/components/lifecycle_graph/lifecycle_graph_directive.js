@@ -12,24 +12,23 @@ function lifecycleGraphDirective(lifecycleService, $timeout) {
     restrict: 'E',
     template: tpl,
     link: (scope) => {
-      //hook into lifecycle graph selection
-      let selectionCb = ( selection )=>{
 
-        lifecycleService.setCurrentSelection( selection )
+      // hook into lifecycle graph selection
+      const currentWindowCallback = (currentWindow) => {
+        lifecycleService.setCurrentWindow(currentWindow);
         $timeout();
-      }
+      };
 
-      let Chart = LifecycleGraphFactory( {selectionCb} ).create();
+      let Chart = LifecycleGraphFactory(currentWindowCallback).create();
 
-      scope.$watch('lifecycles.date', (newValue, oldValue, scope)=>{
-        if( scope.lifecycles && newValue ){
+      scope.$watch('lifecycles.date', (newValue, oldValue, scope) => { 
+        if (scope.lifecycles && newValue) {
           Chart.update(scope.lifecycles);
         }
       });
 
       window.addEventListener('resize', Chart.render);
       scope.$on('render', Chart.render);
-
 
     }
   }

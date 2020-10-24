@@ -1,53 +1,66 @@
 <div class="loan-container">
-
     <div class="row">
-        <div class="col-md-10 ">
-            <editable-input class="loan-name" model="loan.name" type="text" on-save="saveLoans()"></editable-input>
+        <div class="col-md-1">
+            <input
+                type="checkbox"
+                name="visible"
+                style="margin-top: 11px;"
+                ng-model="loan.visible"
+                ng-click="toggleLoanVisibility(loan)"
+            >
         </div>
-        <div class="col-md-2">
-            <span class="glyphicon glyphicon-trash ll-link no-underline" ng-click="removeLoan(loan)"></span>
-        </div>
-    </div>
+        <div class="col-md-11 ">
+            <div class="row">
+                <div class="col-md-10 ">
+                    <editable-input class="loan-name" model="loan.name" type="text" on-save="saveLoans()"></editable-input>
+                </div>
+                <div class="col-md-2">
+                    <span class="glyphicon glyphicon-trash ll-link no-underline" ng-click="removeLoan(loan)"></span>
+                </div>
+            </div>
 
-    <div class="row no-gutters">
-        <div class="col-md-6 loan-prop">
-            <div class="prop">Balance</div>
-            <editable-input
-                prefix="$"
-                model="loan.balance"
-                type="number"
-                on-save="saveLoans()"
-                settings="{decimals: 2, inputSize: 'sm'}">
-            </editable-input>
-        </div>
-        <div class="col-md-6 loan-prop">
-            <div class="prop">Minimum Payment</div>
-            <editable-input
-                model="loan.minimumPayment"
-                type="number"
-                prefix="$"
-                on-save="saveLoans()"
-                settings="{decimals: 2, inputSize: 'sm'}"></editable-input>
+            <div class="row no-gutters">
+                <div class="col-md-6 loan-prop">
+                    <div class="prop">Balance</div>
+                    <editable-input
+                        prefix="$"
+                        model="loan.balance"
+                        type="number"
+                        on-save="saveLoans()"
+                        settings="{decimals: 2, inputSize: 'sm'}">
+                    </editable-input>
+                </div>
+                <div class="col-md-6 loan-prop">
+                    <div class="prop">Minimum Payment</div>
+                    <editable-input
+                        model="loan.minimumPayment"
+                        type="number"
+                        prefix="$"
+                        on-save="saveLoans()"
+                        settings="{decimals: 2, inputSize: 'sm'}"></editable-input>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-md-6 loan-prop">
+                    <div class="prop">Interest Rate</div>
+                    <editable-input
+                        model="loan.interestRate"
+                        type="number"
+                        suffix="%"
+                        on-save="saveLoans()"
+                        settings="{decimals: 3, inputSize: 'sm'}"></editable-input>
+                </div>
+                <div class="col-md-6 loan-prop">
+                    <div class="prop">Due Date</div>
+                    <editable-input
+                        model="loan.dueDate"
+                        type="number"
+                        on-save="saveLoans()"
+                        settings="{ inputSize: 'sm', select: true}"></editable-input>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row no-gutters">
-        <div class="col-md-6 loan-prop">
-            <div class="prop">Interest Rate</div>
-            <editable-input
-                model="loan.interestRate"
-                type="number"
-                suffix="%"
-                on-save="saveLoans()"
-                settings="{decimals: 3, inputSize: 'sm'}"></editable-input>
-        </div>
-        <div class="col-md-6 loan-prop">
-            <div class="prop">Due Date</div>
-            <editable-input
-                model="loan.dueDate"
-                type="number"
-                on-save="saveLoans()"
-                settings="{ inputSize: 'sm', select: true}"></editable-input>
-        </div>
-    </div>
+    
 
 </div>

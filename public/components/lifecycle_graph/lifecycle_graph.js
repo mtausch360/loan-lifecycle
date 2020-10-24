@@ -4,7 +4,7 @@ import d3 from 'd3';
  *
  * @returns object with basic functionality hooks, rendering, updating and hooks into zoomEnd function
  */
-function LifecycleGraphFactory({ selectionCb }={}){
+function LifecycleGraphFactory(selectionCb){
   let _state = {
     created: false,
     udpated: false
@@ -214,7 +214,7 @@ function LifecycleGraphFactory({ selectionCb }={}){
     zoomExtent.x[1] = baseLifecycle.endDate;
     calculateScales();
 
-    if(!_state.updated){
+    if (!_state.updated) {
       _state.updated = true;
 
       if(selectionCb)

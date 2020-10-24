@@ -1,5 +1,5 @@
 // import Loan from '../../modules/Loan';
-import {randomLoans} from '../../modules/util';
+import { randomLoans, newLoan } from '../../modules/util';
 import addLoanModalTpl from '../../templates/add_loan_modal.html';
 
 /**
@@ -8,66 +8,51 @@ import addLoanModalTpl from '../../templates/add_loan_modal.html';
  * @return {[type]}           [description]
  */
 function optionsPanelService($uibModal) {
-  var appName = 'loanLifecycleState';
-  var loans = [];
-  var settings;
-  var appState;
+  const localStorageId = 'loanLifecycleApp';
 
-  initAppState();
-  initLoans();
-  initSettings();
+  let LLState = {
+    id: 0,
+    loans: [],
+    settings: {
+      method: 'HI_INTEREST',
+      extra: 50
+    }
+  };
+
+  const prevLLState = localStorage.getItem(localStorageId);
+
+  if (prevLLState) {
+    LLState = Object.assign({}, LLState, JSON.parse(prevLLState));
+  }
+
+  demo()
 
   return {
     getLoans,
-    addLoan,
-    saveLoans,
-    removeLoan,
     getSettings,
-    saveSettings,
+
+    getVisibleLoans,
+
+    toggleLoanVisibility,
+
+    addLoan,
+    removeLoan,
+
+    save,
+
     demo
   };
 
-  /**
-   * [initAppState description]
-   * @return {[type]} [description]
-   */
-  function initAppState() {
-    let prevAppState = localStorage.getItem(appName);
-
-    if (!prevAppState) {
-      appState = { id: 0 };
-      saveAppState();
-    } else {
-      appState = JSON.parse(prevAppState);
-      appState.id = 0;
-    }
+  function getVisibleLoans () {
+    return LLState.loans.filter(l => l.visible)
   }
 
   /**
-   * [saveAppState description]
+   * [saveLLState description]
    * @return {[type]} [description]
    */
-  function saveAppState() {
-    localStorage.setItem(appName, JSON.stringify(appState));
-  }
-
-  /**
-   * [initSettings description]
-   * @return {[type]} [description]
-   */
-  function initSettings() {
-    let prevSettings = localStorage.getItem('settings');
-
-    if (!prevSettings){
-      settings = {
-        method: 'HI_INTEREST',
-        extra: 50
-      };
-      saveSettings();
-    } else {
-      settings = JSON.parse(prevSettings);
-    }
-
+  function save() {
+    localStorage.setItem(localStorageId, JSON.stringify(LLState));
   }
 
   /**
@@ -75,41 +60,15 @@ function optionsPanelService($uibModal) {
    * @return {[type]} [description]
    */
   function getSettings() {
-    return settings;
+    return LLState.settings;
   }
 
-  /**
-   * [saveSettings description]
-   * @return {[type]} [description]
-   */
-  function saveSettings() {
-    localStorage.setItem('settings', JSON.stringify(settings));
-  }
-
-  /**
-   * [initLoans description]
-   * @return {[type]} [description]
-   */
-  function initLoans() {
-    let prevLoans = localStorage.getItem('loans');
-
-    if( !prevLoans ){
-      loans = [];
-      saveLoans();
-    } else{
-      loans = JSON.parse(prevLoans);
-    }
-    loans = [];
-
-    demo();
-
-  }
   /**
    * [getLoans description]
    * @return {[type]} [description]
    */
   function getLoans() {
-    return loans;
+    return LLState.loans;
   }
 
   /**
@@ -118,10 +77,12 @@ function optionsPanelService($uibModal) {
    */
   function demo(){
     let rl = randomLoans();
-    loans.splice()
+
+    LLState.loans = [];
+
     rl.forEach((l)=>{
-      l.id = appState.id++;
-      loans.push(l)
+      l.id = LLState.id++;
+      LLState.loans.push(l);
     });
   }
 
@@ -130,15 +91,24 @@ function optionsPanelService($uibModal) {
    * @param  {[type]} obj [description]
    * @return {[type]}     [description]
    */
-  function removeLoan(obj) {
-    loans.splice(loans.indexOf(obj), 1);
-    saveLoans();
+  function removeLoan (obj) {
+    LLState.loans.splice(LLState.loans.indexOf(obj), 1);
+    save();
   }
+
+  function toggleLoanVisibility (obj) {
+    LLState.loans.forEach((l) => {
+      if (obj.id === l.id) {
+        l.visibility = !l.visibility;
+      }
+    })
+  }
+
   /**
    * [addLoan description]
    * @param {[type]} loan [description]
    */
-  function addLoan() {
+  function addLoan () {
 
     let modalInstance = $uibModal.open({
       controller: AddLoanController,
@@ -148,45 +118,22 @@ function optionsPanelService($uibModal) {
 
     modalInstance.result.then((loanObj)=>{
       if( !loanObj.id === undefined ){
-        loanObj.id = appState.id++;
-        saveAppState();
+        loanObj.id = LLState.id++;
+        save();
       }
 
-      loans.unshift(loanObj);
+      LLState.loans.unshift(loanObj);
     });
 
 
     function AddLoanController($scope, $uibModalInstance){
-      $scope.loan = getNewLoan();
+      $scope.loan = newLoan(LLState.id++);
 
       $scope.save = ()=> $uibModalInstance.close($scope.loan);
       $scope.close = ()=> $uibModalInstance.dismiss();
     }
 
   }
-
-  /**
-   * [getNewLoan description]
-   * @return {[type]} [description]
-   */
-  function getNewLoan(){
-    return {
-      name: 'New Loan',
-      id: appState.id++,
-      balance: 0,
-      interestRate: 0,
-      minimumPayment: 0,
-      dueDate: 1
-    };
-  }
-  /**
-   * [saveLoans description]
-   * @return {[type]} [description]
-   */
-  function saveLoans() {
-    localStorage.setItem('loans', JSON.stringify(loans));
-  }
-
 
 
 }

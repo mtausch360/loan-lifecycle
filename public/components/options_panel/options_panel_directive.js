@@ -9,17 +9,12 @@ function optionsPanelDirective(optionsService) {
     template: tpl,
     link: function (scope) {
 
-      scope.settings = optionsService.getSettings();
-      scope.loans = optionsService.getLoans();
-
-      scope.$watch('loans', () => {
-        optionsService.saveLoans();
-        scope.$emit('edit', { type: 'loans' });
+      scope.$watch('settings', function () {
+        scope.$emit('edit', { type: 'settings' });
       }, true);
 
-      scope.$watch('settings', function () {
-        optionsService.saveSettings();
-        scope.$emit('edit', { type: 'settings' });
+      scope.$watch('loans', () => {
+        scope.$emit('edit', { type: 'loans' });
       }, true);
 
     }

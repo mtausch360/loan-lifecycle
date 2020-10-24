@@ -13,7 +13,8 @@ function lifecycleService(optionsService) {
     },
     date: null
   };
-  var current = {
+
+  var currentWindow = {
     lifecycleSelection: [null, null],
     baseSelectionData: null,
     customSelectionData: null,
@@ -24,20 +25,20 @@ function lifecycleService(optionsService) {
     getState,
     getBase,
     getCustom,
-
+    
     createLifecycles,
     updateCustom,
     updateBase,
-    getCurrentSelection,
-    setCurrentSelection,
-    getLastSelectionDate
+
+    getCurrentWindow,
+    setCurrentWindow,
   };
 
   /**
    * [getCustom description]
    * @return {[type]} [description]
    */
-  function getCustom(){
+  function getCustom () {
     return lifecycleState.custom;
   }
 
@@ -45,58 +46,53 @@ function lifecycleService(optionsService) {
    * [getBase description]
    * @return {[type]} [description]
    */
-  function getBase(){
+  function getBase () {
     return lifecycleState.base;
   }
 
   /**
-   * [getCurrentSelection description]
+   * [getCurrentWindow description]
    * @return {[type]} [description]
    */
-  function getCurrentSelection(){
-    return current;
+  function getCurrentWindow () {
+    return currentWindow;
   }
 
   /**
-   * [setCurrentSelection description]
+   * [setCurrentWindow description]
    */
-  function setCurrentSelection(selection){
-    current.lifecycleSelection = selection;
-    current.customSelectionData = lifecycleState.custom.lifecycle.search(selection);
-    current.baseSelectionData = lifecycleState.base.lifecycle.search(selection);
-    current.date = Date.now();
-  }
-
-  /**
-   * [getLastSelectionDate description]
-   * @return {[type]} [description]
-   */
-  function getLastSelectionDate(){
-    return current.date;
+  function setCurrentWindow (selection) {
+    currentWindow.lifecycleSelection = selection;
+    currentWindow.customSelectionData = lifecycleState.custom.lifecycle.search(selection);
+    currentWindow.baseSelectionData = lifecycleState.base.lifecycle.search(selection);
+    currentWindow.date = Date.now();
   }
 
   /**
    * [createLifecycles description]
    * @return {[type]} [description]
    */
-  function createLifecycles() {
+  function createLifecycles () {
     updateCustom();
     updateBase();
+    setCurrentWindow([
+      lifecycleState.base.lifecycle.lifecycle.startDate,
+      lifecycleState.base.lifecycle.lifecycle.endDate
+    ]);
   }
 
   /**
    * [updateCustom description]
    * @return {[type]} [description]
    */
-  function updateCustom() {
-
-    let custom = new Lifecycle(optionsService.getLoans(), optionsService.getSettings());
-
-
-    if (!lifecycleState.custom.lifecycle)
+  function updateCustom () {
+    let custom = new Lifecycle(optionsService.getVisibleLoans(), optionsService.getSettings());
+    if (!lifecycleState.custom.lifecycle) {
       lifecycleState.custom.lifecycle = custom;
-    else
+    }
+    else {
       _.extend(lifecycleState.custom.lifecycle, custom);
+    }
     lifecycleState.custom.date = Date.now();
     lifecycleState.date = Date.now();
   }
@@ -106,11 +102,13 @@ function lifecycleService(optionsService) {
    * @return {[type]} [description]
    */
   function updateBase() {
-    let base = new Lifecycle(optionsService.getLoans());
-    if (!lifecycleState.base.lifecycle)
+    let base = new Lifecycle(optionsService.getVisibleLoans());
+    if (!lifecycleState.base.lifecycle) {
       lifecycleState.base.lifecycle = base;
-    else
+    }
+    else {
       _.extend(lifecycleState.base.lifecycle, base);
+    }
     lifecycleState.base.date = Date.now();
     lifecycleState.date = Date.now();
   }

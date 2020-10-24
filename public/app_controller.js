@@ -4,10 +4,13 @@
  * @param {[type]} lifecycleService [description]
  * @param {[type]} $timeout         [description]
  */
-function AppController($scope, lifecycleService, $timeout) {
+function AppController($scope, lifecycleService, optionsService, $timeout) {
 
   $scope.lifecycles = lifecycleService.getState();
   lifecycleService.createLifecycles();
+
+  $scope.loans = optionsService.getLoans();
+  $scope.settings = optionsService.getSettings();
 
   $scope.showNav = true;
 
@@ -27,7 +30,6 @@ function AppController($scope, lifecycleService, $timeout) {
 
   $scope.$on('edit', function (event, data) {
     switch (data.type) {
-
       case 'settings':
         redrawAll();
         break;
@@ -35,12 +37,17 @@ function AppController($scope, lifecycleService, $timeout) {
       case 'loans':
         redrawAll();
         break;
+
+      default:
+        redrawAll();
+        break;
     }
   });
 
   function redrawAll() {
     lifecycleService.createLifecycles();
-    $scope.$broadcast('redrawAll');
+    $scope.visibleLoanCount = $scope.loans.filter((l) => l.visible).length
+
   }
 
 }

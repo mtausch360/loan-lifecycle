@@ -35,6 +35,8 @@ function randomLoan({interestRate=_.random(.01, max.interestRate, true), princip
     balance: principal,
     minimumPayment,
     dueDate,
+
+    visible: true,
     n
   };
 
@@ -89,4 +91,20 @@ function randomName(){
   return str + (str.length ? ' ' : '') + _.capitalize(nouns[ _.random(0, nouns.length - 1, false ) ]);
 }
 
-export { inRange, randomLoan, randomLoans, expectedGrowth };
+/**
+ * [getNewLoan description]
+ * @return {[type]} [description]
+ */
+function newLoan( id ){
+  return {
+    name: 'New Loan',
+    id,
+    balance: 0,
+    interestRate: 0,
+    minimumPayment: 0,
+    dueDate: 1,
+    visible: true
+  };
+}
+
+export { inRange, randomLoan, newLoan, randomLoans, expectedGrowth };
